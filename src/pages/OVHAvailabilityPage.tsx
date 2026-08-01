@@ -575,31 +575,33 @@ const OVHAvailabilityPage = () => {
                 className="cyber-panel p-3 sm:p-4 hover:border-cyber-accent/50 transition-colors backdrop-blur-0 overflow-visible"
               >
               <div className="mb-2 sm:mb-3">
-                <div className="flex items-start justify-between mb-2 gap-2">
+                <div className="flex items-start justify-between mb-3 gap-2">
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-base sm:text-lg font-bold text-cyber-accent truncate">{item.planCode}</h3>
-                    <p className="text-xs sm:text-sm text-cyber-muted line-clamp-1">{item.server}</p>
+                    <h3 className="text-base sm:text-xl font-extrabold text-sky-700 tracking-tight truncate">{item.planCode}</h3>
+                    <p className="text-xs sm:text-sm font-semibold text-slate-700 mt-0.5 line-clamp-1">{item.server}</p>
                   </div>
                   {!isMobile && (
-                    <div className="text-right text-xs text-cyber-muted flex-shrink-0">
-                      <div className="font-mono">{item.fqn}</div>
+                    <div className="text-right flex-shrink-0">
+                      <div className="font-mono text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md shadow-2xs break-all">
+                        {item.fqn}
+                      </div>
                     </div>
                   )}
                 </div>
                 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2 text-xs sm:text-sm">
-                  <div>
-                    <span className="text-cyber-muted">内存：</span>
-                    <span className="text-slate-300 ml-1 sm:ml-2">{item.memory}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs sm:text-sm">
+                  <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 p-2 rounded-md">
+                    <span className="text-slate-500 font-semibold flex-shrink-0">内存:</span>
+                    <span className="text-slate-900 font-bold font-mono truncate">{item.memory}</span>
                   </div>
-                  <div>
-                    <span className="text-cyber-muted">存储：</span>
-                    <span className="text-slate-300 ml-1 sm:ml-2">{item.storage}</span>
+                  <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 p-2 rounded-md">
+                    <span className="text-slate-500 font-semibold flex-shrink-0">存储:</span>
+                    <span className="text-slate-900 font-bold font-mono truncate">{item.storage}</span>
                   </div>
                   {item.systemStorage && (
-                    <div>
-                      <span className="text-cyber-muted">系统盘：</span>
-                      <span className="text-slate-300 ml-1 sm:ml-2">{item.systemStorage}</span>
+                    <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 p-2 rounded-md">
+                      <span className="text-slate-500 font-semibold flex-shrink-0">系统盘:</span>
+                      <span className="text-slate-900 font-bold font-mono truncate">{item.systemStorage}</span>
                     </div>
                   )}
                 </div>

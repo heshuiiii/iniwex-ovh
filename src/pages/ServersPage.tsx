@@ -2025,41 +2025,41 @@ const ServersPage = () => {
                 
                 <CardContent className="p-4 sm:p-5">
                   {/* Server specs in a grid */}
-                  <div className="grid grid-cols-2 gap-1.5 mb-2">
-                    <div className="flex items-center space-x-1.5 p-1 bg-cyber-grid/10 rounded border border-cyber-accent/10">
-                      <Cpu size={14} className="text-cyber-accent flex-shrink-0" />
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+                      <Cpu size={16} className="text-sky-600 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-[9px] text-cyber-muted">CPU</div>
-                        <div className="font-medium text-[11px] truncate">{formatServerSpec(server.cpu, "CPU")}</div>
+                        <div className="text-[10px] font-semibold text-slate-500">CPU</div>
+                        <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.cpu, "CPU")}</div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-1.5 p-1 bg-cyber-grid/10 rounded border border-cyber-accent/10">
-                      <Database size={14} className="text-cyber-accent flex-shrink-0" />
+                    <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+                      <Database size={16} className="text-sky-600 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-[9px] text-cyber-muted">内存</div>
-                        <div className="font-medium text-[11px] truncate">{formatServerSpec(server.memory, "内存")}</div>
+                        <div className="text-[10px] font-semibold text-slate-500">内存</div>
+                        <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.memory, "内存")}</div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-1.5 p-1 bg-cyber-grid/10 rounded border border-cyber-accent/10">
-                      <HardDrive size={14} className="text-cyber-accent flex-shrink-0" />
+                    <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+                      <HardDrive size={16} className="text-sky-600 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-[9px] text-cyber-muted">存储</div>
-                        <div className="font-medium text-[11px] truncate">{formatServerSpec(server.storage, "存储")}</div>
+                        <div className="text-[10px] font-semibold text-slate-500">存储</div>
+                        <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.storage, "存储")}</div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-1.5 p-1 bg-cyber-grid/10 rounded border border-cyber-accent/10">
-                      <Wifi size={14} className="text-cyber-accent flex-shrink-0" />
+                    <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+                      <Wifi size={16} className="text-sky-600 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-[9px] text-cyber-muted">带宽</div>
-                        <div className="font-medium text-[11px] truncate">{formatServerSpec(server.bandwidth, "带宽")}</div>
+                        <div className="text-[10px] font-semibold text-slate-500">带宽</div>
+                        <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.bandwidth, "带宽")}</div>
                       </div>
                     </div>
                     {server.vrackBandwidth && server.vrackBandwidth !== "N/A" && (
-                      <div className="flex items-center space-x-1.5 p-1 bg-cyber-grid/10 rounded border border-cyber-accent/10 col-span-2">
-                        <ArrowRightLeft size={14} className="text-cyber-accent flex-shrink-0" />
+                      <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200 col-span-2">
+                        <ArrowRightLeft size={16} className="text-sky-600 flex-shrink-0" />
                         <div className="min-w-0">
-                          <div className="text-[9px] text-cyber-muted">内网带宽</div>
-                          <div className="font-medium text-[11px] truncate">{formatServerSpec(server.vrackBandwidth, "内网带宽")}</div>
+                          <div className="text-[10px] font-semibold text-slate-500">内网带宽</div>
+                          <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.vrackBandwidth, "内网带宽")}</div>
                         </div>
                       </div>
                     )}
