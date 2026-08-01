@@ -484,6 +484,60 @@
 
   .bg-sidebar .text-xs, .bg-sidebar [class*="text-xs"] { color: rgb(148 163 184) !important; }
   .bg-sidebar .text-sm, .bg-sidebar [class*="text-sm"] { color: rgb(203 213 225) !important; }
+
+  /* ================================================================
+     内容区 cyber-* 颜色强制深色（浅色背景下保证可读性）
+     ================================================================ */
+
+  /* text-cyber-text → 深色正文 */
+  .text-cyber-text { color: #1e293b !important; }
+
+  /* text-cyber-muted → 中灰辅助文字 */
+  .text-cyber-muted { color: #64748b !important; }
+
+  /* text-cyber-secondary → 次要文字 */
+  .text-cyber-secondary { color: #475569 !important; }
+
+  /* text-cyber-accent → 主色蓝 */
+  .text-cyber-accent { color: #0284c7 !important; }
+
+  /* text-cyber-primary-accent → 主色调 */
+  .text-cyber-primary-accent { color: #0284c7 !important; }
+
+  /* bg-cyber-bg → 浅灰内容区背景 */
+  .bg-cyber-bg { background-color: #f1f5f9 !important; }
+
+  /* bg-cyber-surface → 白色卡片面 */
+  .bg-cyber-surface { background-color: #ffffff !important; }
+
+  /* bg-cyber-surface-dark → 略深一级 */
+  .bg-cyber-surface-dark { background-color: #f8fafc !important; }
+
+  /* bg-cyber-dark → 深背景（弹窗/对话框）注意弹窗场景保持深色 */
+  .bg-cyber-dark { background-color: #0f172a !important; }
+
+  /* bg-cyber-hover → hover 态淡蓝 */
+  .bg-cyber-hover { background-color: rgba(2,132,199,0.06) !important; }
+
+  /* bg-cyber-grid → 内容区浅色网格 (半透明，不破坏背景) */
+  .bg-cyber-grid\/5  { background-color: rgba(148,163,184,0.05) !important; }
+  .bg-cyber-grid\/10 { background-color: rgba(148,163,184,0.08) !important; }
+  .bg-cyber-grid\/20 { background-color: rgba(148,163,184,0.12) !important; }
+  .bg-cyber-grid\/30 { background-color: rgba(148,163,184,0.16) !important; }
+  .bg-cyber-grid\/50 { background-color: rgba(148,163,184,0.22) !important; }
+
+  /* border-cyber-border → 分割线浅灰 */
+  .border-cyber-border { border-color: #e2e8f0 !important; }
+
+  /* border-cyber-accent/20 等半透明边框 */
+  .border-cyber-accent\/10 { border-color: rgba(2,132,199,0.10) !important; }
+  .border-cyber-accent\/20 { border-color: rgba(2,132,199,0.20) !important; }
+  .border-cyber-accent\/30 { border-color: rgba(2,132,199,0.30) !important; }
+  .border-cyber-accent\/40 { border-color: rgba(2,132,199,0.40) !important; }
+  .border-cyber-accent\/50 { border-color: rgba(2,132,199,0.50) !important; }
+
+  /* text-cyber-accent with opacity */
+  .text-cyber-accent\/80 { color: rgba(2,132,199,0.80) !important; }
 }
 
 /* ================================================================

@@ -1143,29 +1143,29 @@ const QueuePage = () => {
                           }
                           if (list.length === 1) {
                             return (
-                              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-cyber-grid/10 text-cyber-text border border-cyber-accent/30">{list[0].toUpperCase()}</span>
+                              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-slate-100 text-slate-700 border border-slate-200">{list[0].toUpperCase()}</span>
                             );
                           }
                           return null;
                         })()}
                         {Array.isArray(item.options) && item.options.length > 0 && (
-                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-cyber-grid/10 text-cyber-text border border-cyber-accent/30">含 {item.options.length} 个可选配置</span>
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-slate-100 text-slate-700 border border-slate-200">含 {item.options.length} 个可选配置</span>
                         )}
-                        <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-cyber-grid/10 text-cyber-text border border-cyber-accent/30 flex items-center gap-1">
+                        <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-sky-50 text-sky-700 border border-sky-200 flex items-center gap-1 font-medium">
                           <ShoppingCart size={12} /> {Math.min(item.purchased || 0, item.quantity || 0)} / {item.quantity || 0}
                         </span>
                         {item.auto_pay && (
-                          <span className="px-1.5 py-0.5 h-[18px] text-[10px] font-mono rounded-md bg-cyber-grid/10 text-cyber-text border border-cyber-accent/30 flex items-center justify-center gap-1 leading-none" title="自动支付">
-                            <CreditCard size={12} className="text-cyber-text" />
+                          <span className="px-1.5 py-0.5 h-[18px] text-[10px] font-mono rounded-md bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center gap-1 leading-none font-medium" title="自动支付">
+                            <CreditCard size={12} className="text-sky-600" />
                           </span>
                         )}
                         {item.stabilize_minutes ? (
-                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-amber-500/10 text-amber-700 border border-amber-500/30 flex items-center gap-1 font-semibold" title="检测到有货后等待确认">
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 font-semibold" title="检测到有货后等待确认">
                             ⏱️ {item.stabilize_minutes}分钟稳定等待
                           </span>
                         ) : null}
                         {item.proxy && item.proxy !== 'none' ? (
-                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-sky-500/10 text-sky-700 border border-sky-500/30 flex items-center gap-1 font-semibold">
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-sky-100 text-sky-800 border border-sky-300 flex items-center gap-1 font-semibold">
                             🌐 {item.proxy === 'proxy1' ? '代理1' : '代理2'} 下单
                           </span>
                         ) : null}

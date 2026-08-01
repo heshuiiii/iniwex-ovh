@@ -3200,6 +3200,56 @@ def remove_subscription(plan_code):
     else:
         return jsonify({"status": "error", "message": "订阅不存在"}), 404
 
+@app.route('/api/test-proxy', methods=['POST'])
+def test_proxy():
+    data = request.json or {}
+    proxy_str = (data.get('proxy') or '').strip()
+    if not proxy_str:
+        return jsonify({"status": "error", "message": "未提供代理地址"}), 400
+
+    # 规范化代理 URL
+    if not (proxy_str.startswith('socks5://') or proxy_str.startswith('socks5h://') or proxy_str.startswith('http://') or proxy_str.startswith('https://')):
+        proxy_url = f"socks5://{proxy_str}"
+    else:
+        proxy_url = proxy_str
+
+    proxies = {
+        'http': proxy_url,
+        'https': proxy_url
+    }
+
+    start_time = time.time()
+    try:
+        # 向外网 IP 探测服务发请求测试连通性
+        resp = requests.get('http://ip-api.com/json', proxies=proxies, timeout=8)
+        latency = int((time.time() - start_time) * 1000)
+        if resp.status_code == 200:
+            info = resp.json()
+            ip = info.get('query', '未知')
+            country = info.get('country', '')
+            city = info.get('city', '')
+            isp = info.get('isp', '')
+            location_str = f"{country} {city}".strip()
+            return jsonify({
+                "status": "success",
+                "message": f"代理连通正常！(延迟 {latency}ms)",
+                "ip": ip,
+                "location": location_str or "未知",
+                "isp": isp,
+                "latency": latency
+            })
+        else:
+            return jsonify({"status": "error", "message": f"代理连接成功但探测响应错误: HTTP {resp.status_code}"}), 400
+    except Exception as e:
+        err_msg = str(e)
+        hint = ""
+        if "Connection refused" in err_msg or "10061" in err_msg or "Refused" in err_msg:
+            hint = "\n👉 提示：代理服务器拒绝连接。如果您使用的是 root:密码 格式，请确认 VPS 上已启动监听 1080 端口的 SOCKS5 服务（如 gost/dante/v2ray 等）。如果是本地 ssh -D 转发，请先在控制台运行 ssh -D 1080。"
+        elif "timed out" in err_msg.lower() or "timeout" in err_msg.lower():
+            hint = "\n👉 提示：连接代理超时。请检查 VPS 安全组/防火墙是否放行了对应的代理端口。"
+        
+        return jsonify({"status": "error", "message": f"代理连接失败: {err_msg}{hint}"}), 400
+
 @app.route('/api/monitor/subscriptions/clear', methods=['DELETE'])
 def clear_subscriptions():
     account_id = get_account_id_from_request()

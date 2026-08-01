@@ -38,6 +38,58 @@ const SettingsPage = () => {
     apiSecretKey: false,
     tgToken: false
   });
+
+  // 代理连通性测试相关状态
+  const [testingProxy, setTestingProxy] = useState<{ [key: string]: boolean }>({});
+  const [proxyTestResult, setProxyTestResult] = useState<{ [key: string]: { success: boolean; message: string; ip?: string; location?: string } }>({});
+
+  const testProxyConnection = async (key: 'proxy1' | 'proxy2') => {
+    const val = formValues[key]?.trim();
+    if (!val) {
+      toast.warning(`请先输入 ${key === 'proxy1' ? '代理 1' : '代理 2'} 地址`);
+      return;
+    }
+    setTestingProxy(prev => ({ ...prev, [key]: true }));
+    setProxyTestResult(prev => ({ ...prev, [key]: undefined as any }));
+
+    try {
+      const resp = await api.post('/test-proxy', { proxy: val });
+      const data = resp.data;
+      if (data.status === 'success') {
+        setProxyTestResult(prev => ({
+          ...prev,
+          [key]: {
+            success: true,
+            message: data.message,
+            ip: data.ip,
+            location: data.location
+          }
+        }));
+        toast.success(`${key === 'proxy1' ? '代理 1' : '代理 2'} 连通测试成功！IP: ${data.ip}`);
+      } else {
+        setProxyTestResult(prev => ({
+          ...prev,
+          [key]: {
+            success: false,
+            message: data.message || '测试失败'
+          }
+        }));
+        toast.error(data.message || '代理连通测试失败');
+      }
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || '代理连通测试失败';
+      setProxyTestResult(prev => ({
+        ...prev,
+        [key]: {
+          success: false,
+          message: msg
+        }
+      }));
+      toast.error(msg);
+    } finally {
+      setTestingProxy(prev => ({ ...prev, [key]: false }));
+    }
+  };
   
   // Telegram Webhook 相关状态
   const [webhookUrl, setWebhookUrl] = useState("");
@@ -367,38 +419,110 @@ const SettingsPage = () => {
 
               {/* SOCKS5 下单代理设置 */}
               <div className="cyber-grid-line pt-4">
-                <h2 className="text-xl font-bold mb-2">🌐 指定下单 SOCKS5 代理 (最多2个)</h2>
-                <p className="text-xs text-cyber-muted mb-4">
-                  OVH 下单时检查 IP 归属。仅在触发抢购下单时使用指定代理，API 监控检测不经过代理。
+                <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                  <span>🌐</span> 指定下单 SOCKS5 代理 (最多2个)
+                </h2>
+                <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                  OVH 下单时会检查 IP 归属。代理仅在触发下单时使用，API 监控时不消耗代理流量。
+                  <br />
+                  <span className="text-sky-600 font-medium">💡 格式说明：</span>支持 <code className="bg-slate-100 text-sky-700 px-1 py-0.5 rounded">socks5://user:pass@ip:port</code> 或 <code className="bg-slate-100 text-sky-700 px-1 py-0.5 rounded">socks5://ip:1080</code>。如果填入包含 root 密码的地址，请确保 VPS 已搭建 SOCKS5 服务或完成了端口转发。
                 </p>
 
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-cyber-muted mb-1 text-xs sm:text-sm font-medium">
-                      代理 1 (Proxy 1)
-                    </label>
+                  {/* 代理 1 */}
+                  <div className="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-slate-700 text-xs sm:text-sm font-semibold">
+                        代理 1 (Proxy 1)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => testProxyConnection('proxy1')}
+                        disabled={testingProxy['proxy1'] || !formValues.proxy1.trim()}
+                        className="px-3 py-1 text-xs rounded bg-sky-600 hover:bg-sky-700 text-white font-medium transition-colors shadow-sm disabled:opacity-40 flex items-center gap-1"
+                      >
+                        {testingProxy['proxy1'] ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                            测试中...
+                          </>
+                        ) : (
+                          <>⚡ 测试连通</>
+                        )}
+                      </button>
+                    </div>
                     <input
                       type="text"
                       name="proxy1"
                       value={formValues.proxy1}
                       onChange={handleChange}
-                      placeholder="socks5://username:password@1.2.3.4:1080 或 socks5://1.2.3.4:1080"
+                      placeholder="socks5://user:password@103.97.200.12:1080 或 socks5://103.97.200.12:1080"
                       className="cyber-input w-full text-sm font-mono"
                     />
+                    {proxyTestResult['proxy1'] && (
+                      <div className={`mt-2 p-2.5 rounded text-xs leading-relaxed ${
+                        proxyTestResult['proxy1'].success 
+                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
+                          : 'bg-red-50 text-red-800 border border-red-200'
+                      }`}>
+                        <div className="font-semibold flex items-center gap-1">
+                          {proxyTestResult['proxy1'].success ? '✅' : '❌'} {proxyTestResult['proxy1'].message}
+                        </div>
+                        {proxyTestResult['proxy1'].ip && (
+                          <div className="mt-1 font-mono text-[11px] text-emerald-700">
+                            📍 出站 IP: {proxyTestResult['proxy1'].ip} ({proxyTestResult['proxy1'].location})
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
-                  <div>
-                    <label className="block text-cyber-muted mb-1 text-xs sm:text-sm font-medium">
-                      代理 2 (Proxy 2)
-                    </label>
+                  {/* 代理 2 */}
+                  <div className="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-slate-700 text-xs sm:text-sm font-semibold">
+                        代理 2 (Proxy 2)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => testProxyConnection('proxy2')}
+                        disabled={testingProxy['proxy2'] || !formValues.proxy2.trim()}
+                        className="px-3 py-1 text-xs rounded bg-sky-600 hover:bg-sky-700 text-white font-medium transition-colors shadow-sm disabled:opacity-40 flex items-center gap-1"
+                      >
+                        {testingProxy['proxy2'] ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                            测试中...
+                          </>
+                        ) : (
+                          <>⚡ 测试连通</>
+                        )}
+                      </button>
+                    </div>
                     <input
                       type="text"
                       name="proxy2"
                       value={formValues.proxy2}
                       onChange={handleChange}
-                      placeholder="socks5://username:password@5.6.7.8:1080 或 socks5://5.6.7.8:1080"
+                      placeholder="socks5://user:password@5.6.7.8:1080 或 socks5://5.6.7.8:1080"
                       className="cyber-input w-full text-sm font-mono"
                     />
+                    {proxyTestResult['proxy2'] && (
+                      <div className={`mt-2 p-2.5 rounded text-xs leading-relaxed ${
+                        proxyTestResult['proxy2'].success 
+                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
+                          : 'bg-red-50 text-red-800 border border-red-200'
+                      }`}>
+                        <div className="font-semibold flex items-center gap-1">
+                          {proxyTestResult['proxy2'].success ? '✅' : '❌'} {proxyTestResult['proxy2'].message}
+                        </div>
+                        {proxyTestResult['proxy2'].ip && (
+                          <div className="mt-1 font-mono text-[11px] text-emerald-700">
+                            📍 出站 IP: {proxyTestResult['proxy2'].ip} ({proxyTestResult['proxy2'].location})
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
