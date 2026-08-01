@@ -79,9 +79,12 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ---- 基础文字 — 深色文字在浅色背景上 ---- */
-  p, span, div, li, td, th {
+  /* ---- 基础文字 — 深色文字在浅色背景上（只设 line-height，不强制 color 避免覆盖 Tailwind 颜色类） ---- */
+  body {
     color: #1e293b;
+  }
+
+  p, li {
     line-height: 1.65;
   }
 
@@ -100,23 +103,13 @@
   h5 { font-size: 1.125rem; }
   h6 { font-size: 1rem; }
 
-  /* ---- 文字尺寸辅助 ---- */
-  .text-xs, [class*="text-xs"] {
-    font-size: 0.8125rem;
-    line-height: 1.5;
-    color: #475569;
-  }
-
-  .text-sm, [class*="text-sm"] {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: #1e293b;
-  }
+  /* ---- 文字尺寸辅助（只设尺寸，不覆盖颜色类） ---- */
+  .text-xs { font-size: 0.8125rem; line-height: 1.5; }
+  .text-sm { font-size: 0.9375rem; line-height: 1.6; }
 
   /* ---- Muted 文字 ---- */
-  .text-muted, .text-cyber-muted, [class*="text-muted"] {
-    color: #64748b !important;
-  }
+  .text-cyber-muted { color: #64748b !important; }
+  .text-muted-foreground { color: #64748b; }
 
   /* ---- 表格 ---- */
   table { font-size: 0.9375rem; line-height: 1.65; }
@@ -190,27 +183,17 @@
     overflow-x: auto;
   }
 
-  /* ---- 卡片内文字 — 修正为深色（内容区） ---- */
-  .cyber-card,
-  .card,
-  [class*="card"] {
-    color: #1e293b;
-  }
+  /* ---- 卡片内文字 ---- */
+  .cyber-card { color: #1e293b; }
 
   /* ---- 列表 ---- */
   ul, ol { line-height: 1.8; }
   li { margin-bottom: 0.25rem; }
 
-  /* ---- 对话框/模态框 — 深色主题（通常是覆盖层） ---- */
-  [role="dialog"], [role="alertdialog"], dialog, .dialog {
-    color: #e2e8f0;
-  }
+  /* ---- 对话框/模态框（不强制颜色，由各自子组件决定） ---- */
   [role="dialog"] p,
-  [role="alertdialog"] p,
-  dialog p,
-  .dialog p {
+  [role="alertdialog"] p {
     line-height: 1.7;
-    color: #cbd5e1;
   }
 
   /* ---- 描述文字 ---- */

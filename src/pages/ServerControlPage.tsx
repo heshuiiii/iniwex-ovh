@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { api } from "@/utils/apiClient";
@@ -2219,20 +2219,13 @@ const ServerControlPage: React.FC = () => {
                   const server = servers.find(s => s.serviceName === e.target.value);
                   setSelectedServer(server || null);
                 }}
-                className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all cursor-pointer"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                }}>
+                className="cyber-input w-full py-3 cursor-pointer font-medium">
                 <option value="" className="bg-cyber-bg text-cyber-muted">请选择服务器</option>
                 {servers.map(s => (
                   <option 
                     key={s.serviceName} 
                     value={s.serviceName}
-                    className="bg-cyber-bg text-cyber-text py-2"
-                    style={{
-                      background: 'rgba(15, 23, 42, 0.98)',
-                      padding: '8px 12px'
-                    }}>
+                    className="bg-cyber-bg text-cyber-text py-2">
                     {s.name} ({s.commercialRange}) - {s.datacenter}
                   </option>
                 ))}
@@ -2279,25 +2272,25 @@ const ServerControlPage: React.FC = () => {
                 <div className="grid grid-cols-2 lg:grid-cols-6 gap-3">
                   <button
                     onClick={() => openTasksDialog(selectedServer)}
-                    className="w-full px-4 py-3 bg-cyber-grid/50 border border-cyber-accent/30 rounded-lg text-cyber-text hover:bg-cyber-accent/10 transition-all flex items-center gap-2 justify-center">
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 hover:bg-sky-50 hover:border-sky-400 hover:text-sky-700 transition-all flex items-center gap-2 justify-center">
                     <Activity className="w-4 h-4" />
                     查看任务
                   </button>
                   <button
                     onClick={() => handleReboot(selectedServer)}
-                    className="w-full px-4 py-3 bg-cyber-grid/50 border border-cyber-accent/30 rounded-lg text-cyber-text hover:bg-cyber-accent/10 transition-all flex items-center gap-2 justify-center">
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 hover:bg-sky-50 hover:border-sky-400 hover:text-sky-700 transition-all flex items-center gap-2 justify-center">
                     <Power className="w-4 h-4" />
                     重启服务器
                   </button>
                   <button
                     onClick={openIPMIConsole}
-                    className="w-full px-4 py-3 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-400 hover:bg-blue-500/20 transition-all flex items-center gap-2 justify-center">
+                    className="w-full px-4 py-3 bg-blue-50 border border-blue-300 rounded-lg text-blue-700 hover:bg-blue-100 hover:border-blue-400 transition-all flex items-center gap-2 justify-center">
                     <Monitor className="w-4 h-4" />
                     IPMI控制台
                   </button>
                   <button
                     onClick={() => openReinstallDialog(selectedServer)}
-                    className="w-full px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 hover:bg-red-500/20 transition-all flex items-center gap-2 justify-center">
+                    className="w-full px-4 py-3 bg-red-50 border border-red-300 rounded-lg text-red-700 hover:bg-red-100 hover:border-red-400 transition-all flex items-center gap-2 justify-center">
                     <HardDrive className="w-4 h-4" />
                     重装系统
                   </button>
@@ -2320,14 +2313,14 @@ const ServerControlPage: React.FC = () => {
                   <button
                     onClick={fetchBootModes}
                     disabled={loadingBootModes}
-                    className="w-full px-4 py-3 bg-orange-500/10 border border-orange-500/30 rounded-lg text-orange-400 hover:bg-orange-500/20 transition-all flex items-center gap-2 justify-center disabled:opacity-50">
+                    className="w-full px-4 py-3 bg-orange-50 border border-orange-300 rounded-lg text-orange-700 hover:bg-orange-100 hover:border-orange-400 transition-all flex items-center gap-2 justify-center disabled:opacity-50">
                     <Server className="w-4 h-4" />
                     {loadingBootModes ? '加载中...' : '启动模式'}
                   </button>
                   <button
                     onClick={fetchBiosSettings}
                     disabled={loadingBios}
-                    className="w-full px-4 py-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-400 hover:bg-yellow-500/20 transition-all flex items-center gap-2 justify-center disabled:opacity-50">
+                    className="w-full px-4 py-3 bg-amber-50 border border-amber-300 rounded-lg text-amber-700 hover:bg-amber-100 hover:border-amber-400 transition-all flex items-center gap-2 justify-center disabled:opacity-50">
                     <Cog className="w-4 h-4" />
                     {loadingBios ? '加载中...' : 'BIOS 设置'}
                   </button>
@@ -2336,20 +2329,20 @@ const ServerControlPage: React.FC = () => {
                       setHardwareReplaceType('');
                       setShowHardwareReplaceDialog(true);
                     }}
-                    className="w-full px-4 py-3 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-400 hover:bg-purple-500/20 transition-all flex items-center gap-2 justify-center">
+                    className="w-full px-4 py-3 bg-violet-50 border border-violet-300 rounded-lg text-violet-700 hover:bg-violet-100 hover:border-violet-400 transition-all flex items-center gap-2 justify-center">
                     <Cpu className="w-4 h-4" />
                     硬件更换
                   </button>
                   <button
                     onClick={openChangeContactDialog}
-                    className="w-full px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 hover:bg-green-500/20 transition-all flex items-center gap-2 justify-center">
+                    className="w-full px-4 py-3 bg-emerald-50 border border-emerald-300 rounded-lg text-emerald-700 hover:bg-emerald-100 hover:border-emerald-400 transition-all flex items-center gap-2 justify-center">
                     <Mail className="w-4 h-4" />
                     变更联系人
                   </button>
                   <button
                     onClick={() => handleOpenNetworkSpecs(selectedServer)}
                     disabled={loadingNetworkSpecs}
-                    className="w-full px-4 py-3 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-cyan-400 hover:bg-cyan-500/20 transition-all flex items-center gap-2 justify-center disabled:opacity-50">
+                    className="w-full px-4 py-3 bg-cyan-50 border border-cyan-300 rounded-lg text-cyan-700 hover:bg-cyan-100 hover:border-cyan-400 transition-all flex items-center gap-2 justify-center disabled:opacity-50">
                     <Wifi className="w-4 h-4" />
                     {loadingNetworkSpecs ? '加载中...' : '网络规格'}
                   </button>
@@ -3217,10 +3210,7 @@ const ServerControlPage: React.FC = () => {
                       const template = e.target.value;
                       setSelectedTemplate(template);
                     }}
-                    className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all cursor-pointer"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                    }}>
+                    className="cyber-input w-full py-3 cursor-pointer font-medium">
                     <option value="" className="bg-cyber-bg text-cyber-muted">选择系统模板</option>
                     {osTemplates
                       .filter(template => {
@@ -3234,11 +3224,7 @@ const ServerControlPage: React.FC = () => {
                         <option 
                           key={template.templateName} 
                           value={template.templateName}
-                          className="bg-cyber-bg text-cyber-text hover:bg-cyber-accent/20 py-2"
-                          style={{
-                            background: 'rgba(15, 23, 42, 0.98)',
-                            padding: '8px 12px'
-                          }}>
+                          className="bg-cyber-bg text-cyber-text hover:bg-cyber-accent/20 py-2">
                           {template.distribution} - {template.family} - {template.bitFormat}位
                         </option>
                       ))}
@@ -3253,9 +3239,6 @@ const ServerControlPage: React.FC = () => {
                   value={customHostname}
                   onChange={(e) => setCustomHostname(e.target.value)}
                   className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                  }}
                 />
               </div>
 
@@ -3268,9 +3251,6 @@ const ServerControlPage: React.FC = () => {
                   onChange={(e) => setSshKeyInput(e.target.value)}
                   disabled={useGlobalSshKey}
                   className={`w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all ${useGlobalSshKey ? 'opacity-60 cursor-not-allowed' : ''}`}
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                  }}
                   rows={3}
                 />
                 <label className="flex items-center gap-2 mt-2">
@@ -3627,7 +3607,7 @@ const ServerControlPage: React.FC = () => {
                 <button
                   onClick={() => setShowReinstallDialog(false)}
                   disabled={isProcessing}
-                  className="px-4 py-2 bg-cyber-grid/50 border border-cyber-accent/30 rounded-lg text-cyber-text hover:bg-cyber-accent/10">
+                  className="px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 hover:bg-sky-50 hover:border-sky-400 hover:text-sky-700">
                   取消
                 </button>
                 <button
@@ -4087,9 +4067,6 @@ const ServerControlPage: React.FC = () => {
                           onChange={(e) => setRescueSshKeyInput(e.target.value)}
                           disabled={rescueUseGlobalSshKey}
                           className={`w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all ${rescueUseGlobalSshKey ? 'opacity-60 cursor-not-allowed' : ''}`}
-                          style={{
-                            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                          }}
                           rows={3}
                         />
                         <label className="flex items-center gap-2 mt-2">
@@ -4110,9 +4087,6 @@ const ServerControlPage: React.FC = () => {
                           value={rescueMailInput}
                           onChange={(e) => setRescueMailInput(e.target.value)}
                           className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all"
-                          style={{
-                            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                          }}
                         />
                       </div>
 
@@ -4541,7 +4515,7 @@ const ServerControlPage: React.FC = () => {
                         </div>
                         <button
                           onClick={() => setHardwareReplaceType('')}
-                          className="px-3 py-3 bg-cyber-grid/50 border border-cyber-accent/30 rounded-lg text-cyber-text hover:bg-cyber-accent/10 transition-all"
+                          className="px-3 py-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 hover:bg-sky-50 hover:border-sky-400 hover:text-sky-700 transition-all"
                           title="重新选择">
                           <RefreshCw className="w-4 h-4" />
                         </button>
@@ -4559,9 +4533,6 @@ const ServerControlPage: React.FC = () => {
                         onChange={(e) => setHardwareReplaceComment(e.target.value)}
                         rows={3}
                         className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all resize-none"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                        }}
                       />
                       <p className="text-xs text-cyber-muted mt-1">提交给OVH的工单内容，建议使用英文描述</p>
                     </div>
@@ -4582,9 +4553,6 @@ const ServerControlPage: React.FC = () => {
                           value={hardwareReplaceDetails}
                           onChange={(e) => setHardwareReplaceDetails(e.target.value)}
                           className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all"
-                          style={{
-                            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                          }}
                         />
                         <p className="text-xs text-cyber-muted mt-1">提交给OVH的技术详情，建议使用英文描述</p>
                       </div>
@@ -4697,9 +4665,6 @@ const ServerControlPage: React.FC = () => {
                       value={contactAdmin}
                       onChange={(e) => setContactAdmin(e.target.value)}
                       className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                      }}
                     />
                     <p className="text-xs text-cyber-muted mt-1">OVH账户NIC handle（留空则不修改）</p>
                   </div>
@@ -4715,9 +4680,6 @@ const ServerControlPage: React.FC = () => {
                       value={contactTech}
                       onChange={(e) => setContactTech(e.target.value)}
                       className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                      }}
                     />
                     <p className="text-xs text-cyber-muted mt-1">OVH账户NIC handle（留空则不修改）</p>
                   </div>
@@ -4733,9 +4695,6 @@ const ServerControlPage: React.FC = () => {
                       value={contactBilling}
                       onChange={(e) => setContactBilling(e.target.value)}
                       className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                      }}
                     />
                     <p className="text-xs text-cyber-muted mt-1">OVH账户NIC handle（留空则不修改）</p>
                   </div>
@@ -4957,9 +4916,6 @@ const ServerControlPage: React.FC = () => {
                       value={token}
                       onChange={(e) => setToken(e.target.value)}
                       className="w-full px-4 py-3 bg-cyber-bg border-2 border-cyber-accent/40 rounded-lg text-cyber-text placeholder-cyber-muted focus:border-cyber-accent focus:ring-2 focus:ring-cyber-accent/30 hover:border-cyber-accent/60 transition-all"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)'
-                      }}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && token && !loadingTokenAction) {
                           handleTokenAction();

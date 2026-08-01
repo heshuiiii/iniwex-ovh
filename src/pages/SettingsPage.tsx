@@ -822,17 +822,17 @@ const SettingsPage = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className={`w-3 h-3 rounded-full ${apiKeyValid ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
-                    <span className={`${apiKeyValid ? 'text-green-400' : 'text-red-400'} text-sm`}>访问密码</span>
+                    <div className={`w-3 h-3 rounded-full ${apiKeyValid ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></div>
+                    <span className={`${apiKeyValid ? 'text-emerald-700 font-semibold' : 'text-red-600 font-semibold'} text-sm`}>访问密码</span>
                   </div>
-                  <span className="text-xs text-cyber-muted">{apiKeyValid === null ? '检测中' : apiKeyValid ? '已通过' : '未设置或不匹配'}</span>
+                  <span className="text-xs text-slate-500 font-medium">{apiKeyValid === null ? '检测中...' : apiKeyValid ? '✅ 已通过' : '❌ 未设置或不匹配'}</span>
                 </div>
                 
                 
                 <div className="cyber-grid-line pt-4">
-                  <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 mb-4">
-                    <p className="text-xs text-purple-300 font-semibold mb-1.5">🔐 快速解锁提示</p>
-                    <p className="text-xs text-purple-200 leading-relaxed">
+                  <div className="bg-sky-50 border border-sky-200 rounded-lg p-3 mb-4">
+                    <p className="text-xs text-sky-700 font-bold mb-1.5">🔐 快速解锁提示</p>
+                    <p className="text-xs text-sky-800 leading-relaxed">
                       如果您已完成初次配置，本页面还可作为<strong>面板解锁功能</strong>使用。只需输入 <strong>访问密码</strong>（其他字段可不填），点击保存即可进入面板。
                     </p>
                   </div>
