@@ -2,5 +2,6 @@ flask>=3.1.0
 flask-cors>=4.0.0
 python-dotenv>=1.0.0
 ovh==1.0.0
-requests==2.30.0
+requests[socks]==2.30.0
 tenacity>=8.2.3
+PySocks>=1.7.1
