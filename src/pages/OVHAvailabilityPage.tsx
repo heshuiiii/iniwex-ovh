@@ -6,6 +6,7 @@ import { RefreshCw, Search, Database, Filter, Download, TrendingUp, ChevronLeft,
 import axios from 'axios';
 import apiClient from '@/utils/apiClient';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { OVH_DATACENTERS } from '@/config/ovhConstants';
 
 /**
  * OVH 数据中心可用性查询页面
@@ -306,23 +307,23 @@ const OVHAvailabilityPage = () => {
     ).length,
   };
 
-  // 获取可用性状态的显示信息
+  // 获取可用性状态的显示信息（高对比度亮彩样式）
   const getAvailabilityInfo = (availability: string) => {
     switch (availability) {
       case '1H-low':
-        return { text: '1小时-低库存', color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30' };
+        return { text: '1小时(低库存)', color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-300' };
       case '1H-high':
-        return { text: '1小时-高库存', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30' };
+        return { text: '1小时(高库存)', color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-300' };
       case '72H':
-        return { text: '72小时', color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30' };
+        return { text: '72小时内', color: 'text-sky-700', bg: 'bg-sky-50', border: 'border-sky-300' };
       case '480H':
-        return { text: '480小时', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/30' };
+        return { text: '480小时内', color: 'text-violet-700', bg: 'bg-violet-50', border: 'border-violet-300' };
       case 'unavailable':
-        return { text: '不可用', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30' };
+        return { text: '缺货', color: 'text-rose-600', bg: 'bg-rose-50/80', border: 'border-rose-200' };
       case 'unknown':
-        return { text: '未知', color: 'text-gray-400', bg: 'bg-gray-500/10', border: 'border-gray-500/30' };
+        return { text: '未知', color: 'text-slate-500', bg: 'bg-slate-100', border: 'border-slate-200' };
       default:
-        return { text: availability, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/30' };
+        return { text: availability, color: 'text-sky-800', bg: 'bg-sky-50', border: 'border-sky-200' };
     }
   };
 
@@ -604,22 +605,32 @@ const OVHAvailabilityPage = () => {
                 </div>
               </div>
               
-              <div className="cyber-grid-line pt-2 sm:pt-3">
-                <h4 className="text-xs font-semibold text-cyber-muted mb-2">
-                  数据中心可用性 ({item.datacenters.length} 个)
+              <div className="border-t border-slate-200 pt-3 mt-3">
+                <h4 className="text-xs font-bold text-slate-700 mb-2.5 flex items-center justify-between">
+                  <span>数据中心可用性 ({item.datacenters.length} 个)</span>
                 </h4>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-1.5 sm:gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
                   {item.datacenters.map((dc) => {
                     const availInfo = getAvailabilityInfo(dc.availability);
+                    const dcCodeLower = dc.datacenter.toLowerCase();
+                    const dcObj = OVH_DATACENTERS.find(d => d.code === dcCodeLower);
                     
                     return (
                       <div
                         key={dc.datacenter}
-                        className={`${availInfo.bg} ${availInfo.border} border rounded px-1.5 sm:px-2 py-1 sm:py-1.5 text-xs`}
+                        className={`${availInfo.bg} ${availInfo.border} border rounded-lg p-2 flex flex-col justify-between text-left shadow-sm transition-all`}
                       >
-                        <div className="font-semibold text-slate-200 text-[10px] sm:text-xs">{dc.datacenter.toUpperCase()}</div>
-                        <div className={`${availInfo.color} text-[9px] sm:text-[10px] font-medium`}>
-                          {availInfo.text}
+                        <div className="flex items-center justify-between w-full mb-1">
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm">{dcObj?.flag || '🌐'}</span>
+                            <span className="font-extrabold font-mono text-xs text-slate-800">{dc.datacenter.toUpperCase()}</span>
+                          </div>
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${availInfo.bg} ${availInfo.border} ${availInfo.color}`}>
+                            {availInfo.text}
+                          </span>
+                        </div>
+                        <div className="text-[11px] font-medium text-slate-600 truncate">
+                          {dcObj ? `${dcObj.region} · ${dcObj.name}` : dc.datacenter}
                         </div>
                       </div>
                     );

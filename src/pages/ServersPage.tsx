@@ -2175,7 +2175,7 @@ const ServersPage = () => {
                     </div>
                     
                     {/* 数据中心列表 - 按区域分组 */}
-                    <div className="bg-slate-900/10 p-4 sm:p-5 overflow-hidden">
+                    <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 sm:p-4 overflow-hidden">
                       {Object.entries(DATACENTER_REGIONS).map(([region, dcCodes]) => {
                         const regionDatacenters = OVH_DATACENTERS
                           .filter(dc => dcCodes.includes(dc.code))
@@ -2189,67 +2189,81 @@ const ServersPage = () => {
 
                         if (regionDatacenters.length === 0) return null;
 
+                        const regionIcons: Record<string, string> = {
+                          '欧洲': '🇪🇺',
+                          '北美': '🌎',
+                          '亚太': '🌏'
+                        };
+
                         return (
-                          <div key={region} className="mb-6 last:mb-0">
-                            <h3 className="text-sm font-semibold text-blue-500 mb-3.5 tracking-wide drop-shadow-[0_0_1px_rgba(59,130,246,0.5)]">{region}</h3>
-                            <div className="grid grid-cols-2 gap-3.5 w-full">
+                          <div key={region} className="mb-5 last:mb-0">
+                            <div className="flex items-center gap-2 mb-3">
+                              <span className="text-sm font-bold text-sky-800 bg-sky-100/80 border border-sky-200 px-2.5 py-0.5 rounded-md flex items-center gap-1.5 shadow-sm">
+                                <span>{regionIcons[region] || '🌐'}</span>
+                                <span>{region}</span>
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 w-full">
                               {regionDatacenters.map(dc => {
                                   const dcCode = dc.code.toUpperCase();
                                   const availStatus = availability[server.planCode]?.[dcCode.toLowerCase()];
                                   const isSelected = selectedDatacenters[server.planCode]?.[dcCode];
                                   
                                   let statusText = "";
-                                  let statusBgColor = "bg-yellow-400";
-                                  let statusTextColor = "";
+                                  let statusBadgeClass = "bg-slate-100 text-slate-500 border-slate-200";
                                   let showStatusText = false;
                                   
-                                  // 只显示"可用"和"缺货"两种状态
                                   if (availStatus === "unavailable") {
                                     statusText = "缺货";
-                                    statusBgColor = "bg-red-400";
-                                    statusTextColor = "text-red-400";
+                                    statusBadgeClass = "bg-rose-50 text-rose-600 border-rose-200 font-semibold";
                                     showStatusText = true;
                                   } else if (availStatus && availStatus !== "unknown" && availStatus !== "unavailable") {
-                                    // 有具体的可用性数据，显示"可用"
-                                    statusText = availStatus.includes("H") ? availStatus : "可用";
-                                    statusBgColor = "bg-green-400";
-                                    statusTextColor = "text-green-400";
+                                    statusText = availStatus.includes("H") ? availStatus : "有货";
+                                    statusBadgeClass = "bg-emerald-50 text-emerald-700 border-emerald-300 font-bold";
                                     showStatusText = true;
-                                  } else {
-                                    // 未检测或unknown状态，不显示状态文字
-                                    statusBgColor = "bg-yellow-400";
-                                    showStatusText = false;
                                   }
                                   
-                                  // 极致精细优化，完美复刻图片布局
                                   return (
                                     <button
                                       key={dcCode}
                                       type="button"
-                                      className="w-full px-3.5 pt-2.5 pb-3 rounded-lg transition-all duration-200 flex flex-col items-start min-w-0 bg-cyber-grid/50 border border-cyber-accent/30 hover:bg-cyber-accent/8 hover:border-cyber-accent/45"
+                                      className={`w-full p-2.5 sm:p-3 rounded-lg transition-all duration-150 flex flex-col justify-between text-left min-w-0 border ${
+                                        isSelected
+                                          ? 'bg-sky-50/90 border-2 border-sky-500 shadow-md ring-1 ring-sky-300/50'
+                                          : 'bg-white border-slate-200 hover:border-sky-300 hover:bg-slate-50/80 shadow-sm'
+                                      }`}
                                       onClick={(e) => toggleDatacenterSelection(server.planCode, dcCode, e)}
-                                      title={`${dc.name} (${dc.region})${statusText ? ` - ${statusText}` : ''}`}
+                                      title={`${dc.flag} ${dc.region} - ${dc.name} (${dcCode})`}
                                     >
-                                      {/* 第一行：代码（左） + 可用性状态（中） + 状态点/打勾（右） */}
-                                      <div className="flex items-center justify-between w-full mb-1.5 gap-2">
-                                        <span className="text-xs font-bold tracking-wide leading-none text-white transition-colors duration-200">{dcCode}</span>
-                                        <div className="flex items-center gap-2 flex-1 justify-end">
+                                      {/* 第一行：国旗 + 代码 + 打勾/状态 */}
+                                      <div className="flex items-center justify-between w-full mb-1.5 gap-1.5">
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="text-base">{dc.flag}</span>
+                                          <span className={`text-sm sm:text-base font-extrabold font-mono tracking-wide ${isSelected ? 'text-sky-950' : 'text-slate-800'}`}>
+                                            {dcCode}
+                                          </span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
                                           {showStatusText && (
-                                            <span className={`text-[10px] font-semibold leading-none ${statusTextColor} tracking-tight transition-colors duration-200`}>{statusText}</span>
+                                            <span className={`text-[10px] px-1.5 py-0.5 rounded border ${statusBadgeClass}`}>
+                                              {statusText}
+                                            </span>
                                           )}
                                           <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">
                                             {isSelected ? (
-                                              <Check className="w-4 h-4 text-green-400" strokeWidth={3} />
+                                              <div className="w-4 h-4 rounded-full bg-sky-600 text-white flex items-center justify-center shadow-sm">
+                                                <Check className="w-3 h-3 stroke-[3]" />
+                                              </div>
                                             ) : (
-                                              <span className={`w-[6px] h-[6px] rounded-full ${statusBgColor} transition-all duration-200`}></span>
+                                              <div className="w-3.5 h-3.5 rounded-full border border-slate-300 bg-slate-100" />
                                             )}
                                           </div>
                                         </div>
                                       </div>
                                       
-                                      {/* 第二行：国家/地区 + 城市名称（白色文字，居中显示） */}
-                                      <div className="w-full min-w-0 flex-1 flex items-center">
-                                        <span className="text-[10px] leading-[1.35] break-words font-normal text-white/90 transition-colors duration-200">{dc.region} - {dc.name}</span>
+                                      {/* 第二行：国家 - 城市中文说明 */}
+                                      <div className="w-full truncate text-xs font-medium text-slate-600">
+                                        {dc.region} · {dc.name}
                                       </div>
                                     </button>
                                   );
@@ -2580,38 +2594,77 @@ const ServersPage = () => {
 
                       if (regionDatacenters.length === 0) return null;
 
+                      const regionIcons: Record<string, string> = {
+                        '欧洲': '🇪🇺',
+                        '北美': '🌎',
+                        '亚太': '🌏'
+                      };
+
                       return (
-                        <div key={region} className="mb-3 last:mb-0">
-                          <h3 className="text-xs font-semibold text-cyber-accent/80 mb-2 tracking-wider pl-1">{region}</h3>
-                          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2">
+                        <div key={region} className="mb-4 last:mb-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs font-bold text-sky-800 bg-sky-100/80 border border-sky-200 px-2 py-0.5 rounded flex items-center gap-1">
+                              <span>{regionIcons[region] || '🌐'}</span>
+                              <span>{region}</span>
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                             {regionDatacenters.map(dc => {
                               const dcCode = dc.code.toUpperCase();
                               const availStatus = availability[server.planCode]?.[dcCode.toLowerCase()] || "unknown";
                               const isSelected = selectedDatacenters[server.planCode]?.[dcCode];
                               
+                              let statusText = "";
+                              let statusBadgeClass = "bg-slate-100 text-slate-500 border-slate-200";
+                              if (availStatus === "unavailable") {
+                                statusText = "缺货";
+                                statusBadgeClass = "bg-rose-50 text-rose-600 border-rose-200 font-semibold";
+                              } else if (availStatus && availStatus !== "unknown" && availStatus !== "unavailable") {
+                                statusText = availStatus.includes("H") ? availStatus : "有货";
+                                statusBadgeClass = "bg-emerald-50 text-emerald-700 border-emerald-300 font-bold";
+                              }
+
                               return (
-                                <div
+                                <button
                                   key={dcCode}
+                                  type="button"
                                   onClick={() => toggleDatacenterSelection(server.planCode, dcCode)}
-                                  className={`px-2.5 py-1.5 rounded cursor-pointer text-xs flex items-center justify-between transition-all ${
+                                  className={`p-2 rounded-lg transition-all duration-150 flex flex-col justify-between text-left border ${
                                     isSelected
-                                      ? 'bg-cyber-accent/20 border-cyber-accent text-cyber-accent'
-                                      : 'bg-slate-800/60 border-slate-700 hover:bg-slate-700/60 text-slate-300 hover:border-slate-600'
-                                  } border font-medium`}
-                                  title={`${dc.name} (${dc.region})`}
+                                      ? 'bg-sky-50/90 border-2 border-sky-500 shadow-sm ring-1 ring-sky-300/50'
+                                      : 'bg-white border-slate-200 hover:border-sky-300 hover:bg-slate-50/80 shadow-sm'
+                                  }`}
+                                  title={`${dc.flag} ${dc.region} - ${dc.name} (${dcCode})`}
                                 >
-                                  <span className="font-semibold">{dcCode}</span>
-                                  {availStatus !== "unknown" && (
-                                    <span className={`text-xs font-semibold ml-1.5 ${
-                                      availStatus === "unavailable" ? 'text-red-400' : 'text-green-400'
-                                    }`}>
-                                      {availStatus === "unavailable" ? '无' : '有'}
-                                    </span>
-                                  )}
-                                  {availStatus === "unknown" && (
-                                    <span className="text-xs text-slate-500 ml-1.5">-</span>
-                                  )}
-                                </div>
+                                  {/* 国旗 + 代号 + 打勾 */}
+                                  <div className="flex items-center justify-between w-full mb-1 gap-1">
+                                    <div className="flex items-center gap-1">
+                                      <span className="text-sm">{dc.flag}</span>
+                                      <span className={`text-xs font-extrabold font-mono tracking-wide ${isSelected ? 'text-sky-950' : 'text-slate-800'}`}>
+                                        {dcCode}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      {statusText && (
+                                        <span className={`text-[9px] px-1 py-0.2 rounded border ${statusBadgeClass}`}>
+                                          {statusText}
+                                        </span>
+                                      )}
+                                      {isSelected ? (
+                                        <div className="w-3.5 h-3.5 rounded-full bg-sky-600 text-white flex items-center justify-center shadow-sm flex-shrink-0">
+                                          <Check className="w-2.5 h-2.5 stroke-[3]" />
+                                        </div>
+                                      ) : (
+                                        <div className="w-3 h-3 rounded-full border border-slate-300 bg-slate-100 flex-shrink-0" />
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {/* 中文国家 - 城市 */}
+                                  <div className="w-full truncate text-[11px] font-medium text-slate-600">
+                                    {dc.region} · {dc.name}
+                                  </div>
+                                </button>
                               );
                             })}
                           </div>
