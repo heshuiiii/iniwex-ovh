@@ -67,12 +67,12 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-cyber-bg cyber-grid-bg text-cyber-text">
-      {/* Animated top border */}
-      <div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyber-accent via-cyber-neon to-cyber-neon-alt animate-gradient-x z-50"></div>
-      
+    <div className="min-h-screen flex flex-col bg-slate-100 text-slate-900">
+      {/* 顶部渐变彩条 */}
+      <div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-500 via-cyan-400 to-violet-500 animate-gradient-x z-50"></div>
+
       <div className="flex-1 flex relative">
-        {/* 桌面端始终显示侧边栏 */}
+        {/* 桌面端始终显示侧边栏（深色） */}
         <div className={`hidden lg:block fixed inset-y-0 left-0 z-40`}>
           <Sidebar onToggle={toggleSidebar} isOpen={true} />
         </div>
@@ -81,7 +81,7 @@ const Layout = () => {
         <AnimatePresence mode="wait">
           {isMobile && sidebarOpen && (
             <>
-              {/* 背景遮罩，点击关闭侧边栏 */}
+              {/* 背景遮罩 */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
@@ -90,7 +90,7 @@ const Layout = () => {
                 onClick={() => setSidebarOpen(false)}
                 style={{ pointerEvents: 'auto' }}
               />
-              
+
               {/* 侧边栏 */}
               <motion.div
                 initial={{ x: -280 }}
@@ -100,24 +100,14 @@ const Layout = () => {
                 className="fixed inset-y-0 left-0 z-40"
               >
                 <Sidebar onToggle={toggleSidebar} isOpen={sidebarOpen} />
-                
-                {/* 添加关闭按钮 */}
-                <button 
+
+                {/* 关闭按钮 */}
+                <button
                   onClick={() => setSidebarOpen(false)}
-                  className="absolute top-4 right-4 w-8 h-8 bg-cyber-bg border border-cyber-accent/30 rounded-md flex items-center justify-center text-cyber-text hover:bg-cyber-accent/10 transition-colors"
+                  className="absolute top-4 right-4 w-8 h-8 bg-slate-800 border border-slate-600 rounded-md flex items-center justify-center text-slate-200 hover:bg-slate-700 transition-colors"
                   aria-label="关闭侧边栏"
                 >
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    width="16" 
-                    height="16" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                   </svg>
@@ -129,49 +119,39 @@ const Layout = () => {
 
         {/* 移动端贴边呼出按钮 */}
         {isMobile && !sidebarOpen && (
-          <div 
+          <div
             onClick={toggleSidebar}
             className="fixed right-0 top-1/3 z-40 cursor-pointer"
           >
             <div className="flex items-center">
-              <div className="h-16 w-4 bg-cyber-bg/80 border border-r-0 border-cyber-accent/50 rounded-l-md flex items-center justify-center">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  width="16" 
-                  height="16" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                  className="text-cyber-accent"
-                >
+              <div className="h-16 w-4 bg-white border border-l-0 border-slate-300 rounded-r-md flex items-center justify-center shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sky-500">
                   <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
               </div>
-              <div className="h-24 w-1.5 bg-cyber-accent/80 rounded-l-sm shadow-neon"></div>
+              <div className="h-20 w-1 bg-sky-500 rounded-r-sm shadow-[0_0_8px_rgba(14,165,233,0.5)]"></div>
             </div>
           </div>
         )}
 
-        <main 
+        {/* 主内容区 — 浅色白底 */}
+        <main
           className={`flex-1 py-6 px-4 sm:px-6 transition-all duration-300 ${
             !isMobile ? "lg:ml-72" : "ml-0"
-          } relative`}
+          } relative bg-slate-50 min-h-screen`}
         >
+          {/* 内容区顶部装饰线 */}
+          {!isMobile && (
+            <div className="fixed left-72 top-0 bottom-0 w-px bg-gradient-to-b from-sky-200 via-slate-200 to-sky-200 z-30 pointer-events-none" />
+          )}
+
           {!isLoading && !isAuthenticated && <APINotice />}
-          
-          <div className="container mx-auto max-w-7xl">
-            {/* 移除面包屑部分，直接显示页面内容 */}
+
+          <div className="container mx-auto max-w-7xl pt-1">
             <Outlet />
           </div>
-          
-          {/* 移除移动端菜单按钮，只依赖左侧滑动手势显示菜单 */}
         </main>
       </div>
-      
-      {/* 移除移动端底部导航栏 */}
     </div>
   );
 };

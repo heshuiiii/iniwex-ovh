@@ -5,57 +5,70 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ================================================================
+   CSS 变量 & 主题令牌
+   ================================================================ */
 @layer base {
   :root {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    /* shadcn/ui 兼容令牌 — 浅色内容区 */
+    --background: 216 40% 96%;      /* #f1f5f9 */
+    --foreground: 222 47% 11%;      /* #0f172a */
 
-    --card: 222 47% 13%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;              /* #ffffff */
+    --card-foreground: 222 47% 11%;
 
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 196 100% 50%;
+    --primary: 196 100% 38%;        /* #0284c7 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 13% 69%; /* 更亮的灰色，提升对比度 (约 #94a3b8) */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%; /* #64748b */
 
-    --accent: 196 100% 50%;
+    --accent: 196 100% 38%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 60.6%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 196 100% 50%;
+    --border: 214 32% 87%;          /* #cbd5e1 */
+    --input: 214 32% 87%;
+    --ring: 196 100% 38%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 222 47% 8%;
+    /* 侧边栏令牌 — 深色 */
+    --sidebar-background: 222 47% 10%;   /* 深海军蓝 */
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 196 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 196 100% 26%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-border: 217 33% 18%;
     --sidebar-ring: 196 100% 50%;
   }
 }
 
+/* ================================================================
+   基础 Reset & 全局文字（内容区统一浅色主题）
+   ================================================================ */
 @layer base {
   * {
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-cyber-bg text-cyber-text;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
+                 "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", Arial, sans-serif;
     font-size: 15px;
     line-height: 1.6;
     letter-spacing: 0.01em;
@@ -66,16 +79,16 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* 改善基础文字可读性 */
-  p, span, div, li, td, th, label {
-    color: #e2e8f0;
+  /* ---- 基础文字 — 深色文字在浅色背景上 ---- */
+  p, span, div, li, td, th {
+    color: #1e293b;
     line-height: 1.65;
   }
 
-  /* 标题样式 */
+  /* ---- 标题 ---- */
   h1, h2, h3, h4, h5, h6 {
     @apply font-cyber tracking-wider;
-    color: #ffffff;
+    color: #0f172a;
     line-height: 1.4;
     font-weight: 600;
   }
@@ -87,154 +100,155 @@
   h5 { font-size: 1.125rem; }
   h6 { font-size: 1rem; }
 
-  /* 改善小文字可读性 */
+  /* ---- 文字尺寸辅助 ---- */
   .text-xs, [class*="text-xs"] {
-    font-size: 0.8125rem; /* 13px */
+    font-size: 0.8125rem;
     line-height: 1.5;
-    color: #cbd5e1;
+    color: #475569;
   }
 
   .text-sm, [class*="text-sm"] {
-    font-size: 0.9375rem; /* 15px */
-    line-height: 1.6;
-    color: #e2e8f0;
-  }
-
-  /* 改善 muted 文字对比度 */
-  .text-muted, .text-cyber-muted, [class*="text-muted"] {
-    color: #94a3b8 !important; /* 更亮的灰色，对比度更好 */
-  }
-
-  /* 表格文字可读性 */
-  table {
     font-size: 0.9375rem;
-    line-height: 1.65;
+    line-height: 1.6;
+    color: #1e293b;
   }
 
-  th {
-    color: #e2e8f0;
-    font-weight: 600;
+  /* ---- Muted 文字 ---- */
+  .text-muted, .text-cyber-muted, [class*="text-muted"] {
+    color: #64748b !important;
   }
 
-  td {
-    color: #cbd5e1;
-  }
+  /* ---- 表格 ---- */
+  table { font-size: 0.9375rem; line-height: 1.65; }
+  th    { color: #0f172a; font-weight: 600; }
+  td    { color: #334155; }
 
-  /* 按钮文字 */
+  /* ---- 按钮 ---- */
   button {
     font-size: 0.9375rem;
     line-height: 1.5;
     font-weight: 500;
+    color: #1e293b;
   }
 
-  /* 输入框文字 */
+  /* ---- 表单控件 — 浅色背景、深色文字 ---- */
   input, textarea, select {
     font-size: 0.9375rem;
     line-height: 1.5;
-    color: #e2e8f0;
+    color: #0f172a;
+    background-color: #ffffff;
+    border-color: #cbd5e1;
+  }
+
+  select option {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  select option:hover,
+  select option:focus,
+  select option:active,
+  select option:checked {
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
   }
 
   input::placeholder, textarea::placeholder {
     color: #94a3b8;
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
-  /* 链接文字 */
-  a {
-    color: #60a5fa;
-    transition: color 0.2s;
-  }
+  /* ---- 链接 ---- */
+  a { color: #0284c7; transition: color 0.2s; }
+  a:hover { color: #0369a1; }
 
-  a:hover {
-    color: #3b82f6;
-  }
-
-  /* 改善卡片内文字 */
-  .cyber-card, .card, [class*="card"] {
-    color: #e2e8f0;
-  }
-
-  /* 改善列表文字 */
-  ul, ol {
-    line-height: 1.8;
-  }
-
-  li {
-    margin-bottom: 0.25rem;
-  }
-
-  /* 改善对话框和模态框文字 */
-  [role="dialog"], [role="alertdialog"], dialog, .dialog {
-    color: #e2e8f0;
-  }
-
-  [role="dialog"] p, [role="alertdialog"] p, dialog p, .dialog p {
-    line-height: 1.7;
-    color: #cbd5e1;
-  }
-
-  /* 改善标签文字 */
+  /* ---- 标签 — 内容区深色文字 ---- */
   label {
     font-weight: 500;
-    color: #e2e8f0;
+    color: #334155;
     font-size: 0.9375rem;
   }
 
-  /* 改善描述性文字 */
-  .description, [class*="description"] {
-    color: #cbd5e1;
-    line-height: 1.7;
-  }
-
-  /* 改善代码和等宽文字 */
-  code, kbd, samp, pre {
+  /* ---- 行内代码 — 浅色风格 ---- */
+  code, kbd, samp {
     font-family: 'Courier New', Courier, monospace;
     font-size: 0.875rem;
-    color: #e2e8f0;
-    background-color: rgba(30, 41, 59, 0.5);
+    color: #0f172a;
+    background-color: #e2e8f0;
     padding: 0.125rem 0.375rem;
     border-radius: 0.25rem;
   }
 
-  /* 改善徽章和状态文字 */
+  pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.875rem;
+    color: #0f172a;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+  }
+
+  /* ---- 卡片内文字 — 修正为深色（内容区） ---- */
+  .cyber-card,
+  .card,
+  [class*="card"] {
+    color: #1e293b;
+  }
+
+  /* ---- 列表 ---- */
+  ul, ol { line-height: 1.8; }
+  li { margin-bottom: 0.25rem; }
+
+  /* ---- 对话框/模态框 — 深色主题（通常是覆盖层） ---- */
+  [role="dialog"], [role="alertdialog"], dialog, .dialog {
+    color: #e2e8f0;
+  }
+  [role="dialog"] p,
+  [role="alertdialog"] p,
+  dialog p,
+  .dialog p {
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* ---- 描述文字 ---- */
+  .description, [class*="description"] {
+    color: #64748b;
+    line-height: 1.7;
+  }
+
+  /* ---- 徽章 ---- */
   .badge, [class*="badge"] {
     font-weight: 500;
     font-size: 0.8125rem;
   }
 
-  /* 改善表格标题单元格 */
+  /* ---- 表格辅助 ---- */
   .cyber-table th {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #e2e8f0;
+    color: #0f172a;
   }
 
-  /* 改善表格数据单元格 */
   .cyber-table td {
     font-size: 0.9375rem;
-    color: #cbd5e1;
+    color: #334155;
     line-height: 1.65;
   }
 
-  /* 响应式：移动端字体稍微增大 */
+  /* ---- 响应式 ---- */
   @media (max-width: 640px) {
-    body {
-      font-size: 16px;
-    }
-    
-    .text-xs {
-      font-size: 0.875rem; /* 14px on mobile */
-    }
-    
-    .text-sm {
-      font-size: 1rem; /* 16px on mobile */
-    }
+    body    { font-size: 16px; }
+    .text-xs { font-size: 0.875rem; }
+    .text-sm { font-size: 1rem; }
   }
-  
+
   button, a, input, select, textarea {
     @apply focus:outline-none;
   }
-  
+
   @media (max-width: 640px) {
     button, a {
       @apply min-h-[44px] min-w-[44px];
@@ -242,260 +256,257 @@
   }
 }
 
-/* Custom scrollbar */
+/* ================================================================
+   自定义滚动条 — 浅色风格
+   ================================================================ */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-cyber-bg;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-cyber-accent/50 rounded-full;
-  border: 2px solid transparent;
+  background: #94a3b8;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-cyber-accent;
+  background: #0284c7;
 }
 
+/* ================================================================
+   组件层 — 内容区浅色主题 + 侧边栏深色保留
+   ================================================================ */
 @layer components {
+
+  /* ------ 面板 (Panel) — 白色卡片 ------ */
   .cyber-panel {
-    @apply bg-card bg-opacity-60 backdrop-blur-sm border border-cyber-accent/30 rounded-md overflow-hidden relative;
+    @apply bg-white border border-slate-200 rounded-lg overflow-hidden relative shadow-sm;
     will-change: transform;
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
     backface-visibility: hidden;
     contain: layout paint;
   }
-  
+
   .cyber-panel::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-cyber-accent/5 to-cyber-neon/5 opacity-30 pointer-events-none;
+    @apply absolute inset-0 opacity-0 pointer-events-none;
   }
-  
+
   .cyber-panel::after {
     content: '';
-    @apply absolute h-[1px] w-full left-0 top-0 bg-gradient-to-r from-transparent via-cyber-accent to-transparent pointer-events-none;
+    @apply absolute h-[2px] w-full left-0 top-0 bg-gradient-to-r from-transparent via-sky-400/60 to-transparent pointer-events-none;
   }
-  
+
+  /* ------ 按钮 — 浅色主题 ------ */
   .cyber-button {
     @apply relative px-3 py-2 rounded-md text-sm font-medium
-           bg-slate-800/50 border border-slate-700/50 text-slate-200
-           hover:bg-slate-700/50 hover:border-slate-600/50 hover:text-white
+           bg-white border border-slate-300 text-slate-700
+           hover:bg-sky-50 hover:border-sky-400 hover:text-sky-700
            active:scale-[0.97]
            transition-all duration-150 ease-out
+           shadow-sm
            disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100;
   }
-  
-  .cyber-input {
-    @apply bg-cyber-bg border border-cyber-grid focus:border-cyber-accent/70 focus:shadow-neon-inner
-           px-3 py-2 rounded-sm text-cyber-text placeholder:text-cyber-muted outline-none;
+
+  /* 主色调按钮变体 */
+  .cyber-button-primary {
+    @apply relative px-3 py-2 rounded-md text-sm font-medium
+           bg-sky-600 border border-sky-600 text-white
+           hover:bg-sky-700 hover:border-sky-700
+           active:scale-[0.97]
+           transition-all duration-150 ease-out
+           shadow-sm
+           disabled:opacity-40 disabled:cursor-not-allowed;
   }
-  
+
+  /* ------ 输入框 ------ */
+  .cyber-input {
+    @apply bg-white border border-slate-300 focus:border-sky-400 focus:ring-2 focus:ring-sky-100
+           px-3 py-2 rounded-md text-slate-900 placeholder:text-slate-400 outline-none
+           transition-colors duration-150;
+  }
+
+  /* ------ 卡片 ------ */
   .cyber-card {
-    @apply cyber-panel p-4;
+    @apply bg-white border border-slate-200 rounded-lg p-4 shadow-sm;
     contain: paint;
     will-change: transform;
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
     backface-visibility: hidden;
+    color: #1e293b;
   }
-  
+
+  /* ------ 网格背景 (内容区) ------ */
   .cyber-grid-bg {
-    background-image: 
-      linear-gradient(to right, rgba(30, 42, 58, 0.3) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(30, 42, 58, 0.3) 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-image:
+      linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
-  
-  .cyber-scan {
-    @apply relative overflow-hidden;
-  }
-  
-  .cyber-scan::after {
-    content: '';
-    @apply absolute inset-0 animate-scanning opacity-30;
-  }
-  
-  .cyber-glow-text {
-    @apply text-cyber-accent drop-shadow-[0_0_2px_rgba(0,179,254,0.8)];
-  }
-  
+
+  /* ------ 分割线 ------ */
   .cyber-grid-line {
-    @apply border-t border-cyber-grid;
+    @apply border-t border-slate-200;
   }
-  
+
+  /* ------ 发光文字 (标题) ------ */
+  .cyber-glow-text {
+    @apply text-sky-600 drop-shadow-[0_0_2px_rgba(2,132,199,0.4)];
+  }
+
+  /* ------ 状态徽章 ------ */
+  .status-available   { @apply text-emerald-600 animate-pulse; }
+  .status-unavailable { @apply text-red-500; }
+  .status-unknown     { @apply text-amber-500; }
+
+  /* ------ 渐变边框 ------ */
   .cyber-gradient-border {
     @apply relative;
   }
-  
   .cyber-gradient-border::before {
     content: '';
-    @apply absolute inset-0 rounded-lg p-[1px] bg-gradient-to-r from-cyber-accent via-cyber-neon to-cyber-neon-alt -z-10;
-    mask: 
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
+    @apply absolute inset-0 rounded-lg p-[1px] bg-gradient-to-r from-sky-400 via-cyan-400 to-violet-400 -z-10;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
   }
 
+  /* ------ 表格 ------ */
   .cyber-table th {
-    @apply uppercase text-xs font-cyber text-cyber-accent/80 border-b border-cyber-accent/20 pb-2;
+    @apply uppercase text-xs font-cyber text-sky-600/80 border-b border-slate-200 pb-2;
   }
-  
   .cyber-table td {
-    @apply py-3 border-b border-cyber-grid;
+    @apply py-3 border-b border-slate-100;
   }
-  
+
+  /* ------ 徽章 ------ */
   .cyber-badge {
-    @apply inline-flex items-center rounded-full border border-cyber-accent/30 px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-cyber-accent bg-cyber-bg;
-  }
-  
-  .status-available {
-    @apply text-green-400 animate-pulse;
-  }
-  
-  .status-unavailable {
-    @apply text-red-400;
-  }
-  
-  .status-unknown {
-    @apply text-yellow-400;
-  }
-  
-  .mobile-menu-item {
-    @apply relative flex items-center px-3 py-3 rounded-md transition-all;
-  }
-  
-  .mobile-touch-feedback {
-    @apply active:bg-cyber-accent/20 transition-colors duration-150;
-  }
-  
-  .mobile-bottom-safe-area {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-  
-  .mobile-top-safe-area {
-    padding-top: env(safe-area-inset-top, 0);
+    @apply inline-flex items-center rounded-full border border-sky-300 px-2.5 py-0.5
+           text-xs font-semibold transition-colors
+           text-sky-700 bg-sky-50;
   }
 
-  /* Hide scrollbar but keep functionality */
+  /* ------ 移动端 ------ */
+  .mobile-menu-item { @apply relative flex items-center px-3 py-3 rounded-md transition-all; }
+  .mobile-touch-feedback { @apply active:bg-sky-100/60 transition-colors duration-150; }
+  .mobile-bottom-safe-area { padding-bottom: env(safe-area-inset-bottom, 0); }
+  .mobile-top-safe-area    { padding-top: env(safe-area-inset-top, 0); }
+
+  /* ------ 隐藏滚动条 ------ */
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+  /* ------ 对话框 — 深色主题（覆盖层） ------ */
+  .cyber-dialog {
+    @apply border border-slate-700 bg-slate-900/95 backdrop-blur-md shadow-2xl;
+    will-change: transform;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    backface-visibility: hidden;
+    contain: layout paint;
   }
 
-  /* Dialog styling */
-  .cyber-dialog {
-    @apply border border-cyber-accent/30 bg-cyber-bg/90 backdrop-blur-md shadow-neon-inner;
-    will-change: transform;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-    backface-visibility: hidden;
-    contain: layout paint;
-  }
-  
-  /* Toast styling */
-  .cyber-toast {
-    @apply bg-cyber-bg/90 backdrop-blur-md border border-cyber-accent/30 shadow-neon;
-    will-change: transform;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-    backface-visibility: hidden;
-    contain: layout paint;
-  }
-  
-  /* Sonner Toast 强制深色主题 */
+  /* ------ Sonner Toast — 深色主题 ------ */
   [data-sonner-toast] {
-    background: rgba(15, 23, 42, 0.95) !important;
-    border: 1px solid rgba(34, 211, 238, 0.3) !important;
+    background: rgba(15, 23, 42, 0.97) !important;
+    border: 1px solid rgba(71, 85, 105, 0.6) !important;
     color: #f1f5f9 !important;
-    backdrop-filter: blur(8px) !important;
-    box-shadow: 0 10px 15px -3px rgba(34, 211, 238, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3) !important;
   }
-  
+
   [data-sonner-toast][data-type="success"] {
-    background: rgba(20, 83, 45, 0.2) !important;
-    border-color: rgba(34, 197, 94, 0.4) !important;
-    color: #bbf7d0 !important;
+    background: rgba(6, 78, 59, 0.18) !important;
+    border-color: rgba(16, 185, 129, 0.45) !important;
+    color: #a7f3d0 !important;
   }
-  
+
   [data-sonner-toast][data-type="error"] {
     background: rgba(127, 29, 29, 0.2) !important;
-    border-color: rgba(239, 68, 68, 0.4) !important;
+    border-color: rgba(239, 68, 68, 0.45) !important;
     color: #fecaca !important;
   }
-  
+
   [data-sonner-toast][data-type="warning"] {
-    background: rgba(113, 63, 18, 0.2) !important;
-    border-color: rgba(234, 179, 8, 0.4) !important;
+    background: rgba(120, 53, 15, 0.2) !important;
+    border-color: rgba(234, 179, 8, 0.45) !important;
     color: #fef08a !important;
   }
-  
+
   [data-sonner-toast][data-type="info"] {
     background: rgba(30, 58, 138, 0.2) !important;
-    border-color: rgba(59, 130, 246, 0.4) !important;
+    border-color: rgba(59, 130, 246, 0.45) !important;
     color: #bfdbfe !important;
   }
-  
-  [data-sonner-toast] [data-title] {
-    color: inherit !important;
-    font-weight: 500 !important;
+
+  [data-sonner-toast] [data-title]       { color: inherit !important; font-weight: 500 !important; }
+  [data-sonner-toast] [data-description] { color: rgba(148,163,184,0.9) !important; font-size: 0.875rem !important; }
+  [data-sonner-toast] [data-button]      { background: rgb(2, 132, 199) !important; color: white !important; border: none !important; }
+  [data-sonner-toast] [data-button]:hover { background: rgb(3, 105, 161) !important; }
+  [data-sonner-toast] [data-cancel-button] { background: rgb(30,41,59) !important; color: rgb(203,213,225) !important; border: 1px solid rgb(51,65,85) !important; }
+  [data-sonner-toast] [data-cancel-button]:hover { background: rgb(51,65,85) !important; }
+  [data-sonner-toast] [data-icon] { color: inherit !important; }
+
+  /* ------ 扫描动画 ------ */
+  .cyber-scan { @apply relative overflow-hidden; }
+  .cyber-scan::after { content: ''; @apply absolute inset-0 animate-scanning opacity-20; }
+
+  /* ================================================================
+     侧边栏内文字 — 专门针对深色背景复写（避免被全局浅色覆盖）
+     ================================================================ */
+  .bg-sidebar,
+  [class*="bg-sidebar"] {
+    --tw-text-opacity: 1;
   }
-  
-  [data-sonner-toast] [data-description] {
-    color: rgba(148, 163, 184, 0.9) !important;
-    font-size: 0.875rem !important;
+
+  /* 侧边栏内的 p/span/div/li 保持亮色文字 */
+  .bg-sidebar p,
+  .bg-sidebar span,
+  .bg-sidebar div,
+  .bg-sidebar li,
+  .bg-sidebar label,
+  .bg-sidebar a {
+    color: rgb(210 218 235);
   }
-  
-  [data-sonner-toast] [data-button] {
-    background: rgb(34, 211, 238) !important;
-    color: white !important;
-    border: 1px solid rgb(34, 211, 238) !important;
+
+  .bg-sidebar h1, .bg-sidebar h2,
+  .bg-sidebar h3, .bg-sidebar h4 {
+    color: rgb(226 232 240);
   }
-  
-  [data-sonner-toast] [data-button]:hover {
-    background: rgba(34, 211, 238, 0.8) !important;
-  }
-  
-  [data-sonner-toast] [data-cancel-button] {
-    background: rgb(30, 41, 59) !important;
-    color: rgb(203, 213, 225) !important;
-    border: 1px solid rgb(51, 65, 85) !important;
-  }
-  
-  [data-sonner-toast] [data-cancel-button]:hover {
-    background: rgb(51, 65, 85) !important;
-  }
-  
-  [data-sonner-toast] [data-icon] {
-    color: inherit !important;
-  }
+
+  .bg-sidebar .text-xs, .bg-sidebar [class*="text-xs"] { color: rgb(148 163 184) !important; }
+  .bg-sidebar .text-sm, .bg-sidebar [class*="text-sm"] { color: rgb(203 213 225) !important; }
 }
 
-/* Animation for text cycling */
+/* ================================================================
+   顶部渐变边框动画
+   ================================================================ */
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 4s ease infinite;
+}
+
+/* ================================================================
+   文字循环动画
+   ================================================================ */
 @keyframes text-cycle {
-  0%, 20% {
-    transform: translateY(0%);
-  }
-  25%, 45% {
-    transform: translateY(-25%);
-  }
-  50%, 70% {
-    transform: translateY(-50%);
-  }
-  75%, 95% {
-    transform: translateY(-75%);
-  }
-  100% {
-    transform: translateY(-100%);
-  }
+  0%,  20% { transform: translateY(0%);    }
+  25%, 45% { transform: translateY(-25%);  }
+  50%, 70% { transform: translateY(-50%);  }
+  75%, 95% { transform: translateY(-75%);  }
+  100%      { transform: translateY(-100%); }
 }
 
 .animate-text-cycle {

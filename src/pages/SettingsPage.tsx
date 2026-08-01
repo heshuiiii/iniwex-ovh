@@ -16,15 +16,22 @@ const SettingsPage = () => {
   const { 
     tgToken,
     tgChatId,
+    proxy1: ctxProxy1,
+    proxy2: ctxProxy2,
+    defaultRetryInterval: ctxDefaultRetry,
     isLoading,
-    checkAuthentication
+    checkAuthentication,
+    refreshSettings,
   } = useAPI();
 
   const [formValues, setFormValues] = useState({
     apiSecretKey: "",
     tgToken: "",
     tgChatId: "",
-    sshKey: ""
+    sshKey: "",
+    proxy1: "",
+    proxy2: "",
+    defaultRetryInterval: "30",
   });
   const [isSaving, setIsSaving] = useState(false);
   const [showValues, setShowValues] = useState({
@@ -50,7 +57,7 @@ const SettingsPage = () => {
     }));
   }, [tgToken, tgChatId]);
 
-  // 加载后端设置中的 SSH 公钥
+  // 加载后端设置
   useEffect(() => {
     (async () => {
       try {
@@ -59,8 +66,11 @@ const SettingsPage = () => {
         setFormValues(prev => ({
           ...prev,
           sshKey: cfg.sshKey || "",
+          proxy1: cfg.proxy1 || "",
+          proxy2: cfg.proxy2 || "",
           tgToken: cfg.tgToken || prev.tgToken || "",
-          tgChatId: cfg.tgChatId || prev.tgChatId || ""
+          tgChatId: cfg.tgChatId || prev.tgChatId || "",
+          defaultRetryInterval: cfg.defaultRetryInterval ? String(cfg.defaultRetryInterval) : "30",
         }));
       } catch {}
     })();
@@ -235,14 +245,20 @@ const SettingsPage = () => {
       await new Promise(resolve => setTimeout(resolve, 100));
       
       try {
+        const retryVal = parseInt(formValues.defaultRetryInterval) || 30;
         await api.post('/settings', {
           tgToken: formValues.tgToken || undefined,
           tgChatId: formValues.tgChatId || undefined,
-          sshKey: formValues.sshKey || undefined
+          sshKey: formValues.sshKey || undefined,
+          proxy1: formValues.proxy1 || "",
+          proxy2: formValues.proxy2 || "",
+          defaultRetryInterval: retryVal,
         });
-        toast.success("访问密码与Telegram配置已保存，页面将刷新");
+        // 立即同步代理和间隔到全局 context，无需刷新页面
+        await refreshSettings();
+        toast.success("系统配置与代理设置已保存");
       } catch (err) {
-        toast.error("保存Telegram配置失败");
+        toast.error("保存代理与系统配置失败");
       }
       setTimeout(() => { window.location.reload(); }, 800);
       // 无论是否有OVH配置，确保SSH设置已同步保存
@@ -348,7 +364,90 @@ const SettingsPage = () => {
                 />
                 <p className="text-xs text-cyan-400 mt-1">Windows 模板不适用 SSH 公钥（会被忽略）</p>
               </div>
-              
+
+              {/* SOCKS5 下单代理设置 */}
+              <div className="cyber-grid-line pt-4">
+                <h2 className="text-xl font-bold mb-2">🌐 指定下单 SOCKS5 代理 (最多2个)</h2>
+                <p className="text-xs text-cyber-muted mb-4">
+                  OVH 下单时检查 IP 归属。仅在触发抢购下单时使用指定代理，API 监控检测不经过代理。
+                </p>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-cyber-muted mb-1 text-xs sm:text-sm font-medium">
+                      代理 1 (Proxy 1)
+                    </label>
+                    <input
+                      type="text"
+                      name="proxy1"
+                      value={formValues.proxy1}
+                      onChange={handleChange}
+                      placeholder="socks5://username:password@1.2.3.4:1080 或 socks5://1.2.3.4:1080"
+                      className="cyber-input w-full text-sm font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-cyber-muted mb-1 text-xs sm:text-sm font-medium">
+                      代理 2 (Proxy 2)
+                    </label>
+                    <input
+                      type="text"
+                      name="proxy2"
+                      value={formValues.proxy2}
+                      onChange={handleChange}
+                      placeholder="socks5://username:password@5.6.7.8:1080 或 socks5://5.6.7.8:1080"
+                      className="cyber-input w-full text-sm font-mono"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 全局默认等待时间 */}
+              <div className="cyber-grid-line pt-4">
+                <h2 className="text-xl font-bold mb-2">⏱️ 全局默认检测间隔 (秒)</h2>
+                <p className="text-xs text-cyber-muted mb-4">
+                  抢购队列新任务的默认重试间隔秒数。建议 ≥ 15 秒，过小会触发 OVH API 限速。
+                </p>
+                <div className="flex items-center gap-4">
+                  <input
+                    type="number"
+                    name="defaultRetryInterval"
+                    value={formValues.defaultRetryInterval}
+                    onChange={handleChange}
+                    min={5}
+                    max={3600}
+                    step={1}
+                    className="cyber-input w-48 text-sm font-mono"
+                    placeholder="默认: 30"
+                  />
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs text-cyber-muted">
+                      当前: <span className="text-cyan-400 font-mono font-semibold">{formValues.defaultRetryInterval} 秒</span>
+                      {Number(formValues.defaultRetryInterval) < 15 && (
+                        <span className="ml-2 text-yellow-400">⚠️ 建议 ≥ 15 秒</span>
+                      )}
+                    </span>
+                    <div className="flex gap-2">
+                      {[15, 30, 60].map(v => (
+                        <button
+                          key={v}
+                          type="button"
+                          onClick={() => setFormValues(prev => ({ ...prev, defaultRetryInterval: String(v) }))}
+                          className={`text-xs px-2.5 py-1 rounded border transition-colors ${
+                            Number(formValues.defaultRetryInterval) === v
+                              ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400'
+                              : 'border-slate-600/50 text-slate-400 hover:border-cyan-500/40 hover:text-cyan-400'
+                          }`}
+                        >
+                          {v}s
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="cyber-grid-line pt-4">
                 <h2 className="text-xl font-bold mb-4">📱 Telegram 通知设置 (可选)</h2>
                 

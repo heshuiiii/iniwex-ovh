@@ -1,16 +1,20 @@
 version: "3.8"
+
 services:
-  ovh-app:
-    image: iniwex/ovh:latest
-    container_name: OVH
-    pull_policy: always
+  ovh-sniper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: iniwex-ovh:latest
+    container_name: ovh-sniper
     ports:
       - "20000:80"
     environment:
       - DEBUG=false
       - VITE_API_URL=/api
-      - API_SECRET_KEY=你得替换为你自己的访问密钥
+      - API_SECRET_KEY=your_secure_api_key_here
       - ENABLE_API_KEY_AUTH=true
+      - TZ=Asia/Shanghai
     volumes:
       - ./data:/app/backend/data
       - ./logs:/app/backend/logs

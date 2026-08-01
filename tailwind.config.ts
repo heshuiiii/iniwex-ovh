@@ -64,16 +64,16 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				cyber: {
-					'bg': '#0f1a2c',
-					'accent': '#00b3fe',
-					'accent-glow': '#00b3fe80',
-					'neon': '#00ffe1',
-					'neon-alt': '#e100ff',
-					'grid': '#1e2a3a',
-					'text': '#ffffff',
-					'muted': '#94a3b8', // 更亮的灰色，提升对比度
-					'dark': '#0a1525',
-					'highlight': '#ff3e88'
+					'bg': '#f1f5f9',
+					'accent': '#0284c7',
+					'accent-glow': 'rgba(2, 132, 199, 0.25)',
+					'neon': '#06b6d4',
+					'neon-alt': '#8b5cf6',
+					'grid': '#cbd5e1',
+					'text': '#0f172a',
+					'muted': '#64748b',
+					'dark': '#ffffff',
+					'highlight': '#ec4899'
 				}
 			},
 			borderRadius: {

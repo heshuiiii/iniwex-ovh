@@ -23,6 +23,9 @@ interface APIContextType {
   tgChatId: string;
   iam: string;
   zone: string;
+  proxy1: string;
+  proxy2: string;
+  defaultRetryInterval: number;
   isLoading: boolean;
   isAuthenticated: boolean;
   setAPIKeys: (keys: APIKeysType) => Promise<void>;
@@ -33,6 +36,7 @@ interface APIContextType {
   refreshAccounts: () => Promise<void>;
   accountStatuses: Record<string, { valid: boolean; error?: string }>;
   refreshAccountStatuses: () => Promise<void>;
+  refreshSettings: () => Promise<void>;
 }
 
 interface APIKeysType {
@@ -44,6 +48,9 @@ interface APIKeysType {
   tgChatId?: string;
   iam?: string;
   zone?: string;
+  proxy1?: string;
+  proxy2?: string;
+  defaultRetryInterval?: number;
 }
 
 // Create the API Context
@@ -59,55 +66,71 @@ export const API_Provider = ({ children }: { children: ReactNode }) => {
   const [tgChatId, setTgChatId] = useState<string>('');
   const [iam, setIam] = useState<string>('go-ovh-ie');
   const [zone, setZone] = useState<string>('IE');
+  const [proxy1, setProxy1] = useState<string>('');
+  const [proxy2, setProxy2] = useState<string>('');
+  const [defaultRetryInterval, setDefaultRetryInterval] = useState<number>(30);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<any[]>([]);
   const [currentAccountId, setCurrentAccountIdState] = useState<string>('');
   const [accountStatuses, setAccountStatuses] = useState<Record<string, { valid: boolean; error?: string }>>({});
 
+  // 加载后端设置（含代理和默认间隔）
+  const loadSettings = async () => {
+    try {
+      const apiKey = localStorage.getItem('api_secret_key');
+      if (!apiKey) {
+        console.log('未设置 API 安全密钥，跳过配置加载');
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await api.get(`/settings`);
+      const data = response.data;
+
+      // 始终加载 Telegram 设置
+      setTgToken(data?.tgToken || '');
+      setTgChatId(data?.tgChatId || '');
+
+      // 加载代理设置（全局复用）
+      setProxy1(data?.proxy1 || '');
+      setProxy2(data?.proxy2 || '');
+
+      // 加载全局默认重试间隔
+      if (data?.defaultRetryInterval && Number(data.defaultRetryInterval) > 0) {
+        setDefaultRetryInterval(Number(data.defaultRetryInterval));
+      }
+
+      // 仅当存在全局（旧）OVH设置时才填充这些字段
+      if (data && data.appKey) {
+        setAppKey(data.appKey);
+        setAppSecret(data.appSecret);
+        setConsumerKey(data.consumerKey);
+        setEndpoint(data.endpoint || 'ovh-eu');
+        setIam(data.iam || 'go-ovh-ie');
+        setZone(data.zone || 'IE');
+
+        setIsAuthenticated(true);
+        apiEvents.emitAuthChanged(true);
+      }
+    } catch (error) {
+      console.error('Failed to load API keys:', error);
+      setIsAuthenticated(false);
+      apiEvents.emitAuthChanged(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Load API keys from backend on mount
   useEffect(() => {
-    const loadAPIKeys = async () => {
-      try {
-        // 先检查是否有 API_SECRET_KEY
-        const apiKey = localStorage.getItem('api_secret_key');
-        if (!apiKey) {
-          // 如果没有密钥，不尝试加载配置
-          console.log('未设置 API 安全密钥，跳过配置加载');
-          setIsLoading(false);
-          return;
-        }
-        
-        const response = await api.get(`/settings`);
-        const data = response.data;
-
-        // 始终加载 Telegram 设置（不依赖 OVH 账户是否存在）
-        setTgToken(data?.tgToken || '');
-        setTgChatId(data?.tgChatId || '');
-
-        // 仅当存在全局（旧）OVH设置时才填充这些字段
-        if (data && data.appKey) {
-          setAppKey(data.appKey);
-          setAppSecret(data.appSecret);
-          setConsumerKey(data.consumerKey);
-          setEndpoint(data.endpoint || 'ovh-eu');
-          setIam(data.iam || 'go-ovh-ie');
-          setZone(data.zone || 'IE');
-
-          setIsAuthenticated(true);
-          apiEvents.emitAuthChanged(true);
-        }
-      } catch (error) {
-        console.error('Failed to load API keys:', error);
-        setIsAuthenticated(false);
-        apiEvents.emitAuthChanged(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadAPIKeys();
+    loadSettings();
   }, []);
+
+  // 供外部调用：刷新设置（例如保存后立即同步代理/间隔到 context）
+  const refreshSettings = async (): Promise<void> => {
+    await loadSettings();
+  };
 
   const refreshAccountStatuses = async (): Promise<void> => {
     try {
@@ -166,7 +189,7 @@ export const API_Provider = ({ children }: { children: ReactNode }) => {
   const setAPIKeys = async (keys: APIKeysType): Promise<void> => {
     setIsLoading(true);
     try {
-      const response = await api.post(`/settings`, {
+      await api.post(`/settings`, {
         appKey: keys.appKey,
         appSecret: keys.appSecret,
         consumerKey: keys.consumerKey,
@@ -174,7 +197,10 @@ export const API_Provider = ({ children }: { children: ReactNode }) => {
         tgToken: keys.tgToken || '',
         tgChatId: keys.tgChatId || '',
         iam: keys.iam || 'go-ovh-ie',
-        zone: keys.zone || 'IE'
+        zone: keys.zone || 'IE',
+        proxy1: keys.proxy1 || '',
+        proxy2: keys.proxy2 || '',
+        defaultRetryInterval: keys.defaultRetryInterval || 30
       });
       
       setAppKey(keys.appKey);
@@ -185,6 +211,9 @@ export const API_Provider = ({ children }: { children: ReactNode }) => {
       setTgChatId(keys.tgChatId || '');
       setIam(keys.iam || 'go-ovh-ie');
       setZone(keys.zone || 'IE');
+      setProxy1(keys.proxy1 || '');
+      setProxy2(keys.proxy2 || '');
+      setDefaultRetryInterval(keys.defaultRetryInterval || 30);
       
       setIsAuthenticated(true);
       apiEvents.emitAuthChanged(true);
@@ -235,8 +264,6 @@ export const API_Provider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // 移除基于 currentAccountId 的二次认证，避免重复触发刷新
-
   const value = {
     appKey,
     appSecret,
@@ -246,6 +273,9 @@ export const API_Provider = ({ children }: { children: ReactNode }) => {
     tgChatId,
     iam,
     zone,
+    proxy1,
+    proxy2,
+    defaultRetryInterval,
     isLoading,
     isAuthenticated,
     setAPIKeys,
@@ -255,7 +285,8 @@ export const API_Provider = ({ children }: { children: ReactNode }) => {
     setCurrentAccount,
     refreshAccounts,
     accountStatuses,
-    refreshAccountStatuses
+    refreshAccountStatuses,
+    refreshSettings,
   };
 
   return <APIContext.Provider value={value}>{children}</APIContext.Provider>;

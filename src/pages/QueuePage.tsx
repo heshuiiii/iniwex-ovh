@@ -35,6 +35,9 @@ interface QueueItem {
   failureCount?: number;
   nextAttemptAt?: number;
   auto_pay?: boolean;
+  stabilize_minutes?: number;
+  proxy?: string;
+  stockFirstDetectedAt?: number;
 }
 
 interface ServerOption {
@@ -68,7 +71,7 @@ const DATACENTER_REGIONS: Record<string, string[]> = {
 
 const QueuePage = () => {
   const isMobile = useIsMobile();
-  const { isAuthenticated, accounts } = useAPI();
+  const { isAuthenticated, accounts, currentAccountId, proxy1, proxy2, defaultRetryInterval } = useAPI();
   const [selectedAccountId, setSelectedAccountId] = useState<string>('');
   const [scopeAll, setScopeAll] = useState<boolean>(false);
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
@@ -82,11 +85,23 @@ const QueuePage = () => {
   const [visibleDatacenters, setVisibleDatacenters] = useState<string[] | null>(null);
   
   const [draggingDc, setDraggingDc] = useState<string | null>(null);
+  // 初始重试间隔：优先使用全局 defaultRetryInterval，context 加载后同步
   const [retryInterval, setRetryInterval] = useState<number>(TASK_RETRY_INTERVAL);
+  // 当 context 中的 defaultRetryInterval 首次加载后，更新本地默认值（仅在未编辑时）
+  const retryIntervalInitialized = useRef(false);
+  useEffect(() => {
+    if (!retryIntervalInitialized.current && defaultRetryInterval > 0) {
+      setRetryInterval(defaultRetryInterval);
+      retryIntervalInitialized.current = true;
+    }
+  }, [defaultRetryInterval]);
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 选中的可选配置
   const [optionsInput, setOptionsInput] = useState<string>(''); // 用户自定义输入
   const [autoPay, setAutoPay] = useState<boolean>(false);
+  const [stabilizeMinutes, setStabilizeMinutes] = useState<number>(0);
+  const [selectedProxy, setSelectedProxy] = useState<string>("none");
+  const [accountMonthlyCounts, setAccountMonthlyCounts] = useState<Record<string, number>>({});
   const [planCodeDebounced, setPlanCodeDebounced] = useState<string>("");
   const [showClearConfirm, setShowClearConfirm] = useState(false); // 清空确认对话框
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
@@ -183,6 +198,29 @@ const QueuePage = () => {
     }
   };
 
+  // 计算过去 30 天内各账户成功下单数量
+  const fetchMonthlyOrderCounts = async () => {
+    try {
+      const res = await api.get('/purchase-history', { params: { scope: 'all' } });
+      const historyList = res.data || [];
+      const now = Date.now();
+      const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+      const counts: Record<string, number> = {};
+      for (const item of historyList) {
+        if (item.status === 'success') {
+          const orderTime = new Date(item.purchaseTime || item.createdAt).getTime();
+          if (now - orderTime <= thirtyDaysMs) {
+            const accId = item.accountId || 'default';
+            counts[accId] = (counts[accId] || 0) + 1;
+          }
+        }
+      }
+      setAccountMonthlyCounts(counts);
+    } catch (e) {
+      console.error("Error fetching monthly order counts:", e);
+    }
+  };
+
   // Add new queue item
   const addQueueItem = async () => {
     if (!planCodeInput.trim() || selectedDatacenters.length === 0) {
@@ -195,10 +233,15 @@ const QueuePage = () => {
       return;
     }
 
-
     if (retryInterval <= 0) {
       toast.error("重试间隔必须大于 0 秒");
       return;
+    }
+
+    const targetAcc = selectedAccountId || currentAccountId || 'default';
+    const currentAccCount = accountMonthlyCounts[targetAcc] || 0;
+    if (currentAccCount >= 6) {
+      toast.warning(`⚠️ 账户警告: 该账户在过去30天内已有 ${currentAccCount} 单成功记录！建议单账户月下单保持在 6 单以内`, { duration: 6000 });
     }
 
     try {
@@ -209,17 +252,21 @@ const QueuePage = () => {
         options: selectedOptions,
         quantity: quantity,
         auto_pay: autoPay,
+        stabilize_minutes: stabilizeMinutes,
+        proxy: selectedProxy,
         accountId: selectedAccountId || undefined,
       });
       toast.success(`已创建抢购任务，目标 ${quantity} 台`);
       fetchQueueItems(true);
       setPlanCodeInput("");
       setSelectedDatacenters([]);
-      setRetryInterval(TASK_RETRY_INTERVAL);
+      setRetryInterval(defaultRetryInterval || TASK_RETRY_INTERVAL);
       setQuantity(1);
       setSelectedOptions([]);
       setOptionsInput('');
       setAutoPay(false);
+      setStabilizeMinutes(0);
+      setSelectedProxy("none");
     } catch (error) {
       console.error(`Error adding ${planCodeInput.trim()} to queue:`, error);
       toast.error("添加到队列失败");
@@ -236,6 +283,8 @@ const QueuePage = () => {
     setSelectedOptions(Array.isArray(item.options) ? item.options : []);
     setOptionsInput((Array.isArray(item.options) ? item.options : []).join(', '));
     setAutoPay(!!item.auto_pay);
+    setStabilizeMinutes(item.stabilize_minutes || item.stabilizeMinutes || 0);
+    setSelectedProxy(item.proxy || 'none');
     setTimeout(() => {
       if (Array.isArray(item.datacenters)) {
         setSelectedDatacenters(item.datacenters);
@@ -262,6 +311,8 @@ const QueuePage = () => {
         options: selectedOptions,
         quantity,
         auto_pay: autoPay,
+        stabilize_minutes: stabilizeMinutes,
+        proxy: selectedProxy,
         accountId: selectedAccountId || undefined,
       });
       toast.success('队列已更新');
@@ -341,6 +392,7 @@ const QueuePage = () => {
   // Initial fetch
   useEffect(() => {
     fetchQueueItems();
+    fetchMonthlyOrderCounts();
     (async () => {
       await fetchServers(false);
     })();
@@ -665,10 +717,10 @@ const QueuePage = () => {
         </button>
         <button
           onClick={() => setShowClearConfirm(true)}
-          className="cyber-button text-xs flex items-center bg-red-900/30 border-red-700/40 text-red-300 hover:bg-red-800/40 hover:border-red-600/50 hover:text-red-200 justify-center disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3.5 py-1.5 text-xs rounded-md border border-red-300 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 font-semibold flex items-center justify-center transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-red-50/80 disabled:text-red-700 disabled:border-red-200"
           disabled={isLoading || queueItems.length === 0}
         >
-          <Trash2Icon size={12} className="mr-1" />
+          <Trash2Icon size={13} className="mr-1 text-red-600" />
           {!isMobile && '清空队列'}
           {isMobile && '清空'}
         </button>
@@ -676,28 +728,51 @@ const QueuePage = () => {
 
       {/* Add Form */}
       {showAddForm && (
-        <div className="bg-cyber-surface-dark p-4 sm:p-6 rounded-lg shadow-xl border border-cyber-border">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h2 className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold text-cyber-primary-accent`}>
-              {editingItemId ? '正在编辑队列项' : '添加抢购任务'}
+        <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 sm:mb-6">
+            <h2 className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold text-slate-800`}>
+              {editingItemId ? '✏️ 正在编辑队列项' : '➕ 添加抢购任务'}
             </h2>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              {(() => {
+                const accKey = selectedAccountId || currentAccountId || 'default';
+                const cnt = accountMonthlyCounts[accKey] || 0;
+                if (cnt >= 6) {
+                  return (
+                    <span className="px-2.5 py-1 text-xs rounded-md bg-amber-500/15 border border-amber-500/40 text-amber-700 font-semibold flex items-center gap-1 shadow-sm">
+                      ⚠️ 30天已下单 {cnt} 单（建议单账户≤6单）
+                    </span>
+                  );
+                } else if (cnt > 0) {
+                  return (
+                    <span className="px-2 py-0.5 text-xs rounded bg-blue-500/10 border border-blue-500/30 text-blue-700 font-medium">
+                      30天已下 {cnt} 单
+                    </span>
+                  );
+                }
+                return null;
+              })()}
               <select
                 value={selectedAccountId}
                 onChange={(e) => setSelectedAccountId(e.target.value)}
-                className="text-xs px-2 py-1 rounded border border-cyber-border bg-cyber-grid/10"
+                className="text-xs px-3 py-1.5 rounded-md border border-slate-300 bg-white text-slate-900 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 title="选择账户"
               >
                 <option value="">当前账户</option>
-                {accounts.map((a: any) => (
-                  <option key={a.id} value={a.id}>{a.alias || a.id}</option>
-                ))}
+                {accounts.map((a: any) => {
+                  const c = accountMonthlyCounts[a.id] || 0;
+                  return (
+                    <option key={a.id} value={a.id}>
+                      {a.alias || a.id} {c >= 6 ? `(⚠️ 30天已下${c}单)` : c > 0 ? `(30天已下${c}单)` : ''}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>
-          
+
           <div className="space-y-4 sm:space-y-6 mb-4 sm:mb-6">
-            <div className="flex flex-col md:flex-row md:items-end gap-3">
+            <div className="flex flex-col md:flex-row md:items-start gap-3">
               <div className="md:flex-1">
                 <label htmlFor="planCode" className="block text-sm font-medium text-cyber-secondary mb-1">服务器计划代码</label>
                 <div className="flex gap-2">
@@ -709,10 +784,10 @@ const QueuePage = () => {
                     placeholder="例如: 24sk202"
                     className="flex-1 cyber-input bg-cyber-surface text-cyber-text border-cyber-border focus:ring-cyber-primary focus:border-cyber-primary"
                   />
-                  
                 </div>
               </div>
-              <div className="md:w-[220px]">
+
+              <div className="md:w-[150px]">
                 <label htmlFor="quantity" className="block text-sm font-medium text-cyber-secondary mb-1">抢购单量</label>
                 <input
                   type="number"
@@ -733,8 +808,8 @@ const QueuePage = () => {
                 />
               </div>
               
-              <div className="md:w-[260px]">
-                <label htmlFor="retryInterval" className="block text-sm font-medium text-cyber-secondary mb-1">抢购失败后重试间隔 (秒)</label>
+              <div className="md:w-[200px]">
+                <label htmlFor="retryInterval" className="block text-sm font-medium text-cyber-secondary mb-1">重试间隔 (秒)</label>
                 <input
                   type="number"
                   id="retryInterval"
@@ -750,17 +825,58 @@ const QueuePage = () => {
                   className={`w-full cyber-input bg-cyber-surface text-cyber-text border-cyber-border focus:ring-cyber-primary focus:border-cyber-primary ${retryInterval > 0 && retryInterval < MIN_RETRY_INTERVAL ? 'border-yellow-500' : ''}`}
                   placeholder={`推荐: ${TASK_RETRY_INTERVAL}秒`}
                 />
-                {retryInterval > 0 && retryInterval < MIN_RETRY_INTERVAL && (
-                  <p className="text-xs text-yellow-400 mt-1">⚠️ 间隔时间过短可能导致API过载，建议设置为 {TASK_RETRY_INTERVAL} 秒或更长</p>
-                )}
-                {retryInterval <= 0 && (
-                  <p className="text-xs text-red-400 mt-1">⚠️ 重试间隔必须大于 0</p>
-                )}
               </div>
+
+              <div className="md:w-[210px]">
+                <label htmlFor="stabilizeMinutes" className="block text-sm font-medium text-cyber-secondary mb-1">
+                  库存稳定确认 (分钟)
+                </label>
+                <input
+                  type="number"
+                  id="stabilizeMinutes"
+                  value={stabilizeMinutes}
+                  onChange={(e) => setStabilizeMinutes(Math.max(0, Number(e.target.value) || 0))}
+                  min={0}
+                  max={60}
+                  step={1}
+                  className="w-full cyber-input bg-cyber-surface text-cyber-text border-cyber-border focus:ring-cyber-primary focus:border-cyber-primary"
+                  placeholder="0 = 有货即抢"
+                />
+                <p className="text-[11px] text-cyber-muted mt-1">
+                  {stabilizeMinutes > 0 ? `⏱️ 持续有货 ${stabilizeMinutes} 分钟后下单` : '0: 检测到有货立即下单'}
+                </p>
+              </div>
+
               <div className="md:w-[180px]">
+                <label htmlFor="selectedProxy" className="block text-sm font-medium text-cyber-secondary mb-1">
+                  指定下单代理
+                </label>
+                <select
+                  id="selectedProxy"
+                  value={selectedProxy}
+                  onChange={(e) => setSelectedProxy(e.target.value)}
+                  className="w-full text-xs px-2.5 py-2 rounded-md border border-slate-300 bg-white text-slate-900 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                >
+                  <option value="none">直连 (不使用代理)</option>
+                  <option value="proxy1">
+                    {proxy1 ? `代理1: ${proxy1.replace(/socks5:\/\/[^@]*@/, 'socks5://***@')}` : '代理 1 (未配置)'}
+                  </option>
+                  <option value="proxy2">
+                    {proxy2 ? `代理2: ${proxy2.replace(/socks5:\/\/[^@]*@/, 'socks5://***@')}` : '代理 2 (未配置)'}
+                  </option>
+                </select>
+                <p className="text-[11px] text-cyber-muted mt-1">
+                  {selectedProxy === 'none' ? '仅下单时直连' : 
+                   selectedProxy === 'proxy1' && !proxy1 ? '⚠️ 代理1未在设置中配置' :
+                   selectedProxy === 'proxy2' && !proxy2 ? '⚠️ 代理2未在设置中配置' :
+                   '仅下单时通过代理'}
+                </p>
+              </div>
+
+              <div className="md:w-[150px]">
                 <label className="block text-sm font-medium text-cyber-secondary mb-1">自动支付</label>
                 <div className="flex items-center justify-between bg-cyber-surface border border-cyber-border rounded-md px-3 py-2">
-                  <span className="text-xs text-cyber-muted">使用首选支付方式</span>
+                  <span className="text-xs text-cyber-muted">首选支付</span>
                   <Switch checked={autoPay} onCheckedChange={setAutoPay} />
                 </div>
               </div>
@@ -1043,6 +1159,27 @@ const QueuePage = () => {
                             <CreditCard size={12} className="text-cyber-text" />
                           </span>
                         )}
+                        {item.stabilize_minutes ? (
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-amber-500/10 text-amber-700 border border-amber-500/30 flex items-center gap-1 font-semibold" title="检测到有货后等待确认">
+                            ⏱️ {item.stabilize_minutes}分钟稳定等待
+                          </span>
+                        ) : null}
+                        {item.proxy && item.proxy !== 'none' ? (
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-sky-500/10 text-sky-700 border border-sky-500/30 flex items-center gap-1 font-semibold">
+                            🌐 {item.proxy === 'proxy1' ? '代理1' : '代理2'} 下单
+                          </span>
+                        ) : null}
+                        {(() => {
+                          const accCnt = accountMonthlyCounts[item.accountId || 'default'] || 0;
+                          if (accCnt >= 6) {
+                            return (
+                              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-amber-500/20 text-amber-800 border border-amber-500/50 font-bold" title="过去30天该账户成功下单≥6单">
+                                ⚠️ 30天已下{accCnt}单
+                              </span>
+                            );
+                          }
+                          return null;
+                        })()}
                       </div>
                       <p className="text-xs text-cyber-muted">
                         {(() => {
@@ -1356,27 +1493,29 @@ const QueuePage = () => {
               />
               <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
                 <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="bg-cyber-dark border-2 border-cyber-accent/50 rounded-lg p-6 max-w-md w-full pointer-events-auto"
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  className="bg-white border border-slate-200 shadow-2xl rounded-xl p-6 max-w-md w-full pointer-events-auto"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <h3 className="text-xl font-bold text-cyber-text mb-2">⚠️ 确认清空</h3>
-                  <p className="text-cyber-muted mb-6 whitespace-pre-line">
+                  <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    <span className="text-red-500">⚠️</span> 确认清空
+                  </h3>
+                  <p className="text-slate-600 text-sm mb-6 whitespace-pre-line leading-relaxed">
                     {scopeAll ? '确定要清空全部账户的队列任务吗？' : '确定要清空当前账户的队列任务吗？'}{'\n'}
-                    <span className="text-red-400 text-sm">此操作不可撤销。</span>
+                    <span className="text-red-600 font-semibold mt-1 inline-block">此操作不可撤销。</span>
                   </p>
                   <div className="flex gap-3 justify-end">
                     <button
                       onClick={() => setShowClearConfirm(false)}
-                      className="cyber-button px-4 py-2"
+                      className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-sm"
                     >
                       取消
                     </button>
                     <button
                       onClick={clearAllQueue}
-                      className="cyber-button px-4 py-2 bg-red-900/30 border-red-700/40 text-red-300 hover:bg-red-800/40 hover:border-red-600/50 hover:text-red-200"
+                      className="px-4 py-2 text-sm font-medium rounded-lg border border-red-600 bg-red-600 text-white hover:bg-red-700 transition-colors shadow-sm"
                     >
                       确认清空
                     </button>

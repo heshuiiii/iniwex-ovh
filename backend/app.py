@@ -98,6 +98,8 @@ config = {
     "tgToken": "",
     "tgChatId": "",
     "sshKey": "",
+    "proxy1": "",
+    "proxy2": "",
 }
 
 accounts = {}
@@ -658,7 +660,7 @@ def get_current_account_config(account_id=None):
     }
 
 # Initialize OVH client
-def get_ovh_client(account_id=None):
+def get_ovh_client(account_id=None, proxy_url=None):
     cfg = get_current_account_config(account_id)
     if not cfg["appKey"] or not cfg["appSecret"] or not cfg["consumerKey"]:
         add_log("ERROR", "Missing OVH API credentials")
@@ -670,6 +672,14 @@ def get_ovh_client(account_id=None):
             application_secret=cfg["appSecret"],
             consumer_key=cfg["consumerKey"]
         )
+        if proxy_url and isinstance(proxy_url, str) and proxy_url.strip():
+            p_url = proxy_url.strip()
+            if hasattr(client, '_session') and client._session:
+                client._session.proxies = {
+                    'http': p_url,
+                    'https': p_url
+                }
+                add_log("INFO", f"已为下单 API 客户端配置代理: {p_url.split('@')[-1]}", "purchase")
         return client
     except Exception as e:
         add_log("ERROR", f"Failed to initialize OVH client: {str(e)}")
@@ -949,7 +959,14 @@ def check_server_availability(plan_code, options=None):
 # Purchase server
 def purchase_server(queue_item):
     # 单个抢购任务的下单入口：支持单次下单与并发下单（雨露均沾），并在并发前进行一次预读取以共享区域与选项信息
-    client = get_ovh_client(queue_item.get("accountId"))  # 获取指定账户的OVH客户端
+    proxy_choice = queue_item.get("proxy", "none")
+    proxy_url = None
+    if proxy_choice == "proxy1" and config.get("proxy1"):
+        proxy_url = config.get("proxy1")
+    elif proxy_choice == "proxy2" and config.get("proxy2"):
+        proxy_url = config.get("proxy2")
+
+    client = get_ovh_client(queue_item.get("accountId"), proxy_url=proxy_url)  # 获取指定账户的OVH客户端（如果配置了代理则通过代理下单）
     if not client:
         return False
     helper = get_global_helper(client, max_calls_per_second=5)  # 使用带重试与限速的API帮助器
@@ -1074,8 +1091,29 @@ def purchase_server(queue_item):
         configs_to_check = [matched_config] if matched_config else ([availabilities[0]] if availabilities else [])  # 待检查的配置集合
         selected_api_dc, selected_display_dc = _find_dc(sorted_target_dcs, configs_to_check)
         if not selected_api_dc:
+            if queue_item.get("stockFirstDetectedAt"):
+                queue_item["stockFirstDetectedAt"] = 0
+                add_log("INFO", f"任务 {queue_item['id']} ({queue_item['planCode']}) 库存中断，重置稳定等待计时器", "purchase")
             add_log("INFO", f"服务器 {queue_item['planCode']} 在数据中心 {','.join(sorted_target_dcs)} 当前无货", "purchase")
             return False
+
+        # 有货！检查稳定监控时长
+        stabilize_mins = float(queue_item.get("stabilize_minutes") or queue_item.get("stabilizeMinutes") or 0)
+        if stabilize_mins > 0:
+            now_ts = time.time()
+            first_detected = float(queue_item.get("stockFirstDetectedAt") or 0)
+            if first_detected == 0:
+                queue_item["stockFirstDetectedAt"] = now_ts
+                add_log("INFO", f"⚠️ 任务 {queue_item['id']} ({queue_item['planCode']}) 首次检测到有货！已开启稳定监控，需连续有货 {stabilize_mins} 分钟后下单...", "purchase")
+                return False
+            
+            elapsed_mins = (now_ts - first_detected) / 60.0
+            if elapsed_mins < stabilize_mins:
+                remaining_mins = round(stabilize_mins - elapsed_mins, 1)
+                add_log("INFO", f"⏳ 任务 {queue_item['id']} ({queue_item['planCode']}) 已持续有货 {round(elapsed_mins, 1)}/{stabilize_mins} 分钟，需再等待 {remaining_mins} 分钟后下单", "purchase")
+                return False
+            
+            add_log("INFO", f"✅ 任务 {queue_item['id']} ({queue_item['planCode']}) 已持续 {stabilize_mins} 分钟确认有货！准备开始下单...", "purchase")
 
         # 计算所有可用的目标机房（用于并发雨露均沾分配）
         available_api_dcs = []  # 保持与sorted_target_dcs顺序一致
@@ -2625,6 +2663,10 @@ def save_settings():
         config["tgChatId"] = data.get("tgChatId")
     if data.get("sshKey") is not None:
         config["sshKey"] = data.get("sshKey") or ""
+    if data.get("proxy1") is not None:
+        config["proxy1"] = data.get("proxy1") or ""
+    if data.get("proxy2") is not None:
+        config["proxy2"] = data.get("proxy2") or ""
 
     save_data()
     add_log("INFO", "API 设置已更新并写入 config.json")
@@ -2823,6 +2865,9 @@ def add_queue_item():
         "nextAttemptAt": 0,
         "maxRetryCount": int(data.get("maxRetryCount", 50)),
         "auto_pay": data.get("auto_pay", False),
+        "stabilize_minutes": float(data.get("stabilize_minutes") or data.get("stabilizeMinutes") or 0),
+        "proxy": data.get("proxy", "none"),
+        "stockFirstDetectedAt": 0,
         "status": "running",  # 直接设置为 running
         "createdAt": datetime.now().isoformat(),
         "updatedAt": datetime.now().isoformat(),
@@ -2952,9 +2997,14 @@ def update_queue_item(id):
         item["quantity"] = max(1, min(q, 100))
     if isinstance(data.get("auto_pay"), bool):
         item["auto_pay"] = bool(data.get("auto_pay"))
+    if "stabilize_minutes" in data or "stabilizeMinutes" in data:
+        item["stabilize_minutes"] = float(data.get("stabilize_minutes") or data.get("stabilizeMinutes") or 0)
+    if "proxy" in data:
+        item["proxy"] = data.get("proxy", "none")
     if data.get("accountId"):
         item["accountId"] = data.get("accountId")
     item["updatedAt"] = datetime.now().isoformat()
+    item["stockFirstDetectedAt"] = 0
     # 编辑后重置计数，以便按新配置重新调度
     item["retryCount"] = 0
     item["lastCheckTime"] = 0
