@@ -141,11 +141,11 @@ const LogsPage = () => {
     <div className="space-y-4 sm:space-y-6 min-w-0 max-w-full overflow-x-hidden">
       <div>
         <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold mb-1 cyber-glow-text`}>详细日志</h1>
-        <p className="text-slate-500 text-sm mb-4 sm:mb-6">实时系统调试与核心动作日志流</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mb-4 sm:mb-6">实时系统调试与核心动作日志流</p>
       </div>
 
       {/* Filters and controls */}
-      <div className="bg-white border border-slate-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 shadow-sm">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <div className="relative sm:col-span-2 lg:col-span-1">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

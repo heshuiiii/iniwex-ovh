@@ -419,20 +419,20 @@ const SettingsPage = () => {
 
               {/* SOCKS5 下单代理设置 */}
               <div className="cyber-grid-line pt-4">
-                <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2 flex items-center gap-2">
                   <span>🌐</span> 指定下单 SOCKS5 代理 (最多2个)
                 </h2>
-                <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
                   OVH 下单时会检查 IP 归属。代理仅在触发下单时使用，API 监控时不消耗代理流量。
                   <br />
-                  <span className="text-sky-600 font-medium">💡 格式说明：</span>支持 <code className="bg-slate-100 text-sky-700 px-1 py-0.5 rounded">socks5://user:pass@ip:port</code> 或 <code className="bg-slate-100 text-sky-700 px-1 py-0.5 rounded">socks5://ip:1080</code>。如果填入包含 root 密码的地址，请确保 VPS 已搭建 SOCKS5 服务或完成了端口转发。
+                  <span className="text-sky-600 dark:text-sky-400 font-medium">💡 格式说明：</span>支持 <code className="bg-slate-100 dark:bg-slate-800 text-sky-700 dark:text-sky-300 px-1 py-0.5 rounded">socks5://user:pass@ip:port</code> 或 <code className="bg-slate-100 dark:bg-slate-800 text-sky-700 dark:text-sky-300 px-1 py-0.5 rounded">socks5://ip:1080</code>。如果填入包含 root 密码的地址，请确保 VPS 已搭建 SOCKS5 服务或完成了端口转发。
                 </p>
 
                 <div className="space-y-4">
                   {/* 代理 1 */}
-                  <div className="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                  <div className="bg-slate-50 dark:bg-slate-800/80 p-3.5 rounded-lg border border-slate-200 dark:border-slate-700">
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-slate-700 text-xs sm:text-sm font-semibold">
+                      <label className="block text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-semibold">
                         代理 1 (Proxy 1)
                       </label>
                       <button
@@ -462,14 +462,14 @@ const SettingsPage = () => {
                     {proxyTestResult['proxy1'] && (
                       <div className={`mt-2 p-2.5 rounded text-xs leading-relaxed ${
                         proxyTestResult['proxy1'].success 
-                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
-                          : 'bg-red-50 text-red-800 border border-red-200'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' 
+                          : 'bg-red-50 dark:bg-red-950/80 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800'
                       }`}>
                         <div className="font-semibold flex items-center gap-1">
                           {proxyTestResult['proxy1'].success ? '✅' : '❌'} {proxyTestResult['proxy1'].message}
                         </div>
                         {proxyTestResult['proxy1'].ip && (
-                          <div className="mt-1 font-mono text-[11px] text-emerald-700">
+                          <div className="mt-1 font-mono text-[11px] text-emerald-700 dark:text-emerald-400">
                             📍 出站 IP: {proxyTestResult['proxy1'].ip} ({proxyTestResult['proxy1'].location})
                           </div>
                         )}
@@ -478,9 +478,9 @@ const SettingsPage = () => {
                   </div>
 
                   {/* 代理 2 */}
-                  <div className="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                  <div className="bg-slate-50 dark:bg-slate-800/80 p-3.5 rounded-lg border border-slate-200 dark:border-slate-700">
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-slate-700 text-xs sm:text-sm font-semibold">
+                      <label className="block text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-semibold">
                         代理 2 (Proxy 2)
                       </label>
                       <button

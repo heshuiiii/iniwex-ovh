@@ -2026,40 +2026,40 @@ const ServersPage = () => {
                 <CardContent className="p-4 sm:p-5">
                   {/* Server specs in a grid */}
                   <div className="grid grid-cols-2 gap-2 mb-3">
-                    <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
-                      <Cpu size={16} className="text-sky-600 flex-shrink-0" />
+                    <div className="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700/80">
+                      <Cpu size={16} className="text-sky-600 dark:text-sky-400 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-[10px] font-semibold text-slate-500">CPU</div>
-                        <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.cpu, "CPU")}</div>
+                        <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">CPU</div>
+                        <div className="font-bold text-xs text-slate-900 dark:text-slate-100 truncate font-mono">{formatServerSpec(server.cpu, "CPU")}</div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
-                      <Database size={16} className="text-sky-600 flex-shrink-0" />
+                    <div className="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700/80">
+                      <Database size={16} className="text-sky-600 dark:text-sky-400 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-[10px] font-semibold text-slate-500">内存</div>
-                        <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.memory, "内存")}</div>
+                        <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">内存</div>
+                        <div className="font-bold text-xs text-slate-900 dark:text-slate-100 truncate font-mono">{formatServerSpec(server.memory, "内存")}</div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
-                      <HardDrive size={16} className="text-sky-600 flex-shrink-0" />
+                    <div className="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700/80">
+                      <HardDrive size={16} className="text-sky-600 dark:text-sky-400 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-[10px] font-semibold text-slate-500">存储</div>
-                        <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.storage, "存储")}</div>
+                        <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">存储</div>
+                        <div className="font-bold text-xs text-slate-900 dark:text-slate-100 truncate font-mono">{formatServerSpec(server.storage, "存储")}</div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
-                      <Wifi size={16} className="text-sky-600 flex-shrink-0" />
+                    <div className="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700/80">
+                      <Wifi size={16} className="text-sky-600 dark:text-sky-400 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-[10px] font-semibold text-slate-500">带宽</div>
-                        <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.bandwidth, "带宽")}</div>
+                        <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">带宽</div>
+                        <div className="font-bold text-xs text-slate-900 dark:text-slate-100 truncate font-mono">{formatServerSpec(server.bandwidth, "带宽")}</div>
                       </div>
                     </div>
                     {server.vrackBandwidth && server.vrackBandwidth !== "N/A" && (
-                      <div className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200 col-span-2">
-                        <ArrowRightLeft size={16} className="text-sky-600 flex-shrink-0" />
+                      <div className="flex items-center space-x-2 p-2 bg-slate-50 dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700/80 col-span-2">
+                        <ArrowRightLeft size={16} className="text-sky-600 dark:text-sky-400 flex-shrink-0" />
                         <div className="min-w-0">
-                          <div className="text-[10px] font-semibold text-slate-500">内网带宽</div>
-                          <div className="font-bold text-xs text-slate-900 truncate font-mono">{formatServerSpec(server.vrackBandwidth, "内网带宽")}</div>
+                          <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">内网带宽</div>
+                          <div className="font-bold text-xs text-slate-900 dark:text-slate-100 truncate font-mono">{formatServerSpec(server.vrackBandwidth, "内网带宽")}</div>
                         </div>
                       </div>
                     )}
@@ -2175,7 +2175,7 @@ const ServersPage = () => {
                     </div>
                     
                     {/* 数据中心列表 - 按区域分组 */}
-                    <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 sm:p-4 overflow-hidden">
+                    <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-lg p-3 sm:p-4 overflow-hidden">
                       {Object.entries(DATACENTER_REGIONS).map(([region, dcCodes]) => {
                         const regionDatacenters = OVH_DATACENTERS
                           .filter(dc => dcCodes.includes(dc.code))
@@ -2198,7 +2198,7 @@ const ServersPage = () => {
                         return (
                           <div key={region} className="mb-5 last:mb-0">
                             <div className="flex items-center gap-2 mb-3">
-                              <span className="text-sm font-bold text-sky-800 bg-sky-100/80 border border-sky-200 px-2.5 py-0.5 rounded-md flex items-center gap-1.5 shadow-sm">
+                              <span className="text-sm font-bold text-sky-800 dark:text-sky-300 bg-sky-100/80 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 px-2.5 py-0.5 rounded-md flex items-center gap-1.5 shadow-sm">
                                 <span>{regionIcons[region] || '🌐'}</span>
                                 <span>{region}</span>
                               </span>
@@ -2210,16 +2210,16 @@ const ServersPage = () => {
                                   const isSelected = selectedDatacenters[server.planCode]?.[dcCode];
                                   
                                   let statusText = "";
-                                  let statusBadgeClass = "bg-slate-100 text-slate-500 border-slate-200";
+                                  let statusBadgeClass = "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700";
                                   let showStatusText = false;
                                   
                                   if (availStatus === "unavailable") {
                                     statusText = "缺货";
-                                    statusBadgeClass = "bg-rose-50 text-rose-600 border-rose-200 font-semibold";
+                                    statusBadgeClass = "bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800 font-semibold";
                                     showStatusText = true;
                                   } else if (availStatus && availStatus !== "unknown" && availStatus !== "unavailable") {
                                     statusText = availStatus.includes("H") ? availStatus : "有货";
-                                    statusBadgeClass = "bg-emerald-50 text-emerald-700 border-emerald-300 font-bold";
+                                    statusBadgeClass = "bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 font-bold";
                                     showStatusText = true;
                                   }
                                   
@@ -2229,8 +2229,8 @@ const ServersPage = () => {
                                       type="button"
                                       className={`w-full p-2.5 sm:p-3 rounded-lg transition-all duration-150 flex flex-col justify-between text-left min-w-0 border ${
                                         isSelected
-                                          ? 'bg-sky-50/90 border-2 border-sky-500 shadow-md ring-1 ring-sky-300/50'
-                                          : 'bg-white border-slate-200 hover:border-sky-300 hover:bg-slate-50/80 shadow-sm'
+                                          ? 'bg-sky-50/90 dark:bg-sky-950/80 border-2 border-sky-500 shadow-md ring-1 ring-sky-300/50'
+                                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-500 hover:bg-slate-50/80 dark:hover:bg-slate-800 shadow-sm'
                                       }`}
                                       onClick={(e) => toggleDatacenterSelection(server.planCode, dcCode, e)}
                                       title={`${dc.flag} ${dc.region} - ${dc.name} (${dcCode})`}
@@ -2239,7 +2239,7 @@ const ServersPage = () => {
                                       <div className="flex items-center justify-between w-full mb-1.5 gap-1.5">
                                         <div className="flex items-center gap-1.5">
                                           <span className="text-base">{dc.flag}</span>
-                                          <span className={`text-sm sm:text-base font-extrabold font-mono tracking-wide ${isSelected ? 'text-sky-950' : 'text-slate-800'}`}>
+                                          <span className={`text-sm sm:text-base font-extrabold font-mono tracking-wide ${isSelected ? 'text-sky-950 dark:text-sky-300' : 'text-slate-800 dark:text-slate-200'}`}>
                                             {dcCode}
                                           </span>
                                         </div>
@@ -2255,14 +2255,14 @@ const ServersPage = () => {
                                                 <Check className="w-3 h-3 stroke-[3]" />
                                               </div>
                                             ) : (
-                                              <div className="w-3.5 h-3.5 rounded-full border border-slate-300 bg-slate-100" />
+                                              <div className="w-3.5 h-3.5 rounded-full border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800" />
                                             )}
                                           </div>
                                         </div>
                                       </div>
                                       
                                       {/* 第二行：国家 - 城市中文说明 */}
-                                      <div className="w-full truncate text-xs font-medium text-slate-600">
+                                      <div className="w-full truncate text-xs font-medium text-slate-600 dark:text-slate-400">
                                         {dc.region} · {dc.name}
                                       </div>
                                     </button>
@@ -2603,7 +2603,7 @@ const ServersPage = () => {
                       return (
                         <div key={region} className="mb-4 last:mb-0">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-bold text-sky-800 bg-sky-100/80 border border-sky-200 px-2 py-0.5 rounded flex items-center gap-1">
+                            <span className="text-xs font-bold text-sky-800 dark:text-sky-300 bg-sky-100/80 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 px-2 py-0.5 rounded flex items-center gap-1">
                               <span>{regionIcons[region] || '🌐'}</span>
                               <span>{region}</span>
                             </span>
@@ -2615,13 +2615,13 @@ const ServersPage = () => {
                               const isSelected = selectedDatacenters[server.planCode]?.[dcCode];
                               
                               let statusText = "";
-                              let statusBadgeClass = "bg-slate-100 text-slate-500 border-slate-200";
+                              let statusBadgeClass = "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700";
                               if (availStatus === "unavailable") {
                                 statusText = "缺货";
-                                statusBadgeClass = "bg-rose-50 text-rose-600 border-rose-200 font-semibold";
+                                statusBadgeClass = "bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800 font-semibold";
                               } else if (availStatus && availStatus !== "unknown" && availStatus !== "unavailable") {
                                 statusText = availStatus.includes("H") ? availStatus : "有货";
-                                statusBadgeClass = "bg-emerald-50 text-emerald-700 border-emerald-300 font-bold";
+                                statusBadgeClass = "bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 font-bold";
                               }
 
                               return (
@@ -2631,8 +2631,8 @@ const ServersPage = () => {
                                   onClick={() => toggleDatacenterSelection(server.planCode, dcCode)}
                                   className={`p-2 rounded-lg transition-all duration-150 flex flex-col justify-between text-left border ${
                                     isSelected
-                                      ? 'bg-sky-50/90 border-2 border-sky-500 shadow-sm ring-1 ring-sky-300/50'
-                                      : 'bg-white border-slate-200 hover:border-sky-300 hover:bg-slate-50/80 shadow-sm'
+                                      ? 'bg-sky-50/90 dark:bg-sky-950/80 border-2 border-sky-500 shadow-sm ring-1 ring-sky-300/50'
+                                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-500 hover:bg-slate-50/80 dark:hover:bg-slate-800 shadow-sm'
                                   }`}
                                   title={`${dc.flag} ${dc.region} - ${dc.name} (${dcCode})`}
                                 >
@@ -2640,7 +2640,7 @@ const ServersPage = () => {
                                   <div className="flex items-center justify-between w-full mb-1 gap-1">
                                     <div className="flex items-center gap-1">
                                       <span className="text-sm">{dc.flag}</span>
-                                      <span className={`text-xs font-extrabold font-mono tracking-wide ${isSelected ? 'text-sky-950' : 'text-slate-800'}`}>
+                                      <span className={`text-xs font-extrabold font-mono tracking-wide ${isSelected ? 'text-sky-950 dark:text-sky-300' : 'text-slate-800 dark:text-slate-200'}`}>
                                         {dcCode}
                                       </span>
                                     </div>
@@ -2655,13 +2655,13 @@ const ServersPage = () => {
                                           <Check className="w-2.5 h-2.5 stroke-[3]" />
                                         </div>
                                       ) : (
-                                        <div className="w-3 h-3 rounded-full border border-slate-300 bg-slate-100 flex-shrink-0" />
+                                        <div className="w-3 h-3 rounded-full border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 flex-shrink-0" />
                                       )}
                                     </div>
                                   </div>
 
                                   {/* 中文国家 - 城市 */}
-                                  <div className="w-full truncate text-[11px] font-medium text-slate-600">
+                                  <div className="w-full truncate text-[11px] font-medium text-slate-600 dark:text-slate-400">
                                     {dc.region} · {dc.name}
                                   </div>
                                 </button>

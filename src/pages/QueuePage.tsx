@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAPI } from "@/context/APIContext";
@@ -728,9 +728,9 @@ const QueuePage = () => {
 
       {/* Add Form */}
       {showAddForm && (
-        <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-4 sm:p-6">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 sm:mb-6">
-            <h2 className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold text-slate-800`}>
+            <h2 className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold text-slate-800 dark:text-slate-100`}>
               {editingItemId ? '✏️ 正在编辑队列项' : '➕ 添加抢购任务'}
             </h2>
             <div className="flex items-center gap-2 flex-wrap">
@@ -739,13 +739,13 @@ const QueuePage = () => {
                 const cnt = accountMonthlyCounts[accKey] || 0;
                 if (cnt >= 6) {
                   return (
-                    <span className="px-2.5 py-1 text-xs rounded-md bg-amber-500/15 border border-amber-500/40 text-amber-700 font-semibold flex items-center gap-1 shadow-sm">
+                    <span className="px-2.5 py-1 text-xs rounded-md bg-amber-500/15 border border-amber-500/40 text-amber-700 dark:text-amber-300 font-semibold flex items-center gap-1 shadow-sm">
                       ⚠️ 30天已下单 {cnt} 单（建议单账户≤6单）
                     </span>
                   );
                 } else if (cnt > 0) {
                   return (
-                    <span className="px-2 py-0.5 text-xs rounded bg-blue-500/10 border border-blue-500/30 text-blue-700 font-medium">
+                    <span className="px-2 py-0.5 text-xs rounded bg-blue-500/10 dark:bg-blue-950/40 border border-blue-500/30 text-blue-700 dark:text-blue-300 font-medium">
                       30天已下 {cnt} 单
                     </span>
                   );
@@ -755,7 +755,7 @@ const QueuePage = () => {
               <select
                 value={selectedAccountId}
                 onChange={(e) => setSelectedAccountId(e.target.value)}
-                className="text-xs px-3 py-1.5 rounded-md border border-slate-300 bg-white text-slate-900 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="text-xs px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 title="选择账户"
               >
                 <option value="">当前账户</option>
@@ -774,7 +774,7 @@ const QueuePage = () => {
           <div className="space-y-4 sm:space-y-6 mb-4 sm:mb-6">
             <div className="flex flex-col md:flex-row md:items-start gap-3">
               <div className="md:flex-1">
-                <label htmlFor="planCode" className="block text-sm font-medium text-cyber-secondary mb-1">服务器计划代码</label>
+                <label htmlFor="planCode" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">服务器计划代码</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -782,13 +782,13 @@ const QueuePage = () => {
                     value={planCodeInput}
                     onChange={(e) => setPlanCodeInput(e.target.value)}
                     placeholder="例如: 24sk202"
-                    className="flex-1 cyber-input bg-cyber-surface text-cyber-text border-cyber-border focus:ring-cyber-primary focus:border-cyber-primary"
+                    className="flex-1 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-none text-sm"
                   />
                 </div>
               </div>
 
               <div className="md:w-[150px]">
-                <label htmlFor="quantity" className="block text-sm font-medium text-cyber-secondary mb-1">抢购单量</label>
+                <label htmlFor="quantity" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">抢购单量</label>
                 <input
                   type="number"
                   id="quantity"
@@ -803,13 +803,13 @@ const QueuePage = () => {
                   }}
                   min={1}
                   max={100}
-                  className="w-full cyber-input bg-cyber-surface text-cyber-text border-cyber-border focus:ring-cyber-primary focus:border-cyber-primary"
+                  className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-none text-sm"
                   placeholder="默认: 1台"
                 />
               </div>
               
               <div className="md:w-[200px]">
-                <label htmlFor="retryInterval" className="block text-sm font-medium text-cyber-secondary mb-1">重试间隔 (秒)</label>
+                <label htmlFor="retryInterval" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">重试间隔 (秒)</label>
                 <input
                   type="number"
                   id="retryInterval"
@@ -822,13 +822,13 @@ const QueuePage = () => {
                   }}
                   min={0}
                   step={1}
-                  className={`w-full px-3 py-2 rounded-md border border-slate-300 bg-white text-slate-900 text-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none ${retryInterval > 0 && retryInterval < MIN_RETRY_INTERVAL ? 'border-yellow-500' : ''}`}
+                  className={`w-full px-3 py-2 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none ${retryInterval > 0 && retryInterval < MIN_RETRY_INTERVAL ? 'border-yellow-500' : ''}`}
                   placeholder={`推荐: ${TASK_RETRY_INTERVAL}秒`}
                 />
               </div>
 
               <div className="md:w-[210px]">
-                <label htmlFor="stabilizeMinutes" className="block text-sm font-bold text-slate-900 mb-1">
+                <label htmlFor="stabilizeMinutes" className="block text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
                   库存稳定确认 (分钟)
                 </label>
                 <input
@@ -839,23 +839,23 @@ const QueuePage = () => {
                   min={0}
                   max={60}
                   step={1}
-                  className="w-full px-3 py-2 rounded-md border border-slate-300 bg-white text-slate-900 text-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none"
+                  className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none"
                   placeholder="0 = 有货即抢"
                 />
-                <p className="text-xs font-semibold text-slate-800 mt-1">
+                <p className="text-xs font-semibold text-slate-800 dark:text-slate-300 mt-1">
                   {stabilizeMinutes > 0 ? `⏱️ 持续有货 ${stabilizeMinutes} 分钟后下单` : '0: 检测到有货立即下单'}
                 </p>
               </div>
 
               <div className="md:w-[180px]">
-                <label htmlFor="selectedProxy" className="block text-sm font-bold text-slate-900 mb-1">
+                <label htmlFor="selectedProxy" className="block text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
                   指定下单代理
                 </label>
                 <select
                   id="selectedProxy"
                   value={selectedProxy}
                   onChange={(e) => setSelectedProxy(e.target.value)}
-                  className="w-full text-xs px-2.5 py-2 rounded-md border border-slate-300 bg-white text-slate-900 font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full text-xs px-2.5 py-2 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 >
                   <option value="none">直连 (不使用代理)</option>
                   <option value="proxy1">
@@ -865,7 +865,7 @@ const QueuePage = () => {
                     {proxy2 ? `代理2: ${proxy2.replace(/socks5:\/\/[^@]*@/, 'socks5://***@')}` : '代理 2 (未配置)'}
                   </option>
                 </select>
-                <p className="text-xs font-semibold text-slate-800 mt-1">
+                <p className="text-xs font-semibold text-slate-800 dark:text-slate-300 mt-1">
                   {selectedProxy === 'none' ? '仅下单时直连' : 
                    selectedProxy === 'proxy1' && !proxy1 ? '⚠️ 代理1未在设置中配置' :
                    selectedProxy === 'proxy2' && !proxy2 ? '⚠️ 代理2未在设置中配置' :
@@ -874,9 +874,9 @@ const QueuePage = () => {
               </div>
 
               <div className="md:w-[150px]">
-                <label className="block text-sm font-bold text-slate-900 mb-1">自动支付</label>
-                <div className="flex items-center justify-between bg-white border border-slate-300 rounded-md px-3 py-2">
-                  <span className="text-xs font-bold text-slate-900">首选支付</span>
+                <label className="block text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">自动支付</label>
+                <div className="flex items-center justify-between bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2">
+                  <span className="text-xs font-bold text-slate-900 dark:text-slate-100">首选支付</span>
                   <Switch checked={autoPay} onCheckedChange={setAutoPay} />
                 </div>
               </div>
@@ -885,21 +885,21 @@ const QueuePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 {(visibleDatacenters && visibleDatacenters.length > 0) && (
-                <div className="rounded-md overflow-hidden border border-slate-300">
-                  <div className="px-2 py-1 bg-slate-100 border-b border-slate-300 flex items-center">
-                    <span className="text-[12px] font-bold text-slate-700">选择部署位置</span>
+                <div className="rounded-md overflow-hidden border border-slate-300 dark:border-slate-700">
+                  <div className="px-2 py-1 bg-slate-100 dark:bg-slate-800/80 border-b border-slate-300 dark:border-slate-700 flex items-center">
+                    <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300">选择部署位置</span>
                     <div className="ml-auto flex items-center gap-2">
-                      <button type="button" onClick={selectAllDatacenters} className="text-[10px] text-slate-600 hover:text-sky-700">全选</button>
-                      <button type="button" onClick={deselectAllDatacenters} className="text-[10px] text-slate-600 hover:text-sky-700"><span className="hidden sm:inline">取消全选</span><span className="sm:hidden">取消</span></button>
+                      <button type="button" onClick={selectAllDatacenters} className="text-[10px] text-slate-600 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300">全选</button>
+                      <button type="button" onClick={deselectAllDatacenters} className="text-[10px] text-slate-600 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300"><span className="hidden sm:inline">取消全选</span><span className="sm:hidden">取消</span></button>
                     </div>
                   </div>
-                  <div className="p-3 sm:p-4 overflow-hidden bg-slate-50">
+                  <div className="p-3 sm:p-4 overflow-hidden bg-slate-50 dark:bg-slate-900/60">
                     {Object.entries(DATACENTER_REGIONS).map(([region, dcCodes]) => {
                       const list = dcCodes.filter(code => (visibleDatacenters || []).includes(code));
                       if (list.length === 0) return null;
                       return (
                         <div key={region} className="mb-5 last:mb-0">
-                          <h3 className="text-[12px] font-bold text-slate-900 mb-3 tracking-wide">{region}</h3>
+                          <h3 className="text-[12px] font-bold text-slate-900 dark:text-slate-100 mb-3 tracking-wide">{region}</h3>
                           <div className="grid grid-cols-2 gap-3 w-full">
                             {list.map(code => {
                               const dcObj = OVH_DATACENTERS.find(d => d.code === code);
@@ -909,15 +909,15 @@ const QueuePage = () => {
                                 <button
                                   key={code}
                                   type="button"
-                                  className={`w-full px-2.5 py-2 rounded-md transition-all duration-200 flex flex-col items-start min-w-0 ${isSelected ? 'bg-sky-50 border border-sky-400' : 'bg-white border border-slate-300 hover:bg-slate-50'}`}
+                                  className={`w-full px-2.5 py-2 rounded-md transition-all duration-200 flex flex-col items-start min-w-0 ${isSelected ? 'bg-sky-50 dark:bg-sky-950/80 border border-sky-400 dark:border-sky-600' : 'bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
                                   onClick={() => handleDatacenterChange(code)}
                                   title={`${dcObj?.name || dcCodeUpper}`}
                                 >
                                   <div className="flex items-center justify-between w-full mb-1.5 gap-2">
-                                    <span className="text-[11px] font-bold tracking-wide leading-none text-slate-900">{dcCodeUpper}</span>
-                                    <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">{isSelected ? (<Check className="w-4 h-4 text-sky-600" strokeWidth={3} />) : (<span className={`w-[6px] h-[6px] rounded-full bg-slate-300`}></span>)}</div>
+                                    <span className="text-[11px] font-bold tracking-wide leading-none text-slate-900 dark:text-slate-100">{dcCodeUpper}</span>
+                                    <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">{isSelected ? (<Check className="w-4 h-4 text-sky-600 dark:text-sky-400" strokeWidth={3} />) : (<span className={`w-[6px] h-[6px] rounded-full bg-slate-300 dark:bg-slate-600`}></span>)}</div>
                                   </div>
-                                  <div className="w-full min-w-0 flex-1 flex items-center"><span className="text-[10px] leading-[1.35] break-words font-medium text-slate-600">{dcObj?.region} - {dcObj?.name}</span></div>
+                                  <div className="w-full min-w-0 flex-1 flex items-center"><span className="text-[10px] leading-[1.35] break-words font-medium text-slate-600 dark:text-slate-400">{dcObj?.region} - {dcObj?.name}</span></div>
                                 </button>
                               );
                             })}
@@ -930,10 +930,10 @@ const QueuePage = () => {
                 )}
                 {selectedDatacenters.length > 0 && (
                   <div className="mt-4">
-                    <div className="text-xs font-bold text-slate-900 mb-2">拖动标签以设置优先级（越靠前优先级越高）</div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100 mb-2">拖动标签以设置优先级（越靠前优先级越高）</div>
                     <div className="flex flex-wrap gap-2">
                       {selectedDatacenters.map((dc) => (
-                        <div key={dc} draggable onDragStart={() => setDraggingDc(dc)} onDragEnd={() => setDraggingDc(null)} onDragOver={(e) => { e.preventDefault(); if (!draggingDc || draggingDc === dc) return; setSelectedDatacenters(prev => { const from = prev.indexOf(draggingDc); const to = prev.indexOf(dc); if (from === -1 || to === -1) return prev; const next = [...prev]; next.splice(from, 1); next.splice(to, 0, draggingDc); return next; }); }} className={`px-3 py-1.5 text-xs font-bold rounded-md border border-sky-300 bg-sky-50 text-sky-700 cursor-move shadow-sm ${draggingDc === dc ? 'opacity-70' : ''}`} title="拖动以调整优先级">{dc.toUpperCase()}</div>
+                        <div key={dc} draggable onDragStart={() => setDraggingDc(dc)} onDragEnd={() => setDraggingDc(null)} onDragOver={(e) => { e.preventDefault(); if (!draggingDc || draggingDc === dc) return; setSelectedDatacenters(prev => { const from = prev.indexOf(draggingDc); const to = prev.indexOf(dc); if (from === -1 || to === -1) return prev; const next = [...prev]; next.splice(from, 1); next.splice(to, 0, draggingDc); return next; }); }} className={`px-3 py-1.5 text-xs font-bold rounded-md border border-sky-300 dark:border-sky-800 bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 cursor-move shadow-sm ${draggingDc === dc ? 'opacity-70' : ''}`} title="拖动以调整优先级">{dc.toUpperCase()}</div>
                       ))}
                     </div>
                   </div>
@@ -955,35 +955,35 @@ const QueuePage = () => {
                     <div className="space-y-2">
 
                       {!optionsIdentical && hasGroupedOptions && (
-                        <div className="rounded-md overflow-hidden border border-slate-300">
-                          <div className="px-2 py-1 bg-slate-100 border-b border-slate-300 flex items-center">
-                            <Settings size={11} className="mr-1 text-slate-700" />
-                            <span className="text-[12px] font-bold text-slate-700">自定义配置</span>
+                        <div className="rounded-md overflow-hidden border border-slate-300 dark:border-slate-700">
+                          <div className="px-2 py-1 bg-slate-100 dark:bg-slate-800/80 border-b border-slate-300 dark:border-slate-700 flex items-center">
+                            <Settings size={11} className="mr-1 text-slate-700 dark:text-slate-300" />
+                            <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300">自定义配置</span>
                             <div className="ml-auto flex items-center gap-2">
-                              <button type="button" onClick={() => { const defaults = (selectedServer?.defaultOptions || []).map(o => o.value); setSelectedOptions(defaults); setOptionsInput(defaults.join(', ')); }} className="text-[10px] text-slate-600 hover:text-sky-700">使用默认配置</button>
-                              <button type="button" onClick={() => { setSelectedOptions([]); setOptionsInput(''); }} className="text-[10px] text-slate-600 hover:text-sky-700">清空选择</button>
+                              <button type="button" onClick={() => { const defaults = (selectedServer?.defaultOptions || []).map(o => o.value); setSelectedOptions(defaults); setOptionsInput(defaults.join(', ')); }} className="text-[10px] text-slate-600 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300">使用默认配置</button>
+                              <button type="button" onClick={() => { setSelectedOptions([]); setOptionsInput(''); }} className="text-[10px] text-slate-600 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300">清空选择</button>
                             </div>
                           </div>
-                          <div className="divide-y divide-slate-200">
+                          <div className="divide-y divide-slate-200 dark:divide-slate-700">
                             {Object.entries(optionGroups).map(([groupName, options]) => {
                               if (options.length === 0) return null;
                               let GroupIcon = Settings; if (groupName === "CPU/处理器") GroupIcon = Cpu; else if (groupName === "内存") GroupIcon = Database; else if (groupName === "存储") GroupIcon = HardDrive; else if (groupName === "带宽/网络") GroupIcon = Wifi; else if (groupName === "vRack内网") GroupIcon = ArrowRightLeft;
                               return (
                                 <div key={groupName} className="p-1.5">
-                                  <div className="font-bold text-[10px] mb-1 flex items-center text-slate-700"><GroupIcon size={11} className="mr-0.5" />{groupName}</div>
+                                  <div className="font-bold text-[10px] mb-1 flex items-center text-slate-700 dark:text-slate-300"><GroupIcon size={11} className="mr-0.5" />{groupName}</div>
                                   <div className="space-y-0.5 pl-0.5">
                                     {options.map(option => {
                                       const { displayLabel, detailLabel } = formatOptionDisplay(option, groupName);
                                       const isSelected = isOptionSelectedValue(option.value);
                                       return (
                                         <div key={option.value} className="flex items-center">
-                                          <label className={`flex items-center justify-between px-1.5 py-1 rounded cursor-pointer transition-colors w-full ${isSelected ? 'bg-sky-50 border border-sky-300' : 'hover:bg-slate-100 border border-transparent'}`}>
+                                          <label className={`flex items-center justify-between px-1.5 py-1 rounded cursor-pointer transition-colors w-full ${isSelected ? 'bg-sky-50 dark:bg-sky-950/80 border border-sky-300 dark:border-sky-700' : 'hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent'}`}>
                                             <div className="flex items-center min-w-0">
                                               <div className="relative mr-1 flex items-center justify-center w-3.5 h-3.5 flex-shrink-0">
                                                 <input type="checkbox" checked={isSelected} onChange={() => toggleOptionValue(option.value, groupName)} className="opacity-0 absolute w-full h-full cursor-pointer" />
-                                                <div className={`w-3.5 h-3.5 border rounded-sm flex items-center justify-center ${isSelected ? 'border-sky-600 bg-sky-600' : 'border-slate-400'}`}>{isSelected && (<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>)}</div>
+                                                <div className={`w-3.5 h-3.5 border rounded-sm flex items-center justify-center ${isSelected ? 'border-sky-600 bg-sky-600' : 'border-slate-400 dark:border-slate-600'}`}>{isSelected && (<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>)}</div>
                                               </div>
-                                              <div className="flex flex-col min-w-0"><span className="text-[11px] font-bold text-slate-900 truncate">{displayLabel}</span><span className="text-[9px] text-slate-500 font-mono truncate">{detailLabel}</span></div>
+                                              <div className="flex flex-col min-w-0"><span className="text-[11px] font-bold text-slate-900 dark:text-slate-100 truncate">{displayLabel}</span><span className="text-[9px] text-slate-500 dark:text-slate-400 font-mono truncate">{detailLabel}</span></div>
                                             </div>
                                           </label>
                                         </div>
@@ -997,8 +997,8 @@ const QueuePage = () => {
                         </div>
                       )}
                       {selectedOptions.length > 0 && (
-                        <div className="mt-2 p-2.5 bg-sky-50 border border-sky-200 rounded-md">
-                          <div className="text-[10px] font-bold text-sky-800 mb-1.5 flex items-center"><CheckSquare size={10} className="mr-0.5" />已选配置</div>
+                        <div className="mt-2 p-2.5 bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 rounded-md">
+                          <div className="text-[10px] font-bold text-sky-800 dark:text-sky-300 mb-1.5 flex items-center"><CheckSquare size={10} className="mr-0.5" />已选配置</div>
                           <div className="flex flex-wrap gap-1.5">
                             {selectedOptions.map(optValue => {
                               const option = (selectedServer.availableOptions || []).find(o => o.value === optValue) || (selectedServer.defaultOptions || []).find(o => o.value === optValue);
@@ -1008,9 +1008,9 @@ const QueuePage = () => {
                               for (const [name, group] of Object.entries(groups)) { if (group.some(o => o.value === optValue)) { groupName = name; break; } }
                               const { displayLabel } = formatOptionDisplay(option, groupName);
                               return (
-                                <div key={optValue} className="px-1.5 py-0.5 bg-sky-100 rounded text-[9px] font-bold text-sky-800 flex items-center">
+                                <div key={optValue} className="px-1.5 py-0.5 bg-sky-100 dark:bg-sky-900/80 rounded text-[9px] font-bold text-sky-800 dark:text-sky-200 flex items-center">
                                   {displayLabel}
-                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleOptionValue(optValue); }} className="ml-1 text-sky-600 hover:text-sky-800">
+                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleOptionValue(optValue); }} className="ml-1 text-sky-600 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                   </button>
                                 </div>
@@ -1037,13 +1037,13 @@ const QueuePage = () => {
                       setSelectedOptions([]);
                       setOptionsInput('');
                     }}
-                    className="w-full md:flex-1 px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 font-bold hover:bg-slate-100 transition-all shadow-sm"
+                    className="w-full md:flex-1 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 transition-all shadow-sm"
                   >
                     取消编辑
                   </button>
                   <button
                     onClick={() => updateQueueItem()}
-                    className="w-full md:flex-1 px-4 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold transition-all shadow-md disabled:bg-slate-200 disabled:text-slate-400"
+                    className="w-full md:flex-1 px-4 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold transition-all shadow-md disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500"
                     disabled={!planCodeInput.trim() || selectedDatacenters.length === 0}
                   >
                     修改队列
@@ -1052,7 +1052,7 @@ const QueuePage = () => {
               ) : (
                 <button
                   onClick={() => addQueueItem()}
-                  className="w-full py-3 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm sm:text-base transition-all shadow-md disabled:bg-slate-200 disabled:text-slate-400 disabled:border-slate-300 cursor-pointer"
+                  className="w-full py-3 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm sm:text-base transition-all shadow-md disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 disabled:border-slate-300 dark:disabled:border-slate-700 cursor-pointer"
                   disabled={!planCodeInput.trim() || selectedDatacenters.length === 0}
                 >
                   {selectedDatacenters.length > 0
@@ -1068,17 +1068,17 @@ const QueuePage = () => {
       <div>
         {/* 只在首次加载时显示加载状态，刷新时保留列表 */}
         {isLoading && queueItems.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-lg p-12 text-center shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-12 text-center shadow-sm">
             <RefreshCwIcon className="w-8 h-8 animate-spin text-sky-600 mx-auto" />
           </div>
         ) : (
           <div className="space-y-6">
             <div>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'running' | 'completed' | 'paused')} className="w-full">
-                <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1 border border-slate-200 rounded-xl">
-                  <TabsTrigger value="running" className="font-bold text-slate-800 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">正在进行</TabsTrigger>
-                  <TabsTrigger value="paused" className="font-bold text-slate-800 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">已暂停</TabsTrigger>
-                  <TabsTrigger value="completed" className="font-bold text-slate-800 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">已完成</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3 bg-slate-100 dark:bg-slate-800/90 p-1 border border-slate-200 dark:border-slate-700 rounded-xl">
+                  <TabsTrigger value="running" className="font-bold text-slate-800 dark:text-slate-200 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">正在进行</TabsTrigger>
+                  <TabsTrigger value="paused" className="font-bold text-slate-800 dark:text-slate-200 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">已暂停</TabsTrigger>
+                  <TabsTrigger value="completed" className="font-bold text-slate-800 dark:text-slate-200 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">已完成</TabsTrigger>
                 </TabsList>
               </Tabs>
               <div className="mt-3 flex items-center justify-end">
@@ -1142,29 +1142,29 @@ const QueuePage = () => {
                           }
                           if (list.length === 1) {
                             return (
-                              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-slate-100 text-slate-700 border border-slate-200">{list[0].toUpperCase()}</span>
+                              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">{list[0].toUpperCase()}</span>
                             );
                           }
                           return null;
                         })()}
                         {Array.isArray(item.options) && item.options.length > 0 && (
-                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-slate-100 text-slate-700 border border-slate-200">含 {item.options.length} 个可选配置</span>
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">含 {item.options.length} 个可选配置</span>
                         )}
-                        <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-sky-50 text-sky-700 border border-sky-200 flex items-center gap-1 font-medium">
+                        <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 flex items-center gap-1 font-medium">
                           <ShoppingCart size={12} /> {Math.min(item.purchased || 0, item.quantity || 0)} / {item.quantity || 0}
                         </span>
                         {item.auto_pay && (
-                          <span className="px-1.5 py-0.5 h-[18px] text-[10px] font-mono rounded-md bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center gap-1 leading-none font-medium" title="自动支付">
-                            <CreditCard size={12} className="text-sky-600" />
+                          <span className="px-1.5 py-0.5 h-[18px] text-[10px] font-mono rounded-md bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 flex items-center justify-center gap-1 leading-none font-medium" title="自动支付">
+                            <CreditCard size={12} className="text-sky-600 dark:text-sky-400" />
                           </span>
                         )}
                         {item.stabilize_minutes ? (
-                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 font-semibold" title="检测到有货后等待确认">
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-amber-50 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 flex items-center gap-1 font-semibold" title="检测到有货后等待确认">
                             ⏱️ {item.stabilize_minutes}分钟稳定等待
                           </span>
                         ) : null}
                         {item.proxy && item.proxy !== 'none' ? (
-                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-sky-100 text-sky-800 border border-sky-300 flex items-center gap-1 font-semibold">
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-sky-100 dark:bg-sky-900/80 text-sky-800 dark:text-sky-200 border border-sky-300 dark:border-sky-700 flex items-center gap-1 font-semibold">
                             🌐 {item.proxy === 'proxy1' ? '代理1' : '代理2'} 下单
                           </span>
                         ) : null}
@@ -1172,7 +1172,7 @@ const QueuePage = () => {
                           const accCnt = accountMonthlyCounts[item.accountId || 'default'] || 0;
                           if (accCnt >= 6) {
                             return (
-                              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-amber-500/20 text-amber-800 border border-amber-500/50 font-bold" title="过去30天该账户成功下单≥6单">
+                              <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/50 font-bold" title="过去30天该账户成功下单≥6单">
                                 ⚠️ 30天已下{accCnt}单
                               </span>
                             );
@@ -1231,15 +1231,15 @@ const QueuePage = () => {
                   </div>
                 ))}
                 {runningItems.length === 0 && (
-                  <div className="text-center py-12 text-slate-800 font-bold text-sm sm:text-base">暂无进行中的任务</div>
+                  <div className="text-center py-12 text-slate-800 dark:text-slate-200 font-bold text-sm sm:text-base">暂无进行中的任务</div>
                 )}
-                <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-200 text-xs font-medium">
+                <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs font-medium">
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-900 font-bold">每页</span>
+                    <span className="text-slate-900 dark:text-slate-100 font-bold">每页</span>
                     <select
                       value={pageSize}
                       onChange={(e) => { const v = Number(e.target.value) || 10; setPageSize(v); setRunningPage(1); setCompletedPage(1); setPausedPage(1); }}
-                      className="px-2 py-1 bg-white border border-slate-300 rounded text-slate-900 font-bold outline-none shadow-xs"
+                      className="px-2 py-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-slate-900 dark:text-slate-100 font-bold outline-none shadow-xs"
                     >
                       <option value={5}>5</option>
                       <option value={10}>10</option>
@@ -1248,9 +1248,9 @@ const QueuePage = () => {
                     </select>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <button className="px-3 py-1 bg-white border border-slate-300 rounded text-slate-900 font-bold hover:bg-sky-50 shadow-xs disabled:opacity-40 disabled:hover:bg-white" disabled={runningPage <= 1} onClick={() => setRunningPage(p => Math.max(1, p - 1))}>上一页</button>
-                    <span className="text-slate-900 font-bold px-2">{runningPage} / {runningTotalPages}</span>
-                    <button className="px-3 py-1 bg-white border border-slate-300 rounded text-slate-900 font-bold hover:bg-sky-50 shadow-xs disabled:opacity-40 disabled:hover:bg-white" disabled={runningPage >= runningTotalPages} onClick={() => setRunningPage(p => Math.min(runningTotalPages, p + 1))}>下一页</button>
+                    <button className="px-3 py-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-slate-900 dark:text-slate-100 font-bold hover:bg-sky-50 dark:hover:bg-slate-700 shadow-xs disabled:opacity-40" disabled={runningPage <= 1} onClick={() => setRunningPage(p => Math.max(1, p - 1))}>上一页</button>
+                    <span className="text-slate-900 dark:text-slate-100 font-bold px-2">{runningPage} / {runningTotalPages}</span>
+                    <button className="px-3 py-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-slate-900 dark:text-slate-100 font-bold hover:bg-sky-50 dark:hover:bg-slate-700 shadow-xs disabled:opacity-40" disabled={runningPage >= runningTotalPages} onClick={() => setRunningPage(p => Math.min(runningTotalPages, p + 1))}>下一页</button>
                   </div>
                 </div>
               </CardContent>
@@ -1495,20 +1495,20 @@ const QueuePage = () => {
                   initial={{ opacity: 0, scale: 0.95, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                  className="bg-white border border-slate-200 shadow-2xl rounded-xl p-6 max-w-md w-full pointer-events-auto"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-xl p-6 max-w-md w-full pointer-events-auto"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                  <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2 flex items-center gap-2">
                     <span className="text-red-500">⚠️</span> 确认清空
                   </h3>
-                  <p className="text-slate-600 text-sm mb-6 whitespace-pre-line leading-relaxed">
+                  <p className="text-slate-600 dark:text-slate-300 text-sm mb-6 whitespace-pre-line leading-relaxed">
                     {scopeAll ? '确定要清空全部账户的队列任务吗？' : '确定要清空当前账户的队列任务吗？'}{'\n'}
-                    <span className="text-red-600 font-semibold mt-1 inline-block">此操作不可撤销。</span>
+                    <span className="text-red-600 dark:text-red-400 font-semibold mt-1 inline-block">此操作不可撤销。</span>
                   </p>
                   <div className="flex gap-3 justify-end">
                     <button
                       onClick={() => setShowClearConfirm(false)}
-                      className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-sm"
+                      className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
                     >
                       取消
                     </button>
