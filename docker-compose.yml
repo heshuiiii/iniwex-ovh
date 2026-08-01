@@ -12,7 +12,7 @@ services:
     environment:
       - DEBUG=false
       - VITE_API_URL=/api
-      - API_SECRET_KEY=your_secure_api_key_here
+      - API_SECRET_KEY=akashi178..
       - ENABLE_API_KEY_AUTH=true
       - TZ=Asia/Shanghai
     volumes:

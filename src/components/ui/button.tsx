@@ -16,9 +16,9 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        cyber: "relative rounded-md px-3 py-2 bg-slate-800/50 border border-slate-700/50 text-slate-200 font-medium hover:bg-slate-700/50 hover:border-slate-600/50 hover:text-white active:scale-[0.97] transition-all duration-150 ease-out",
-        'cyber-filled': "relative rounded-md px-3 py-2 bg-cyber-accent/20 border border-cyber-accent/40 text-cyber-accent font-medium hover:bg-cyber-accent/30 hover:border-cyber-accent/60 hover:text-cyber-accent active:scale-[0.97] transition-all duration-150 ease-out",
-        'cyber-destructive': "relative rounded-md px-3 py-2 bg-red-900/30 border border-red-700/40 text-red-300 font-medium hover:bg-red-800/40 hover:border-red-600/50 hover:text-red-200 active:scale-[0.97] transition-all duration-150 ease-out",
+        cyber: "relative rounded-md px-3 py-2 bg-white border border-slate-300 text-slate-900 font-bold hover:bg-sky-50 hover:border-sky-500 hover:text-sky-800 shadow-sm active:scale-[0.97] transition-all duration-150 ease-out",
+        'cyber-filled': "relative rounded-md px-3 py-2 bg-sky-600 border border-sky-600 text-white font-bold hover:bg-sky-700 shadow-sm active:scale-[0.97] transition-all duration-150 ease-out",
+        'cyber-destructive': "relative rounded-md px-3 py-2 bg-red-50 border border-red-300 text-red-700 font-bold hover:bg-red-600 hover:text-white shadow-sm active:scale-[0.97] transition-all duration-150 ease-out",
       },
       size: {
         default: "h-10 px-4 py-2",

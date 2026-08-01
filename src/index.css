@@ -472,14 +472,14 @@
      内容区 cyber-* 颜色强制深色（浅色背景下保证可读性）
      ================================================================ */
 
-  /* text-cyber-text → 深色正文 */
-  .text-cyber-text { color: #1e293b !important; }
+  /* text-cyber-text → 深黑正文 */
+  .text-cyber-text { color: #0f172a !important; font-weight: 500; }
 
-  /* text-cyber-muted → 中灰辅助文字 */
-  .text-cyber-muted { color: #64748b !important; }
+  /* text-cyber-muted → 浓黑辅助文字 (拒绝浅灰) */
+  .text-cyber-muted { color: #1e293b !important; }
 
-  /* text-cyber-secondary → 次要文字 */
-  .text-cyber-secondary { color: #475569 !important; }
+  /* text-cyber-secondary → 纯黑次要文字 */
+  .text-cyber-secondary { color: #0f172a !important; }
 
   /* text-cyber-accent → 主色蓝 */
   .text-cyber-accent { color: #0284c7 !important; }

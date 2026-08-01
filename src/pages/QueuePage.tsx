@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAPI } from "@/context/APIContext";
@@ -822,13 +822,13 @@ const QueuePage = () => {
                   }}
                   min={0}
                   step={1}
-                  className={`w-full cyber-input bg-cyber-surface text-cyber-text border-cyber-border focus:ring-cyber-primary focus:border-cyber-primary ${retryInterval > 0 && retryInterval < MIN_RETRY_INTERVAL ? 'border-yellow-500' : ''}`}
+                  className={`w-full px-3 py-2 rounded-md border border-slate-300 bg-white text-slate-900 text-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none ${retryInterval > 0 && retryInterval < MIN_RETRY_INTERVAL ? 'border-yellow-500' : ''}`}
                   placeholder={`推荐: ${TASK_RETRY_INTERVAL}秒`}
                 />
               </div>
 
               <div className="md:w-[210px]">
-                <label htmlFor="stabilizeMinutes" className="block text-sm font-medium text-cyber-secondary mb-1">
+                <label htmlFor="stabilizeMinutes" className="block text-sm font-bold text-slate-900 mb-1">
                   库存稳定确认 (分钟)
                 </label>
                 <input
@@ -839,23 +839,23 @@ const QueuePage = () => {
                   min={0}
                   max={60}
                   step={1}
-                  className="w-full cyber-input bg-cyber-surface text-cyber-text border-cyber-border focus:ring-cyber-primary focus:border-cyber-primary"
+                  className="w-full px-3 py-2 rounded-md border border-slate-300 bg-white text-slate-900 text-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none"
                   placeholder="0 = 有货即抢"
                 />
-                <p className="text-[11px] text-cyber-muted mt-1">
+                <p className="text-xs font-semibold text-slate-800 mt-1">
                   {stabilizeMinutes > 0 ? `⏱️ 持续有货 ${stabilizeMinutes} 分钟后下单` : '0: 检测到有货立即下单'}
                 </p>
               </div>
 
               <div className="md:w-[180px]">
-                <label htmlFor="selectedProxy" className="block text-sm font-medium text-cyber-secondary mb-1">
+                <label htmlFor="selectedProxy" className="block text-sm font-bold text-slate-900 mb-1">
                   指定下单代理
                 </label>
                 <select
                   id="selectedProxy"
                   value={selectedProxy}
                   onChange={(e) => setSelectedProxy(e.target.value)}
-                  className="w-full text-xs px-2.5 py-2 rounded-md border border-slate-300 bg-white text-slate-900 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  className="w-full text-xs px-2.5 py-2 rounded-md border border-slate-300 bg-white text-slate-900 font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 >
                   <option value="none">直连 (不使用代理)</option>
                   <option value="proxy1">
@@ -865,7 +865,7 @@ const QueuePage = () => {
                     {proxy2 ? `代理2: ${proxy2.replace(/socks5:\/\/[^@]*@/, 'socks5://***@')}` : '代理 2 (未配置)'}
                   </option>
                 </select>
-                <p className="text-[11px] text-cyber-muted mt-1">
+                <p className="text-xs font-semibold text-slate-800 mt-1">
                   {selectedProxy === 'none' ? '仅下单时直连' : 
                    selectedProxy === 'proxy1' && !proxy1 ? '⚠️ 代理1未在设置中配置' :
                    selectedProxy === 'proxy2' && !proxy2 ? '⚠️ 代理2未在设置中配置' :
@@ -874,9 +874,9 @@ const QueuePage = () => {
               </div>
 
               <div className="md:w-[150px]">
-                <label className="block text-sm font-medium text-cyber-secondary mb-1">自动支付</label>
-                <div className="flex items-center justify-between bg-cyber-surface border border-cyber-border rounded-md px-3 py-2">
-                  <span className="text-xs text-cyber-muted">首选支付</span>
+                <label className="block text-sm font-bold text-slate-900 mb-1">自动支付</label>
+                <div className="flex items-center justify-between bg-white border border-slate-300 rounded-md px-3 py-2">
+                  <span className="text-xs font-bold text-slate-900">首选支付</span>
                   <Switch checked={autoPay} onCheckedChange={setAutoPay} />
                 </div>
               </div>
@@ -885,22 +885,21 @@ const QueuePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 {(visibleDatacenters && visibleDatacenters.length > 0) && (
-                <div className="rounded-md overflow-hidden border border-cyber-accent/20">
-                  <div className="px-2 py-1 bg-cyber-grid/20 border-b border-cyber-accent/20 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-cyber-accent"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
-                    <span className="text-[12px] font-medium">选择部署位置</span>
+                <div className="rounded-md overflow-hidden border border-slate-300">
+                  <div className="px-2 py-1 bg-slate-100 border-b border-slate-300 flex items-center">
+                    <span className="text-[12px] font-bold text-slate-700">选择部署位置</span>
                     <div className="ml-auto flex items-center gap-2">
-                      <button type="button" onClick={selectAllDatacenters} className="text-[10px] text-cyber-muted hover:text-cyber-accent">全选</button>
-                      <button type="button" onClick={deselectAllDatacenters} className="text-[10px] text-cyber-muted hover:text-cyber-accent"><span className="hidden sm:inline">取消全选</span><span className="sm:hidden">取消</span></button>
+                      <button type="button" onClick={selectAllDatacenters} className="text-[10px] text-slate-600 hover:text-sky-700">全选</button>
+                      <button type="button" onClick={deselectAllDatacenters} className="text-[10px] text-slate-600 hover:text-sky-700"><span className="hidden sm:inline">取消全选</span><span className="sm:hidden">取消</span></button>
                     </div>
                   </div>
-                  <div className="bg-cyber-grid/5 p-3 sm:p-4 overflow-hidden">
+                  <div className="p-3 sm:p-4 overflow-hidden bg-slate-50">
                     {Object.entries(DATACENTER_REGIONS).map(([region, dcCodes]) => {
                       const list = dcCodes.filter(code => (visibleDatacenters || []).includes(code));
                       if (list.length === 0) return null;
                       return (
                         <div key={region} className="mb-5 last:mb-0">
-                          <h3 className="text-[12px] font-semibold text-blue-500 mb-3 tracking-wide drop-shadow-[0_0_1px_rgba(59,130,246,0.5)]">{region}</h3>
+                          <h3 className="text-[12px] font-bold text-slate-900 mb-3 tracking-wide">{region}</h3>
                           <div className="grid grid-cols-2 gap-3 w-full">
                             {list.map(code => {
                               const dcObj = OVH_DATACENTERS.find(d => d.code === code);
@@ -910,15 +909,15 @@ const QueuePage = () => {
                                 <button
                                   key={code}
                                   type="button"
-                                  className={`w-full px-2.5 py-2 rounded-md transition-all duration-200 flex flex-col items-start min-w-0 ${isSelected ? 'bg-cyber-accent/15 border border-cyber-accent/30' : 'bg-cyber-grid/30 border border-cyber-accent/25 hover:bg-cyber-accent/8 hover:border-cyber-accent/40'}`}
+                                  className={`w-full px-2.5 py-2 rounded-md transition-all duration-200 flex flex-col items-start min-w-0 ${isSelected ? 'bg-sky-50 border border-sky-400' : 'bg-white border border-slate-300 hover:bg-slate-50'}`}
                                   onClick={() => handleDatacenterChange(code)}
                                   title={`${dcObj?.name || dcCodeUpper}`}
                                 >
                                   <div className="flex items-center justify-between w-full mb-1.5 gap-2">
-                                    <span className="text-[11px] font-bold tracking-wide leading-none text-white transition-colors duration-200">{dcCodeUpper}</span>
-                                    <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">{isSelected ? (<Check className="w-4 h-4 text-green-400" strokeWidth={3} />) : (<span className={`w-[6px] h-[6px] rounded-full bg-yellow-400 transition-all duration-200`}></span>)}</div>
+                                    <span className="text-[11px] font-bold tracking-wide leading-none text-slate-900">{dcCodeUpper}</span>
+                                    <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">{isSelected ? (<Check className="w-4 h-4 text-sky-600" strokeWidth={3} />) : (<span className={`w-[6px] h-[6px] rounded-full bg-slate-300`}></span>)}</div>
                                   </div>
-                                  <div className="w-full min-w-0 flex-1 flex items-center"><span className="text-[10px] leading-[1.35] break-words font-normal text-white/90 transition-colors duration-200">{dcObj?.region} - {dcObj?.name}</span></div>
+                                  <div className="w-full min-w-0 flex-1 flex items-center"><span className="text-[10px] leading-[1.35] break-words font-medium text-slate-600">{dcObj?.region} - {dcObj?.name}</span></div>
                                 </button>
                               );
                             })}
@@ -931,10 +930,10 @@ const QueuePage = () => {
                 )}
                 {selectedDatacenters.length > 0 && (
                   <div className="mt-4">
-                    <div className="text-xs font-medium text-cyber-secondary mb-2">拖动标签以设置优先级（越靠前优先级越高）</div>
+                    <div className="text-xs font-bold text-slate-900 mb-2">拖动标签以设置优先级（越靠前优先级越高）</div>
                     <div className="flex flex-wrap gap-2">
                       {selectedDatacenters.map((dc) => (
-                        <div key={dc} draggable onDragStart={() => setDraggingDc(dc)} onDragEnd={() => setDraggingDc(null)} onDragOver={(e) => { e.preventDefault(); if (!draggingDc || draggingDc === dc) return; setSelectedDatacenters(prev => { const from = prev.indexOf(draggingDc); const to = prev.indexOf(dc); if (from === -1 || to === -1) return prev; const next = [...prev]; next.splice(from, 1); next.splice(to, 0, draggingDc); return next; }); }} className={`px-3 py-1.5 text-xs rounded-md border-2 bg-cyber-accent/10 border-cyber-accent/40 text-cyber-accent cursor-move shadow-sm ${draggingDc === dc ? 'opacity-70' : ''}`} title="拖动以调整优先级">{dc.toUpperCase()}</div>
+                        <div key={dc} draggable onDragStart={() => setDraggingDc(dc)} onDragEnd={() => setDraggingDc(null)} onDragOver={(e) => { e.preventDefault(); if (!draggingDc || draggingDc === dc) return; setSelectedDatacenters(prev => { const from = prev.indexOf(draggingDc); const to = prev.indexOf(dc); if (from === -1 || to === -1) return prev; const next = [...prev]; next.splice(from, 1); next.splice(to, 0, draggingDc); return next; }); }} className={`px-3 py-1.5 text-xs font-bold rounded-md border border-sky-300 bg-sky-50 text-sky-700 cursor-move shadow-sm ${draggingDc === dc ? 'opacity-70' : ''}`} title="拖动以调整优先级">{dc.toUpperCase()}</div>
                       ))}
                     </div>
                   </div>
@@ -956,35 +955,35 @@ const QueuePage = () => {
                     <div className="space-y-2">
 
                       {!optionsIdentical && hasGroupedOptions && (
-                        <div className="rounded-md overflow-hidden border border-cyber-accent/20">
-                          <div className="px-2 py-1 bg-cyber-grid/20 border-b border-cyber-accent/20 flex items-center">
-                            <Settings size={11} className="mr-1 text-cyber-accent" />
-                            <span className="text-[12px] font-medium">自定义配置</span>
+                        <div className="rounded-md overflow-hidden border border-slate-300">
+                          <div className="px-2 py-1 bg-slate-100 border-b border-slate-300 flex items-center">
+                            <Settings size={11} className="mr-1 text-slate-700" />
+                            <span className="text-[12px] font-bold text-slate-700">自定义配置</span>
                             <div className="ml-auto flex items-center gap-2">
-                              <button type="button" onClick={() => { const defaults = (selectedServer?.defaultOptions || []).map(o => o.value); setSelectedOptions(defaults); setOptionsInput(defaults.join(', ')); }} className="text-[10px] text-cyber-muted hover:text-cyber-accent">使用默认配置</button>
-                              <button type="button" onClick={() => { setSelectedOptions([]); setOptionsInput(''); }} className="text-[10px] text-cyber-muted hover:text-cyber-accent">清空选择</button>
+                              <button type="button" onClick={() => { const defaults = (selectedServer?.defaultOptions || []).map(o => o.value); setSelectedOptions(defaults); setOptionsInput(defaults.join(', ')); }} className="text-[10px] text-slate-600 hover:text-sky-700">使用默认配置</button>
+                              <button type="button" onClick={() => { setSelectedOptions([]); setOptionsInput(''); }} className="text-[10px] text-slate-600 hover:text-sky-700">清空选择</button>
                             </div>
                           </div>
-                          <div className="divide-y divide-cyber-accent/10">
+                          <div className="divide-y divide-slate-200">
                             {Object.entries(optionGroups).map(([groupName, options]) => {
                               if (options.length === 0) return null;
                               let GroupIcon = Settings; if (groupName === "CPU/处理器") GroupIcon = Cpu; else if (groupName === "内存") GroupIcon = Database; else if (groupName === "存储") GroupIcon = HardDrive; else if (groupName === "带宽/网络") GroupIcon = Wifi; else if (groupName === "vRack内网") GroupIcon = ArrowRightLeft;
                               return (
                                 <div key={groupName} className="p-1.5">
-                                  <div className="font-medium text-[10px] mb-1 flex items-center text-cyber-accent"><GroupIcon size={11} className="mr-0.5" />{groupName}</div>
+                                  <div className="font-bold text-[10px] mb-1 flex items-center text-slate-700"><GroupIcon size={11} className="mr-0.5" />{groupName}</div>
                                   <div className="space-y-0.5 pl-0.5">
                                     {options.map(option => {
                                       const { displayLabel, detailLabel } = formatOptionDisplay(option, groupName);
                                       const isSelected = isOptionSelectedValue(option.value);
                                       return (
                                         <div key={option.value} className="flex items-center">
-                                          <label className={`flex items-center justify-between px-1.5 py-1 rounded cursor-pointer transition-colors w-full ${isSelected ? 'bg-cyber-accent/15 border border-cyber-accent/30' : 'hover:bg-cyber-grid/10 border border-transparent'}`}>
+                                          <label className={`flex items-center justify-between px-1.5 py-1 rounded cursor-pointer transition-colors w-full ${isSelected ? 'bg-sky-50 border border-sky-300' : 'hover:bg-slate-100 border border-transparent'}`}>
                                             <div className="flex items-center min-w-0">
                                               <div className="relative mr-1 flex items-center justify-center w-3.5 h-3.5 flex-shrink-0">
                                                 <input type="checkbox" checked={isSelected} onChange={() => toggleOptionValue(option.value, groupName)} className="opacity-0 absolute w-full h-full cursor-pointer" />
-                                                <div className={`w-3.5 h-3.5 border rounded-sm flex items-center justify-center ${isSelected ? 'border-cyber-accent bg-cyber-accent/30' : 'border-slate-500'}`}>{isSelected && (<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-cyber-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>)}</div>
+                                                <div className={`w-3.5 h-3.5 border rounded-sm flex items-center justify-center ${isSelected ? 'border-sky-600 bg-sky-600' : 'border-slate-400'}`}>{isSelected && (<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>)}</div>
                                               </div>
-                                              <div className="flex flex-col min-w-0"><span className="text-[11px] font-medium truncate">{displayLabel}</span><span className="text-[9px] text-cyber-muted font-mono truncate">{detailLabel}</span></div>
+                                              <div className="flex flex-col min-w-0"><span className="text-[11px] font-bold text-slate-900 truncate">{displayLabel}</span><span className="text-[9px] text-slate-500 font-mono truncate">{detailLabel}</span></div>
                                             </div>
                                           </label>
                                         </div>
@@ -998,8 +997,8 @@ const QueuePage = () => {
                         </div>
                       )}
                       {selectedOptions.length > 0 && (
-                        <div className="mt-2 p-2.5 bg-cyber-accent/10 border border-cyber-accent/30 rounded-md">
-                          <div className="text-[10px] font-medium text-cyber-accent mb-1.5 flex items-center"><CheckSquare size={10} className="mr-0.5" />已选配置</div>
+                        <div className="mt-2 p-2.5 bg-sky-50 border border-sky-200 rounded-md">
+                          <div className="text-[10px] font-bold text-sky-800 mb-1.5 flex items-center"><CheckSquare size={10} className="mr-0.5" />已选配置</div>
                           <div className="flex flex-wrap gap-1.5">
                             {selectedOptions.map(optValue => {
                               const option = (selectedServer.availableOptions || []).find(o => o.value === optValue) || (selectedServer.defaultOptions || []).find(o => o.value === optValue);
@@ -1009,9 +1008,9 @@ const QueuePage = () => {
                               for (const [name, group] of Object.entries(groups)) { if (group.some(o => o.value === optValue)) { groupName = name; break; } }
                               const { displayLabel } = formatOptionDisplay(option, groupName);
                               return (
-                                <div key={optValue} className="px-1.5 py-0.5 bg-cyber-accent/20 rounded text-[9px] flex items-center">
+                                <div key={optValue} className="px-1.5 py-0.5 bg-sky-100 rounded text-[9px] font-bold text-sky-800 flex items-center">
                                   {displayLabel}
-                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleOptionValue(optValue); }} className="ml-1 text-cyber-muted hover:text-cyber-accent">
+                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleOptionValue(optValue); }} className="ml-1 text-sky-600 hover:text-sky-800">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                   </button>
                                 </div>
@@ -1038,13 +1037,13 @@ const QueuePage = () => {
                       setSelectedOptions([]);
                       setOptionsInput('');
                     }}
-                    className="cyber-button w-full md:flex-1 px-4 py-2.5"
+                    className="w-full md:flex-1 px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 font-bold hover:bg-slate-100 transition-all shadow-sm"
                   >
                     取消编辑
                   </button>
                   <button
                     onClick={() => updateQueueItem()}
-                    className="cyber-button w-full md:flex-1 bg-cyber-primary hover:bg-cyber-primary-dark text-white font-semibold py-2.5"
+                    className="w-full md:flex-1 px-4 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold transition-all shadow-md disabled:bg-slate-200 disabled:text-slate-400"
                     disabled={!planCodeInput.trim() || selectedDatacenters.length === 0}
                   >
                     修改队列
@@ -1053,10 +1052,12 @@ const QueuePage = () => {
               ) : (
                 <button
                   onClick={() => addQueueItem()}
-                  className="w-full cyber-button bg-cyber-primary hover:bg-cyber-primary-dark text-white font-semibold py-2.5"
+                  className="w-full py-3 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm sm:text-base transition-all shadow-md disabled:bg-slate-200 disabled:text-slate-400 disabled:border-slate-300 cursor-pointer"
                   disabled={!planCodeInput.trim() || selectedDatacenters.length === 0}
                 >
-                  {selectedDatacenters.length > 0 ? `添加到队列（目标 ${quantity} 台${selectedOptions.length > 0 ? `，含${selectedOptions.length}个可选配置` : ''}）` : '添加到队列'}
+                  {selectedDatacenters.length > 0
+                    ? `添加到队列（目标 ${quantity} 台${selectedOptions.length > 0 ? '，含' + selectedOptions.length + '个可选配置' : ''}）`
+                    : '添加到队列'}
                 </button>
               )}
             </div>
@@ -1067,22 +1068,20 @@ const QueuePage = () => {
       <div>
         {/* 只在首次加载时显示加载状态，刷新时保留列表 */}
         {isLoading && queueItems.length === 0 ? (
-          <div className="cyber-card">
-            <div className="flex items-center justify-center py-12">
-              <RefreshCwIcon className="w-8 h-8 animate-spin text-cyber-accent" />
-            </div>
+          <div className="bg-white border border-slate-200 rounded-lg p-12 text-center shadow-sm">
+            <RefreshCwIcon className="w-8 h-8 animate-spin text-sky-600 mx-auto" />
           </div>
         ) : (
           <div className="space-y-6">
             <div>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'running' | 'completed' | 'paused')} className="w-full">
-                <TabsList className="grid w-full grid-cols-3 cyber-card">
-                  <TabsTrigger value="running" className="data-[state=active]:bg-cyber-accent/20">正在进行</TabsTrigger>
-                  <TabsTrigger value="paused" className="data-[state=active]:bg-cyber-accent/20">已暂停</TabsTrigger>
-                  <TabsTrigger value="completed" className="data-[state=active]:bg-cyber-accent/20">已完成</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1 border border-slate-200 rounded-xl">
+                  <TabsTrigger value="running" className="font-bold text-slate-800 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">正在进行</TabsTrigger>
+                  <TabsTrigger value="paused" className="font-bold text-slate-800 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">已暂停</TabsTrigger>
+                  <TabsTrigger value="completed" className="font-bold text-slate-800 data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-lg transition-all">已完成</TabsTrigger>
                 </TabsList>
               </Tabs>
-              <div className="mt-2 flex items-center justify-end">
+              <div className="mt-3 flex items-center justify-end">
                 <div
                   className="relative inline-flex items-center bg-cyber-grid/10 border border-cyber-border rounded-full h-7 px-3"
                   role="group"
@@ -1232,15 +1231,15 @@ const QueuePage = () => {
                   </div>
                 ))}
                 {runningItems.length === 0 && (
-                  <div className="text-center py-8 text-cyber-muted">暂无进行中的任务</div>
+                  <div className="text-center py-12 text-slate-800 font-bold text-sm sm:text-base">暂无进行中的任务</div>
                 )}
-                <div className="flex items-center justify-between mt-3 text-xs">
+                <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-200 text-xs font-medium">
                   <div className="flex items-center gap-2">
-                    <span className="text-cyber-muted">每页</span>
+                    <span className="text-slate-900 font-bold">每页</span>
                     <select
                       value={pageSize}
                       onChange={(e) => { const v = Number(e.target.value) || 10; setPageSize(v); setRunningPage(1); setCompletedPage(1); setPausedPage(1); }}
-                      className="px-2 py-1 bg-cyber-bg border border-cyber-accent/30 rounded text-cyber-text"
+                      className="px-2 py-1 bg-white border border-slate-300 rounded text-slate-900 font-bold outline-none shadow-xs"
                     >
                       <option value={5}>5</option>
                       <option value={10}>10</option>
@@ -1248,10 +1247,10 @@ const QueuePage = () => {
                       <option value={50}>50</option>
                     </select>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <button className="cyber-button text-xs px-2 py-1" disabled={runningPage <= 1} onClick={() => setRunningPage(p => Math.max(1, p - 1))}>上一页</button>
-                    <span className="text-cyber-muted">{runningPage} / {runningTotalPages}</span>
-                    <button className="cyber-button text-xs px-2 py-1" disabled={runningPage >= runningTotalPages} onClick={() => setRunningPage(p => Math.min(runningTotalPages, p + 1))}>下一页</button>
+                  <div className="flex items-center gap-1.5">
+                    <button className="px-3 py-1 bg-white border border-slate-300 rounded text-slate-900 font-bold hover:bg-sky-50 shadow-xs disabled:opacity-40 disabled:hover:bg-white" disabled={runningPage <= 1} onClick={() => setRunningPage(p => Math.max(1, p - 1))}>上一页</button>
+                    <span className="text-slate-900 font-bold px-2">{runningPage} / {runningTotalPages}</span>
+                    <button className="px-3 py-1 bg-white border border-slate-300 rounded text-slate-900 font-bold hover:bg-sky-50 shadow-xs disabled:opacity-40 disabled:hover:bg-white" disabled={runningPage >= runningTotalPages} onClick={() => setRunningPage(p => Math.min(runningTotalPages, p + 1))}>下一页</button>
                   </div>
                 </div>
               </CardContent>

@@ -336,64 +336,60 @@ const OVHAvailabilityPage = () => {
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold mb-1 cyber-glow-text`}>OVH 实时可用性</h1>
-            <p className="text-cyber-muted text-sm">直接查询 OVH 公开 API（无需认证）</p>
+            <h1 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-extrabold mb-1 text-slate-900`}>OVH 实时可用性</h1>
+            <p className="text-slate-800 font-bold text-sm">直接查询 OVH 公开 API（无需认证）</p>
           </div>
           
           <div className="flex gap-2">
-            <Button
+            <button
               onClick={exportData}
               disabled={filteredData.length === 0}
-              variant="cyber"
-              size="sm"
-              className="flex items-center gap-2 text-xs sm:text-sm"
+              className="px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 font-bold text-xs sm:text-sm shadow-xs hover:bg-sky-50 hover:border-sky-500 hover:text-sky-800 transition-all flex items-center gap-1.5 disabled:opacity-40"
             >
-              <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+              <Download className="w-3.5 h-3.5 text-slate-700" />
               {!isMobile && '导出JSON'}
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() => fetchAvailabilities(true)}
               disabled={isLoading || isRefreshing}
-              variant="cyber"
-              size="sm"
-              className="flex items-center gap-2 text-xs sm:text-sm"
+              className="px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 font-bold text-xs sm:text-sm shadow-xs hover:bg-sky-50 hover:border-sky-500 hover:text-sky-800 transition-all flex items-center gap-1.5 disabled:opacity-40"
             >
-              <RefreshCw className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 text-slate-700 flex-shrink-0 ${isRefreshing ? 'animate-spin' : ''}`} />
               <span className="min-w-[2.5rem]">刷新</span>
-            </Button>
+            </button>
           </div>
         </div>
       </motion.div>
 
       {/* API 信息 */}
       {endpoint && (
-        <div className="cyber-panel p-4 border-cyan-500/50 backdrop-blur-0 overflow-visible">
+        <div className="bg-white border border-sky-200 rounded-xl p-4 shadow-sm">
           <div className="flex items-start gap-3">
-            <Database className="w-5 h-5 text-cyan-400 mt-0.5" />
+            <Database className="w-5 h-5 text-sky-600 mt-0.5" />
             <div className="flex-1">
               <>
-                <h3 className="font-semibold text-cyan-400 mb-2 flex items-center gap-2">
+                <h3 className="font-extrabold text-sky-900 text-base mb-2 flex items-center gap-2">
                   OVH 公开 API
-                  <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">
+                  <span className="text-xs px-2 py-0.5 rounded bg-sky-100 border border-sky-300 text-sky-900 font-bold">
                     {endpoint === 'ovh-us' ? '🇺🇸 美国' : endpoint === 'ovh-ca' ? '🇨🇦 加拿大' : '🇪🇺 欧洲'}
                   </span>
                 </h3>
-                <div className="space-y-1 text-sm">
+                <div className="space-y-1.5 text-sm">
                   <div className="flex items-start gap-2">
-                    <span className="text-cyber-muted min-w-[60px]">端点：</span>
-                    <code className="text-cyan-400 bg-cyber-grid/50 px-2 py-0.5 rounded text-xs break-all">
+                    <span className="text-slate-900 font-bold min-w-[60px]">端点：</span>
+                    <code className="text-sky-900 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded text-xs font-mono font-bold break-all">
                       {apiBaseUrl}/v1/dedicated/server/datacenter/availabilities
                     </code>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="text-cyber-muted min-w-[60px]">区域：</span>
-                    <span className="text-slate-300">
+                    <span className="text-slate-900 font-bold min-w-[60px]">区域：</span>
+                    <span className="text-slate-900 font-bold">
                       {endpoint === 'ovh-us' ? '美国 (US)' : endpoint === 'ovh-ca' ? '加拿大 (CA)' : '欧洲 (EU)'}
                     </span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="text-cyber-muted min-w-[60px]">说明：</span>
-                    <span className="text-slate-300">
+                    <span className="text-slate-900 font-bold min-w-[60px]">说明：</span>
+                    <span className="text-slate-900 font-bold">
                       此 API 无需认证，实时返回所有 OVH 专用服务器在各数据中心的库存状态
                     </span>
                   </div>
@@ -407,46 +403,46 @@ const OVHAvailabilityPage = () => {
       {/* 统计卡片 */}
       {availabilities.length > 0 && (
         <div className="grid grid-cols-3 gap-2 sm:gap-4">
-          <div className="cyber-panel p-2 sm:p-4 backdrop-blur-0 overflow-visible">
-            <div className="flex items-center gap-1 sm:gap-2 text-cyber-muted text-xs sm:text-sm mb-1">
-              <Database className="w-3 h-3 sm:w-4 sm:h-4" />
+          <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-sm">
+            <div className="flex items-center gap-1.5 text-slate-900 font-extrabold text-xs sm:text-sm mb-1">
+              <Database className="w-3.5 h-3.5 text-sky-600" />
               <span className="hidden sm:inline">总记录数</span>
               <span className="sm:hidden">总数</span>
             </div>
-            <div className="text-lg sm:text-2xl font-bold text-cyber-accent">{stats.total}</div>
+            <div className="text-xl sm:text-3xl font-extrabold text-sky-700">{stats.total}</div>
           </div>
-          <div className="cyber-panel p-2 sm:p-4 backdrop-blur-0 overflow-visible">
-            <div className="flex items-center gap-1 sm:gap-2 text-cyber-muted text-xs sm:text-sm mb-1">
-              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+          <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-sm">
+            <div className="flex items-center gap-1.5 text-slate-900 font-extrabold text-xs sm:text-sm mb-1">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
               <span className="hidden sm:inline">有货服务器</span>
               <span className="sm:hidden">有货</span>
             </div>
-            <div className="text-lg sm:text-2xl font-bold text-green-400">{stats.available}</div>
+            <div className="text-xl sm:text-3xl font-extrabold text-emerald-700">{stats.available}</div>
           </div>
-          <div className="cyber-panel p-2 sm:p-4 backdrop-blur-0 overflow-visible">
-            <div className="flex items-center gap-1 sm:gap-2 text-cyber-muted text-xs sm:text-sm mb-1">
-              <Filter className="w-3 h-3 sm:w-4 sm:h-4" />
+          <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-sm">
+            <div className="flex items-center gap-1.5 text-slate-900 font-extrabold text-xs sm:text-sm mb-1">
+              <Filter className="w-3.5 h-3.5 text-amber-600" />
               <span className="hidden sm:inline">1小时内</span>
               <span className="sm:hidden">1H内</span>
             </div>
-            <div className="text-lg sm:text-2xl font-bold text-yellow-400">{stats.oneHour}</div>
+            <div className="text-xl sm:text-3xl font-extrabold text-amber-700">{stats.oneHour}</div>
           </div>
         </div>
       )}
 
       {/* 搜索和过滤器 */}
       {availabilities.length > 0 && (
-        <div className="cyber-panel p-3 sm:p-4 backdrop-blur-0 overflow-visible">
+        <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-sm">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4">
             {/* 搜索框 */}
             <div className="relative sm:col-span-2 lg:col-span-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-cyber-muted" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-700" />
               <input
                 type="text"
                 placeholder={isMobile ? "搜索..." : "搜索服务器、内存、存储..."}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="cyber-input pl-8 sm:pl-10 w-full text-sm"
+                className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold placeholder:text-slate-400 placeholder:font-normal text-sm outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
               />
             </div>
             
@@ -454,7 +450,7 @@ const OVHAvailabilityPage = () => {
             <select
               value={filterDatacenter}
               onChange={(e) => setFilterDatacenter(e.target.value)}
-              className="cyber-input w-full"
+              className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold text-sm outline-none focus:border-sky-500"
             >
               <option value="all">所有数据中心</option>
               <optgroup label="🇪🇺 欧洲">
@@ -483,7 +479,7 @@ const OVHAvailabilityPage = () => {
             <select
               value={filterAvailability}
               onChange={(e) => setFilterAvailability(e.target.value)}
-              className="cyber-input w-full"
+              className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold text-sm outline-none focus:border-sky-500"
             >
               <option value="all">所有状态</option>
               <option value="available">有货</option>
@@ -495,7 +491,7 @@ const OVHAvailabilityPage = () => {
             <select
               value={filterMemory}
               onChange={(e) => setFilterMemory(e.target.value)}
-              className="cyber-input w-full"
+              className="px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold text-sm outline-none focus:border-sky-500"
             >
               <option value="all">所有内存</option>
               <option value="<=128">≤ 128GB</option>
@@ -507,8 +503,8 @@ const OVHAvailabilityPage = () => {
           
           {/* 排序选项 */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-cyber-muted">排序：</span>
-            <Button
+            <span className="text-slate-900 font-bold">排序：</span>
+            <button
               onClick={() => {
                 if (sortBy === 'planCode') {
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -517,13 +513,11 @@ const OVHAvailabilityPage = () => {
                   setSortOrder('asc');
                 }
               }}
-              variant="cyber"
-              size="sm"
-              className={`text-xs ${sortBy === 'planCode' ? 'bg-cyber-accent/20' : ''}`}
+              className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${sortBy === 'planCode' ? 'bg-sky-600 border-sky-600 text-white shadow-xs' : 'bg-white border-slate-300 text-slate-900 hover:bg-slate-50'}`}
             >
               型号 {sortBy === 'planCode' && (sortOrder === 'asc' ? '↑' : '↓')}
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() => {
                 if (sortBy === 'memory') {
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -532,13 +526,11 @@ const OVHAvailabilityPage = () => {
                   setSortOrder('asc');
                 }
               }}
-              variant="cyber"
-              size="sm"
-              className={`text-xs ${sortBy === 'memory' ? 'bg-cyber-accent/20' : ''}`}
+              className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${sortBy === 'memory' ? 'bg-sky-600 border-sky-600 text-white shadow-xs' : 'bg-white border-slate-300 text-slate-900 hover:bg-slate-50'}`}
             >
               内存 {sortBy === 'memory' && (sortOrder === 'asc' ? '↑' : '↓')}
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() => {
                 if (sortBy === 'availability') {
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -547,12 +539,10 @@ const OVHAvailabilityPage = () => {
                   setSortOrder('desc');
                 }
               }}
-              variant="cyber"
-              size="sm"
-              className={`text-xs ${sortBy === 'availability' ? 'bg-cyber-accent/20' : ''}`}
+              className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${sortBy === 'availability' ? 'bg-sky-600 border-sky-600 text-white shadow-xs' : 'bg-white border-slate-300 text-slate-900 hover:bg-slate-50'}`}
             >
               可用性 {sortBy === 'availability' && (sortOrder === 'asc' ? '↑' : '↓')}
-            </Button>
+            </button>
           </div>
         </div>
       )}
@@ -645,9 +635,9 @@ const OVHAvailabilityPage = () => {
           
           {/* 分页控件 */}
           {totalPages > 1 && (
-            <div className="cyber-panel p-3 sm:p-4 mt-3 sm:mt-4 backdrop-blur-0 overflow-visible">
+            <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 mt-3 sm:mt-4 shadow-sm">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-                <div className="text-xs sm:text-sm text-cyber-muted">
+                <div className="text-xs sm:text-sm font-bold text-slate-800">
                   {isMobile ? (
                     <>{currentPage}/{totalPages}</>
                   ) : (
@@ -657,53 +647,45 @@ const OVHAvailabilityPage = () => {
                 
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   {!isMobile && (
-                    <Button
+                    <button
                       onClick={() => setCurrentPage(1)}
                       disabled={currentPage === 1}
-                      variant="cyber"
-                      size="sm"
-                      className="px-3 text-xs"
+                      className="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold text-xs hover:bg-sky-50 shadow-xs disabled:opacity-40"
                     >
                       首页
-                    </Button>
+                    </button>
                   )}
                   
-                  <Button
+                  <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    variant="cyber"
-                    size="sm"
-                    className="px-2"
+                    className="p-1.5 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold hover:bg-sky-50 shadow-xs disabled:opacity-40"
                   >
-                    <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </Button>
+                    <ChevronLeft className="w-4 h-4 text-slate-800" />
+                  </button>
                   
-                  <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-cyber-grid/30 rounded text-xs sm:text-sm">
-                    <span className="text-cyber-accent font-medium">{currentPage}</span>
-                    <span className="text-cyber-muted">/</span>
-                    <span className="text-cyber-muted">{totalPages}</span>
+                  <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 border border-slate-300 rounded-lg text-xs sm:text-sm font-bold">
+                    <span className="text-sky-700">{currentPage}</span>
+                    <span className="text-slate-600">/</span>
+                    <span className="text-slate-800">{totalPages}</span>
                   </div>
                   
-                  <Button
+                  <button
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
-                    variant="cyber"
-                    size="sm"
-                    className="px-2"
+                    className="p-1.5 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold hover:bg-sky-50 shadow-xs disabled:opacity-40"
                   >
-                    <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </Button>
+                    <ChevronRight className="w-4 h-4 text-slate-800" />
+                  </button>
                   
                   {!isMobile && (
-                    <Button
+                    <button
                       onClick={() => setCurrentPage(totalPages)}
                       disabled={currentPage === totalPages}
-                      variant="cyber"
-                      size="sm"
-                      className="px-3 text-xs"
+                      className="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold text-xs hover:bg-sky-50 shadow-xs disabled:opacity-40"
                     >
                       末页
-                    </Button>
+                    </button>
                   )}
                 </div>
               </div>
