@@ -57,7 +57,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     <ToastContext.Provider value={{ showToast, showConfirm }}>
       {children}
       
-      {/* Toast 容器 - 右下角，预留滚动条空间 */}
+      {/* Toast 容器 - 右下角 */}
       <div className="fixed bottom-4 right-6 z-[9999] flex flex-col items-end pointer-events-none">
         <AnimatePresence>
           {toasts.map((toast) => (
@@ -71,29 +71,29 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         {confirmDialog && (
           <>
             <div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999]"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999]"
               onClick={() => handleConfirm(false)}
             />
             <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
-              <div className="bg-white border border-slate-200 rounded-xl p-6 max-w-md w-full pointer-events-auto shadow-2xl">
-                <h3 className="text-xl font-bold text-slate-800 mb-2">
+              <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-6 max-w-md w-full pointer-events-auto shadow-2xl transition-colors">
+                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2">
                   {confirmDialog.options.title}
                 </h3>
                 {confirmDialog.options.message && (
-                  <p className="text-slate-600 text-sm mb-6 whitespace-pre-line leading-relaxed">
+                  <p className="text-slate-700 dark:text-slate-200 text-sm font-medium mb-6 whitespace-pre-line leading-relaxed">
                     {confirmDialog.options.message}
                   </p>
                 )}
                 <div className="flex gap-3 justify-end">
                   <button
                     onClick={() => handleConfirm(false)}
-                    className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-sm"
+                    className="px-4 py-2 text-sm font-bold rounded-lg border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shadow-sm"
                   >
                     {confirmDialog.options.cancelText || '取消'}
                   </button>
                   <button
                     onClick={() => handleConfirm(true)}
-                    className="px-4 py-2 text-sm font-medium rounded-lg border border-sky-600 bg-sky-600 text-white hover:bg-sky-700 transition-colors shadow-sm"
+                    className="px-4 py-2 text-sm font-bold rounded-lg bg-sky-600 text-white hover:bg-sky-700 transition-colors shadow-sm"
                   >
                     {confirmDialog.options.confirmText || '确定'}
                   </button>

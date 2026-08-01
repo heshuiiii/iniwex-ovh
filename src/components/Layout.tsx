@@ -4,12 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Sidebar from "./Sidebar";
 import { useAPI } from "@/context/APIContext";
+import { useTheme } from "@/context/ThemeContext";
 import APINotice from "./APINotice";
+import { Sun, Moon } from "lucide-react";
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isMobile = useIsMobile();
   const { isAuthenticated, isLoading } = useAPI();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -25,12 +28,10 @@ const Layout = () => {
         touchEndX.current = e.changedTouches[0].clientX;
         const distance = touchEndX.current - touchStartX.current;
         
-        // 如果从屏幕左边缘开始向右划动超过30px，打开侧边栏
         if (touchStartX.current < 20 && distance > 30 && !sidebarOpen) {
           setSidebarOpen(true);
         }
         
-        // 如果侧边栏打开，从右向左划动超过50px，关闭侧边栏
         if (distance < -50 && sidebarOpen) {
           setSidebarOpen(false);
         }
@@ -47,7 +48,6 @@ const Layout = () => {
   }, [isMobile, sidebarOpen]);
 
   useEffect(() => {
-    // 仅在移动端时关闭边栏，桌面端始终保持显示
     if (isMobile) {
       setSidebarOpen(false);
     } else {
@@ -56,7 +56,6 @@ const Layout = () => {
   }, [isMobile]);
 
   useEffect(() => {
-    // 移动端切换页面时关闭侧边栏
     if (isMobile) {
       setSidebarOpen(false);
     }
@@ -67,41 +66,38 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-100 text-slate-900">
-      {/* 顶部渐变彩条 */}
+    <div className="min-h-screen flex flex-col transition-colors duration-200" style={{ backgroundColor: 'var(--bg-page)', color: 'var(--text-primary)' }}>
+      {/* 顶部彩条 */}
       <div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-500 via-cyan-400 to-violet-500 animate-gradient-x z-50"></div>
 
       <div className="flex-1 flex relative">
-        {/* 桌面端始终显示侧边栏（深色） */}
-        <div className={`hidden lg:block fixed inset-y-0 left-0 z-40`}>
+        {/* 桌面侧边栏 */}
+        <div className="hidden lg:block fixed inset-y-0 left-0 z-40">
           <Sidebar onToggle={toggleSidebar} isOpen={true} />
         </div>
 
-        {/* 移动端可滑出的侧边栏 */}
+        {/* 移动端侧边栏 */}
         <AnimatePresence mode="wait">
           {isMobile && sidebarOpen && (
             <>
-              {/* 背景遮罩 */}
               <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0.5 }}
+                animate={{ opacity: 0.6 }}
                 exit={{ opacity: 0 }}
                 className="fixed inset-0 bg-black z-30"
                 onClick={() => setSidebarOpen(false)}
                 style={{ pointerEvents: 'auto' }}
               />
 
-              {/* 侧边栏 */}
               <motion.div
                 initial={{ x: -280 }}
                 animate={{ x: 0 }}
                 exit={{ x: -280 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
                 className="fixed inset-y-0 left-0 z-40"
               >
                 <Sidebar onToggle={toggleSidebar} isOpen={sidebarOpen} />
 
-                {/* 关闭按钮 */}
                 <button
                   onClick={() => setSidebarOpen(false)}
                   className="absolute top-4 right-4 w-8 h-8 bg-slate-800 border border-slate-600 rounded-md flex items-center justify-center text-slate-200 hover:bg-slate-700 transition-colors"
@@ -117,32 +113,53 @@ const Layout = () => {
           )}
         </AnimatePresence>
 
-        {/* 移动端贴边呼出按钮 */}
+        {/* 移动端呼出侧边栏按钮 */}
         {isMobile && !sidebarOpen && (
           <div
             onClick={toggleSidebar}
-            className="fixed right-0 top-1/3 z-40 cursor-pointer"
+            className="fixed left-0 top-1/3 z-40 cursor-pointer"
           >
             <div className="flex items-center">
-              <div className="h-16 w-4 bg-white border border-l-0 border-slate-300 rounded-r-md flex items-center justify-center shadow-md">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sky-500">
-                  <polyline points="15 18 9 12 15 6"></polyline>
+              <div className="h-14 w-5 bg-white dark:bg-slate-800 border border-l-0 border-slate-300 dark:border-slate-700 rounded-r-md flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-sky-500">
+                  <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
               </div>
-              <div className="h-20 w-1 bg-sky-500 rounded-r-sm shadow-[0_0_8px_rgba(14,165,233,0.5)]"></div>
             </div>
           </div>
         )}
 
-        {/* 主内容区 — 浅色白底 */}
+        {/* 右上角固定主题快速切换悬浮胶囊 */}
+        <div className="fixed top-3 right-4 z-40 flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold text-xs shadow-md backdrop-blur-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            title={theme === 'light' ? '切换到夜间模式' : '切换到日间模式'}
+          >
+            {theme === 'light' ? (
+              <>
+                <Sun className="w-3.5 h-3.5 text-amber-500 animate-spin-slow" />
+                <span>日间</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-3.5 h-3.5 text-sky-400" />
+                <span>夜间</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* 主内容区 */}
         <main
           className={`flex-1 py-6 px-4 sm:px-6 transition-all duration-300 ${
             !isMobile ? "lg:ml-72" : "ml-0"
-          } relative bg-slate-50 min-h-screen`}
+          } relative min-h-screen`}
+          style={{ backgroundColor: 'var(--bg-page)' }}
         >
-          {/* 内容区顶部装饰线 */}
+          {/* 内容区左侧分割线 */}
           {!isMobile && (
-            <div className="fixed left-72 top-0 bottom-0 w-px bg-gradient-to-b from-sky-200 via-slate-200 to-sky-200 z-30 pointer-events-none" />
+            <div className="fixed left-72 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-800/80 z-30 pointer-events-none" />
           )}
 
           {!isLoading && !isAuthenticated && <APINotice />}

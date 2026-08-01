@@ -6,59 +6,95 @@
 @tailwind utilities;
 
 /* ================================================================
-   CSS 变量 & 主题令牌
+   CSS 变量 & 主题系统 (Light vs Dark)
    ================================================================ */
 @layer base {
   :root {
-    /* shadcn/ui 兼容令牌 — 浅色内容区 */
-    --background: 216 40% 96%;      /* #f1f5f9 */
-    --foreground: 222 47% 11%;      /* #0f172a */
+    /* 页面背景与卡片 — 日间 Mode (Light) */
+    --bg-page: #f8fafc;           /* slate-50 */
+    --bg-card: #ffffff;           /* 纯白 */
+    --bg-card-subtle: #f1f5f9;    /* slate-100 */
+    --bg-card-hover: #e2e8f0;     /* slate-200 */
+    --bg-sidebar: #0f172a;        /* 侧边栏保持高级深邃蓝 */
+    --sidebar-text: #f8fafc;
+    --sidebar-muted: #94a3b8;
 
-    --card: 0 0% 100%;              /* #ffffff */
+    /* 字体与对比度 */
+    --text-primary: #0f172a;      /* slate-900 极致深黑 */
+    --text-secondary: #334155;    /* slate-700 浓郁深灰 */
+    --text-muted: #475569;        /* slate-600 */
+
+    /* 边框与阴影 */
+    --border-main: #cbd5e1;       /* slate-300 */
+    --border-subtle: #e2e8f0;     /* slate-200 */
+    --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+
+    /* 品牌主色 */
+    --accent-sky: #0284c7;        /* sky-600 */
+    --accent-sky-hover: #0369a1;  /* sky-700 */
+    --accent-sky-light: #e0f2fe;  /* sky-100 */
+
+    /* shadcn/ui 兼容变量 */
+    --background: 216 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-
-    --primary: 196 100% 38%;        /* #0284c7 */
+    --primary: 196 100% 38%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 214 32% 91%;
-    --secondary-foreground: 222 47% 11%;
-
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%; /* #64748b */
-
-    --accent: 196 100% 38%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214 32% 87%;          /* #cbd5e1 */
+    --border: 214 32% 87%;
     --input: 214 32% 87%;
     --ring: 196 100% 38%;
-
     --radius: 0.5rem;
+  }
 
-    /* 侧边栏令牌 — 深色 */
-    --sidebar-background: 222 47% 10%;   /* 深海军蓝 */
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 196 100% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 196 100% 26%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 217 33% 18%;
-    --sidebar-ring: 196 100% 50%;
+  .dark {
+    /* 页面背景与卡片 — 夜间 Mode (Dark) */
+    --bg-page: #0b0f19;           /* 极深蓝黑 */
+    --bg-card: #151d2a;           /* 沉稳深蓝灰卡片 */
+    --bg-card-subtle: #1e293b;    /* slate-800 */
+    --bg-card-hover: #283548;     /* hover卡片 */
+    --bg-sidebar: #070a11;        /* 更深色侧边栏 */
+    --sidebar-text: #f8fafc;
+    --sidebar-muted: #94a3b8;
+
+    /* 字体与对比度 */
+    --text-primary: #f8fafc;      /* slate-50 纯亮白 */
+    --text-secondary: #e2e8f0;    /* slate-200 明亮淡灰 */
+    --text-muted: #cbd5e1;        /* slate-300 高清晰度淡灰 */
+
+    /* 边框与阴影 */
+    --border-main: #334155;       /* slate-700 */
+    --border-subtle: #1e293b;     /* slate-800 */
+    --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+
+    /* 品牌主色 */
+    --accent-sky: #38bdf8;        /* sky-400 */
+    --accent-sky-hover: #7dd3fc;  /* sky-300 */
+    --accent-sky-light: rgba(56, 189, 248, 0.15);
+
+    /* shadcn/ui 兼容变量 */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 10%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 10%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 196 100% 48%;
+    --primary-foreground: 0 0% 100%;
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 196 100% 48%;
   }
 }
 
 /* ================================================================
-   基础 Reset & 全局文字（内容区统一浅色主题）
+   全局基础 Reset
    ================================================================ */
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border-main);
   }
 
   html {
@@ -66,7 +102,8 @@
   }
 
   body {
-    @apply bg-cyber-bg text-cyber-text;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
                  "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", Arial, sans-serif;
     font-size: 15px;
@@ -77,23 +114,19 @@
     overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* ---- 基础文字 — 深色文字在浅色背景上（只设 line-height，不强制 color 避免覆盖 Tailwind 颜色类） ---- */
-  body {
-    color: #1e293b;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   p, li {
     line-height: 1.65;
   }
 
-  /* ---- 标题 ---- */
+  /* 标题 */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-cyber tracking-wider;
-    color: #0f172a;
+    font-family: 'Orbitron', -apple-system, sans-serif;
+    color: var(--text-primary);
     line-height: 1.4;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   h1 { font-size: 2rem; }
@@ -103,428 +136,243 @@
   h5 { font-size: 1.125rem; }
   h6 { font-size: 1rem; }
 
-  /* ---- 文字尺寸辅助（只设尺寸，不覆盖颜色类） ---- */
-  .text-xs { font-size: 0.8125rem; line-height: 1.5; }
-  .text-sm { font-size: 0.9375rem; line-height: 1.6; }
+  /* 辅助文字 */
+  .text-cyber-muted, .text-muted-foreground {
+    color: var(--text-muted) !important;
+  }
 
-  /* ---- Muted 文字 ---- */
-  .text-cyber-muted { color: #64748b !important; }
-  .text-muted-foreground { color: #64748b; }
-
-  /* ---- 表格 ---- */
+  /* 表格 */
   table { font-size: 0.9375rem; line-height: 1.65; }
-  th    { color: #0f172a; font-weight: 600; }
-  td    { color: #334155; }
+  th    { color: var(--text-primary); font-weight: 700; }
+  td    { color: var(--text-secondary); }
 
-  /* ---- 按钮 ---- */
+  /* 按钮基础 */
   button {
     font-size: 0.9375rem;
     line-height: 1.5;
-    font-weight: 500;
-    color: #1e293b;
+    font-weight: 600;
   }
 
-  /* ---- 表单控件 — 浅色背景、深色文字 ---- */
+  /* 表单控件 — 统一适配日夜 */
   input, textarea, select {
     font-size: 0.9375rem;
     line-height: 1.5;
-    color: #0f172a;
-    background-color: #ffffff;
-    border-color: #cbd5e1;
+    color: var(--text-primary);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-main);
+    border-radius: 0.5rem;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
   }
 
   select option {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
-  }
-
-  select option:hover,
-  select option:focus,
-  select option:active,
-  select option:checked {
-    background-color: #0284c7 !important;
-    color: #ffffff !important;
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
   }
 
   input::placeholder, textarea::placeholder {
-    color: #94a3b8;
-    opacity: 0.9;
+    color: var(--text-muted);
+    opacity: 0.75;
   }
 
-  /* ---- 链接 ---- */
-  a { color: #0284c7; transition: color 0.2s; }
-  a:hover { color: #0369a1; }
+  /* 链接 */
+  a { color: var(--accent-sky); transition: color 0.2s; }
+  a:hover { color: var(--accent-sky-hover); }
 
-  /* ---- 标签 — 内容区深色文字 ---- */
+  /* 标签 */
   label {
-    font-weight: 500;
-    color: #334155;
+    font-weight: 600;
+    color: var(--text-primary);
     font-size: 0.9375rem;
   }
 
-  /* ---- 行内代码 — 浅色风格 ---- */
+  /* 行内代码 */
   code, kbd, samp {
     font-family: 'Courier New', Courier, monospace;
     font-size: 0.875rem;
-    color: #0f172a;
-    background-color: #e2e8f0;
+    color: var(--text-primary);
+    background-color: var(--bg-card-subtle);
+    border: 1px solid var(--border-main);
     padding: 0.125rem 0.375rem;
     border-radius: 0.25rem;
   }
-
-  pre {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.875rem;
-    color: #0f172a;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.375rem;
-    padding: 0.75rem 1rem;
-    overflow-x: auto;
-  }
-
-  /* ---- 卡片内文字 ---- */
-  .cyber-card { color: #1e293b; }
-
-  /* ---- 列表 ---- */
-  ul, ol { line-height: 1.8; }
-  li { margin-bottom: 0.25rem; }
-
-  /* ---- 对话框/模态框（不强制颜色，由各自子组件决定） ---- */
-  [role="dialog"] p,
-  [role="alertdialog"] p {
-    line-height: 1.7;
-  }
-
-  /* ---- 描述文字 ---- */
-  .description, [class*="description"] {
-    color: #64748b;
-    line-height: 1.7;
-  }
-
-  /* ---- 徽章 ---- */
-  .badge, [class*="badge"] {
-    font-weight: 500;
-    font-size: 0.8125rem;
-  }
-
-  /* ---- 表格辅助 ---- */
-  .cyber-table th {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #0f172a;
-  }
-
-  .cyber-table td {
-    font-size: 0.9375rem;
-    color: #334155;
-    line-height: 1.65;
-  }
-
-  /* ---- 响应式 ---- */
-  @media (max-width: 640px) {
-    body    { font-size: 16px; }
-    .text-xs { font-size: 0.875rem; }
-    .text-sm { font-size: 1rem; }
-  }
-
-  button, a, input, select, textarea {
-    @apply focus:outline-none;
-  }
-
-  @media (max-width: 640px) {
-    button, a {
-      @apply min-h-[44px] min-w-[44px];
-    }
-  }
 }
 
 /* ================================================================
-   自定义滚动条 — 浅色风格
-   ================================================================ */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #94a3b8;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #0284c7;
-}
-
-/* ================================================================
-   组件层 — 内容区浅色主题 + 侧边栏深色保留
+   组件层 — 卡片、按钮、Toast 彻底重置
    ================================================================ */
 @layer components {
 
-  /* ------ 面板 (Panel) — 白色卡片 ------ */
-  .cyber-panel {
-    @apply bg-white border border-slate-200 rounded-lg overflow-hidden relative shadow-sm;
-    will-change: transform;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-    backface-visibility: hidden;
-    contain: layout paint;
+  /* 卡片 / 面板 */
+  .cyber-panel, .cyber-card {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-main) !important;
+    color: var(--text-primary) !important;
+    box-shadow: var(--shadow-card);
+    border-radius: 0.75rem;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
   }
 
-  .cyber-panel::before {
-    content: '';
-    @apply absolute inset-0 opacity-0 pointer-events-none;
-  }
-
-  .cyber-panel::after {
-    content: '';
-    @apply absolute h-[2px] w-full left-0 top-0 bg-gradient-to-r from-transparent via-sky-400/60 to-transparent pointer-events-none;
-  }
-
-  /* ------ 按钮 — 浅色主题 ------ */
+  /* 按钮通用 */
   .cyber-button {
-    @apply relative px-3 py-2 rounded-md text-sm font-medium
-           bg-white border border-slate-300 text-slate-700
-           hover:bg-sky-50 hover:border-sky-400 hover:text-sky-700
-           active:scale-[0.97]
-           transition-all duration-150 ease-out
-           shadow-sm
-           disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-main);
+    color: var(--text-primary);
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.15s ease-out;
   }
 
-  /* 主色调按钮变体 */
+  .cyber-button:hover:not(:disabled) {
+    background-color: var(--bg-card-hover);
+    border-color: var(--accent-sky);
+    color: var(--accent-sky);
+  }
+
   .cyber-button-primary {
-    @apply relative px-3 py-2 rounded-md text-sm font-medium
-           bg-sky-600 border border-sky-600 text-white
-           hover:bg-sky-700 hover:border-sky-700
-           active:scale-[0.97]
-           transition-all duration-150 ease-out
-           shadow-sm
-           disabled:opacity-40 disabled:cursor-not-allowed;
+    background-color: #0284c7;
+    border: 1px solid #0284c7;
+    color: #ffffff !important;
+    font-weight: 700;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    box-shadow: 0 2px 4px 0 rgba(2, 132, 199, 0.25);
+    transition: all 0.15s ease-out;
   }
 
-  /* ------ 输入框 ------ */
+  .cyber-button-primary:hover:not(:disabled) {
+    background-color: #0369a1;
+    border-color: #0369a1;
+  }
+
+  .dark .cyber-button-primary {
+    background-color: #0284c7;
+    border-color: #38bdf8;
+    color: #ffffff !important;
+  }
+
+  /* 输入框 */
   .cyber-input {
-    @apply bg-white border border-slate-300 focus:border-sky-400 focus:ring-2 focus:ring-sky-100
-           px-3 py-2 rounded-md text-slate-900 placeholder:text-slate-400 outline-none
-           transition-colors duration-150;
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-main) !important;
+    color: var(--text-primary) !important;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
   }
 
-  /* ------ 卡片 ------ */
-  .cyber-card {
-    @apply bg-white border border-slate-200 rounded-lg p-4 shadow-sm;
-    contain: paint;
-    will-change: transform;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-    backface-visibility: hidden;
-    color: #1e293b;
+  .cyber-input:focus {
+    border-color: var(--accent-sky) !important;
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-sky-light);
   }
 
-  /* ------ 网格背景 (内容区) ------ */
-  .cyber-grid-bg {
-    background-image:
-      linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
+  /* 全局兼容类 */
+  .bg-cyber-bg { background-color: var(--bg-page) !important; }
+  .bg-cyber-surface { background-color: var(--bg-card) !important; }
+  .bg-cyber-surface-dark { background-color: var(--bg-card-subtle) !important; }
+  .text-cyber-text { color: var(--text-primary) !important; font-weight: 600; }
+  .text-cyber-secondary { color: var(--text-secondary) !important; font-weight: 600; }
+  .text-cyber-accent { color: var(--accent-sky) !important; font-weight: 700; }
+  .border-cyber-border { border-color: var(--border-main) !important; }
 
-  /* ------ 分割线 ------ */
-  .cyber-grid-line {
-    @apply border-t border-slate-200;
-  }
+  /* ================================================================
+     Sonner Toast 弹出框样式修复 (彻底解决浅绿浅文字配色错乱)
+     ================================================================ */
 
-  /* ------ 发光文字 (标题) ------ */
-  .cyber-glow-text {
-    @apply text-sky-600 drop-shadow-[0_0_2px_rgba(2,132,199,0.4)];
-  }
-
-  /* ------ 状态徽章 ------ */
-  .status-available   { @apply text-emerald-600 animate-pulse; }
-  .status-unavailable { @apply text-red-500; }
-  .status-unknown     { @apply text-amber-500; }
-
-  /* ------ 渐变边框 ------ */
-  .cyber-gradient-border {
-    @apply relative;
-  }
-  .cyber-gradient-border::before {
-    content: '';
-    @apply absolute inset-0 rounded-lg p-[1px] bg-gradient-to-r from-sky-400 via-cyan-400 to-violet-400 -z-10;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-  }
-
-  /* ------ 表格 ------ */
-  .cyber-table th {
-    @apply uppercase text-xs font-cyber text-sky-600/80 border-b border-slate-200 pb-2;
-  }
-  .cyber-table td {
-    @apply py-3 border-b border-slate-100;
-  }
-
-  /* ------ 徽章 ------ */
-  .cyber-badge {
-    @apply inline-flex items-center rounded-full border border-sky-300 px-2.5 py-0.5
-           text-xs font-semibold transition-colors
-           text-sky-700 bg-sky-50;
-  }
-
-  /* ------ 移动端 ------ */
-  .mobile-menu-item { @apply relative flex items-center px-3 py-3 rounded-md transition-all; }
-  .mobile-touch-feedback { @apply active:bg-sky-100/60 transition-colors duration-150; }
-  .mobile-bottom-safe-area { padding-bottom: env(safe-area-inset-bottom, 0); }
-  .mobile-top-safe-area    { padding-top: env(safe-area-inset-top, 0); }
-
-  /* ------ 隐藏滚动条 ------ */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar { display: none; }
-
-  /* ------ 对话框 — 深色主题（覆盖层） ------ */
-  .cyber-dialog {
-    @apply border border-slate-700 bg-slate-900/95 backdrop-blur-md shadow-2xl;
-    will-change: transform;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-    backface-visibility: hidden;
-    contain: layout paint;
-  }
-
-  /* ------ Sonner Toast — 深色主题 ------ */
+  /* 基础 Toast 容器 */
   [data-sonner-toast] {
-    background: rgba(15, 23, 42, 0.97) !important;
-    border: 1px solid rgba(71, 85, 105, 0.6) !important;
-    color: #f1f5f9 !important;
-    backdrop-filter: blur(10px) !important;
-    box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3) !important;
+    background-color: #ffffff !important;
+    border: 2px solid #0284c7 !important;
+    color: #0f172a !important;
+    border-radius: 0.75rem !important;
+    padding: 0.875rem 1.125rem !important;
+    box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.25) !important;
+    font-size: 0.9375rem !important;
+    font-weight: 700 !important;
   }
 
+  .dark [data-sonner-toast] {
+    background-color: #151d2a !important;
+    border: 2px solid #38bdf8 !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 35px -4px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  /* Success 成功 Success Toast (核心修复用户截图中错乱的“成功获取xx条记录”) */
   [data-sonner-toast][data-type="success"] {
-    background: rgba(6, 78, 59, 0.18) !important;
-    border-color: rgba(16, 185, 129, 0.45) !important;
-    color: #a7f3d0 !important;
+    background-color: #f0fdf4 !important; /* 实体亮明绿色背景 */
+    border: 2px solid #16a34a !important;  /* 实体绿边框 */
+    color: #14532d !important;             /* 极深浓墨绿文本 (确保高清阅读) */
   }
 
+  .dark [data-sonner-toast][data-type="success"] {
+    background-color: #052e16 !important; /* 夜间深沉墨绿背景 */
+    border: 2px solid #22c55e !important;  /* 鲜艳绿边框 */
+    color: #ffffff !important;             /* 纯白文字 */
+  }
+
+  /* Error 失败 Error Toast */
   [data-sonner-toast][data-type="error"] {
-    background: rgba(127, 29, 29, 0.2) !important;
-    border-color: rgba(239, 68, 68, 0.45) !important;
-    color: #fecaca !important;
+    background-color: #fef2f2 !important;
+    border: 2px solid #dc2626 !important;
+    color: #7f1d1d !important;
   }
 
+  .dark [data-sonner-toast][data-type="error"] {
+    background-color: #450a0a !important;
+    border: 2px solid #ef4444 !important;
+    color: #ffffff !important;
+  }
+
+  /* Warning 警告 Toast */
   [data-sonner-toast][data-type="warning"] {
-    background: rgba(120, 53, 15, 0.2) !important;
-    border-color: rgba(234, 179, 8, 0.45) !important;
-    color: #fef08a !important;
+    background-color: #fffbeb !important;
+    border: 2px solid #d97706 !important;
+    color: #78350f !important;
   }
 
+  .dark [data-sonner-toast][data-type="warning"] {
+    background-color: #451a03 !important;
+    border: 2px solid #f59e0b !important;
+    color: #ffffff !important;
+  }
+
+  /* Info 信息 Toast */
   [data-sonner-toast][data-type="info"] {
-    background: rgba(30, 58, 138, 0.2) !important;
-    border-color: rgba(59, 130, 246, 0.45) !important;
-    color: #bfdbfe !important;
+    background-color: #f0f9ff !important;
+    border: 2px solid #0284c7 !important;
+    color: #0c4a6e !important;
   }
 
-  [data-sonner-toast] [data-title]       { color: inherit !important; font-weight: 500 !important; }
-  [data-sonner-toast] [data-description] { color: rgba(148,163,184,0.9) !important; font-size: 0.875rem !important; }
-  [data-sonner-toast] [data-button]      { background: rgb(2, 132, 199) !important; color: white !important; border: none !important; }
-  [data-sonner-toast] [data-button]:hover { background: rgb(3, 105, 161) !important; }
-  [data-sonner-toast] [data-cancel-button] { background: rgb(30,41,59) !important; color: rgb(203,213,225) !important; border: 1px solid rgb(51,65,85) !important; }
-  [data-sonner-toast] [data-cancel-button]:hover { background: rgb(51,65,85) !important; }
-  [data-sonner-toast] [data-icon] { color: inherit !important; }
-
-  /* ------ 扫描动画 ------ */
-  .cyber-scan { @apply relative overflow-hidden; }
-  .cyber-scan::after { content: ''; @apply absolute inset-0 animate-scanning opacity-20; }
-
-  /* ================================================================
-     侧边栏内文字 — 专门针对深色背景复写（避免被全局浅色覆盖）
-     ================================================================ */
-  .bg-sidebar,
-  [class*="bg-sidebar"] {
-    --tw-text-opacity: 1;
+  .dark [data-sonner-toast][data-type="info"] {
+    background-color: #0c4a6e !important;
+    border: 2px solid #38bdf8 !important;
+    color: #ffffff !important;
   }
 
-  /* 侧边栏内的 p/span/div/li 保持亮色文字 */
-  .bg-sidebar p,
-  .bg-sidebar span,
-  .bg-sidebar div,
-  .bg-sidebar li,
-  .bg-sidebar label,
-  .bg-sidebar a {
-    color: rgb(210 218 235);
+  /* Toast 内文案细节控制 */
+  [data-sonner-toast] [data-title] {
+    color: inherit !important;
+    font-weight: 700 !important;
+    font-size: 0.9375rem !important;
   }
 
-  .bg-sidebar h1, .bg-sidebar h2,
-  .bg-sidebar h3, .bg-sidebar h4 {
-    color: rgb(226 232 240);
+  [data-sonner-toast] [data-description] {
+    color: inherit !important;
+    opacity: 0.9 !important;
+    font-size: 0.8125rem !important;
+    font-weight: 600 !important;
+    margin-top: 0.25rem !important;
   }
 
-  .bg-sidebar .text-xs, .bg-sidebar [class*="text-xs"] { color: rgb(148 163 184) !important; }
-  .bg-sidebar .text-sm, .bg-sidebar [class*="text-sm"] { color: rgb(203 213 225) !important; }
-
-  /* ================================================================
-     内容区 cyber-* 颜色强制深色（浅色背景下保证可读性）
-     ================================================================ */
-
-  /* text-cyber-text → 深黑正文 */
-  .text-cyber-text { color: #0f172a !important; font-weight: 500; }
-
-  /* text-cyber-muted → 浓黑辅助文字 (拒绝浅灰) */
-  .text-cyber-muted { color: #1e293b !important; }
-
-  /* text-cyber-secondary → 纯黑次要文字 */
-  .text-cyber-secondary { color: #0f172a !important; }
-
-  /* text-cyber-accent → 主色蓝 */
-  .text-cyber-accent { color: #0284c7 !important; }
-
-  /* text-cyber-primary-accent → 主色调 */
-  .text-cyber-primary-accent { color: #0284c7 !important; }
-
-  /* bg-cyber-bg → 浅灰内容区背景 */
-  .bg-cyber-bg { background-color: #f1f5f9 !important; }
-
-  /* bg-cyber-surface → 白色卡片面 */
-  .bg-cyber-surface { background-color: #ffffff !important; }
-
-  /* bg-cyber-surface-dark → 略深一级 */
-  .bg-cyber-surface-dark { background-color: #f8fafc !important; }
-
-  /* bg-cyber-dark → 深背景（弹窗/对话框）注意弹窗场景保持深色 */
-  .bg-cyber-dark { background-color: #0f172a !important; }
-
-  /* bg-cyber-hover → hover 态淡蓝 */
-  .bg-cyber-hover { background-color: rgba(2,132,199,0.06) !important; }
-
-  /* bg-cyber-grid → 内容区浅色网格 (半透明，不破坏背景) */
-  .bg-cyber-grid\/5  { background-color: rgba(148,163,184,0.05) !important; }
-  .bg-cyber-grid\/10 { background-color: rgba(148,163,184,0.08) !important; }
-  .bg-cyber-grid\/20 { background-color: rgba(148,163,184,0.12) !important; }
-  .bg-cyber-grid\/30 { background-color: rgba(148,163,184,0.16) !important; }
-  .bg-cyber-grid\/50 { background-color: rgba(148,163,184,0.22) !important; }
-
-  /* border-cyber-border → 分割线浅灰 */
-  .border-cyber-border { border-color: #e2e8f0 !important; }
-
-  /* border-cyber-accent/20 等半透明边框 */
-  .border-cyber-accent\/10 { border-color: rgba(2,132,199,0.10) !important; }
-  .border-cyber-accent\/20 { border-color: rgba(2,132,199,0.20) !important; }
-  .border-cyber-accent\/30 { border-color: rgba(2,132,199,0.30) !important; }
-  .border-cyber-accent\/40 { border-color: rgba(2,132,199,0.40) !important; }
-  .border-cyber-accent\/50 { border-color: rgba(2,132,199,0.50) !important; }
-
-  /* text-cyber-accent with opacity */
-  .text-cyber-accent\/80 { color: rgba(2,132,199,0.80) !important; }
+  [data-sonner-toast] [data-icon] {
+    color: inherit !important;
+  }
 }
 
 /* ================================================================
-   顶部渐变边框动画
+   动画与辅助
    ================================================================ */
 @keyframes gradient-x {
   0%, 100% { background-position: 0% 50%; }
@@ -533,19 +381,4 @@
 .animate-gradient-x {
   background-size: 200% 200%;
   animation: gradient-x 4s ease infinite;
-}
-
-/* ================================================================
-   文字循环动画
-   ================================================================ */
-@keyframes text-cycle {
-  0%,  20% { transform: translateY(0%);    }
-  25%, 45% { transform: translateY(-25%);  }
-  50%, 70% { transform: translateY(-50%);  }
-  75%, 95% { transform: translateY(-75%);  }
-  100%      { transform: translateY(-100%); }
-}
-
-.animate-text-cycle {
-  animation: text-cycle 10s ease-in-out infinite;
 }
