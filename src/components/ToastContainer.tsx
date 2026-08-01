@@ -71,29 +71,29 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         {confirmDialog && (
           <>
             <div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999]"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999]"
               onClick={() => handleConfirm(false)}
             />
             <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
-              <div className="cyber-card p-6 max-w-md w-full pointer-events-auto">
-                <h3 className="text-xl font-bold text-cyber-text mb-2">
+              <div className="bg-white border border-slate-200 rounded-xl p-6 max-w-md w-full pointer-events-auto shadow-2xl">
+                <h3 className="text-xl font-bold text-slate-800 mb-2">
                   {confirmDialog.options.title}
                 </h3>
                 {confirmDialog.options.message && (
-                  <p className="text-cyber-muted mb-6 whitespace-pre-line">
+                  <p className="text-slate-600 text-sm mb-6 whitespace-pre-line leading-relaxed">
                     {confirmDialog.options.message}
                   </p>
                 )}
                 <div className="flex gap-3 justify-end">
                   <button
                     onClick={() => handleConfirm(false)}
-                    className="cyber-button px-4 py-2"
+                    className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-sm"
                   >
                     {confirmDialog.options.cancelText || '取消'}
                   </button>
                   <button
                     onClick={() => handleConfirm(true)}
-                    className="cyber-button px-4 py-2 bg-cyber-accent/20 border-cyber-accent/40 text-cyber-accent hover:bg-cyber-accent/30 hover:border-cyber-accent/60 hover:text-cyber-accent"
+                    className="px-4 py-2 text-sm font-medium rounded-lg border border-sky-600 bg-sky-600 text-white hover:bg-sky-700 transition-colors shadow-sm"
                   >
                     {confirmDialog.options.confirmText || '确定'}
                   </button>
