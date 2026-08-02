@@ -4712,6 +4712,9 @@ def standardize_config(config_str):
     # 第一步：移除所有型号后缀
     model_patterns = [
         r'-\d+skl[a-e]\d{2}(-v\d+)?',  # -24sklea01, -24sklea01-v1
+        r'-\d+skb\d+',                  # -25skb01
+        r'-\d+skc\d+',                  # -25skc01
+        r'-\d+sk\d+b(?=-v\d+|$)',       # -24sk60b, -26sk10b, -26sk10b-v1（必须排在通用的 -\d+sk\d+ 前面，否则会被后者先吃掉数字部分，残留字母b）
         r'-\d+sk\d+',                   # -24sk502
         r'-\d+rise\d*',                 # -24rise, -24rise012
         r'-\d+sys\w*',                  # -24sys, -24sysgame01
@@ -4726,9 +4729,6 @@ def standardize_config(config_str):
         r'-ks\d+',                      # -ks40
         r'-rise',                       # -rise
         r'-\d+sysle\d+',                # -25sysle012
-        r'-\d+skb\d+',                  # -25skb01
-        r'-\d+skc\d+',                  # -25skc01
-        r'-\d+sk\d+b',                  # -24sk60b
         r'-v\d+',                       # -v1
         r'-[a-z]{3}$',                  # -gra, -sgp (机房后缀)
     ]
