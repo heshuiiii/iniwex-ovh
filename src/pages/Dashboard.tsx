@@ -116,7 +116,7 @@ const Dashboard = () => {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
       >
         {/* 活跃队列 */}
-        <motion.div variants={itemVariants} className="cyber-card relative overflow-hidden">
+        <motion.div variants={itemVariants} className="cyber-card relative overflow-hidden flex flex-col">
           <div className="absolute top-0 right-0 w-16 h-16 -mr-6 -mt-6 bg-cyber-accent/10 rounded-full blur-xl"></div>
           <div className="flex justify-between items-start">
             <div>
@@ -137,7 +137,7 @@ const Dashboard = () => {
               </svg>
             </div>
           </div>
-          <div className="mt-4 text-cyber-muted text-xs">
+          <div className="mt-auto pt-4 text-cyber-muted text-xs">
             <Link to="/queue" className="inline-flex items-center hover:text-cyber-accent transition-colors">
               查看队列 
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
@@ -148,7 +148,7 @@ const Dashboard = () => {
         </motion.div>
 
         {/* 服务器总数 */}
-        <motion.div variants={itemVariants} className="cyber-card relative overflow-hidden">
+        <motion.div variants={itemVariants} className="cyber-card relative overflow-hidden flex flex-col">
           <div className="absolute top-0 right-0 w-16 h-16 -mr-6 -mt-6 bg-cyber-neon/10 rounded-full blur-xl"></div>
           <div className="flex justify-between items-start">
             <div>
@@ -180,7 +180,7 @@ const Dashboard = () => {
               可用: {isLoading ? '-' : stats.availableServers}
             </span>
           </div>
-          <div className="mt-2 text-cyber-muted text-xs">
+          <div className="mt-auto pt-2 text-cyber-muted text-xs">
             <Link to="/servers" className="inline-flex items-center hover:text-cyber-neon transition-colors">
               查看服务器 
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
@@ -191,7 +191,7 @@ const Dashboard = () => {
         </motion.div>
 
         {/* 抢购成功 */}
-        <motion.div variants={itemVariants} className="cyber-card relative overflow-hidden">
+        <motion.div variants={itemVariants} className="cyber-card relative overflow-hidden flex flex-col">
           <div className="absolute top-0 right-0 w-16 h-16 -mr-6 -mt-6 bg-green-500/10 rounded-full opacity-40"></div>
           <div className="flex justify-between items-start">
             <div>
@@ -209,7 +209,7 @@ const Dashboard = () => {
               </svg>
             </div>
           </div>
-          <div className="mt-4 text-cyber-muted text-xs">
+          <div className="mt-auto pt-4 text-cyber-muted text-xs">
             <Link to="/history" className="inline-flex items-center hover:text-green-400 transition-colors">
               查看历史 
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
@@ -220,7 +220,7 @@ const Dashboard = () => {
         </motion.div>
 
         {/* 抢购失败 */}
-        <motion.div variants={itemVariants} className="cyber-card relative overflow-hidden">
+        <motion.div variants={itemVariants} className="cyber-card relative overflow-hidden flex flex-col">
           <div className="absolute top-0 right-0 w-16 h-16 -mr-6 -mt-6 bg-red-500/10 rounded-full opacity-40"></div>
           <div className="flex justify-between items-start">
             <div>
@@ -238,7 +238,7 @@ const Dashboard = () => {
               </svg>
             </div>
           </div>
-          <div className="mt-4 text-cyber-muted text-xs">
+          <div className="mt-auto pt-4 text-cyber-muted text-xs">
             <Link to="/history" className="inline-flex items-center hover:text-red-400 transition-colors">
               查看失败原因 
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">

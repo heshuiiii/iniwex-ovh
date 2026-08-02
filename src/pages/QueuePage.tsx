@@ -1043,7 +1043,7 @@ const QueuePage = () => {
                   </button>
                   <button
                     onClick={() => updateQueueItem()}
-                    className="w-full md:flex-1 px-4 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold transition-all shadow-md disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500"
+                    className="w-full md:flex-1 px-4 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold transition-all shadow-md disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-600 dark:disabled:text-slate-300"
                     disabled={!planCodeInput.trim() || selectedDatacenters.length === 0}
                   >
                     修改队列
@@ -1052,7 +1052,7 @@ const QueuePage = () => {
               ) : (
                 <button
                   onClick={() => addQueueItem()}
-                  className="w-full py-3 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm sm:text-base transition-all shadow-md disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-500 disabled:border-slate-300 dark:disabled:border-slate-700 cursor-pointer"
+                  className="w-full py-3 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm sm:text-base transition-all shadow-md disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-600 dark:disabled:text-slate-300 disabled:border-slate-300 dark:disabled:border-slate-700 cursor-pointer"
                   disabled={!planCodeInput.trim() || selectedDatacenters.length === 0}
                 >
                   {selectedDatacenters.length > 0
